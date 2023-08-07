@@ -185,7 +185,7 @@ public class StockBusiness implements IBasicBusiness<Request<StockDto>, Response
 			if (dto.getQuantite() != null && dto.getQuantite() > 0) {
 				entityToSave.setQuantite(dto.getQuantite());
 			}
-			if (Utilities.notBlank(dto.getEtat())) {
+			if (Utilities.notBlank(dto.getEtat().toString())) {
 				entityToSave.setEtat(dto.getEtat());
 			}
 			if (Utilities.notBlank(dto.getDateEntree())) {

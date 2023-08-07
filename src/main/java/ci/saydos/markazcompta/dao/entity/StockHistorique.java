@@ -7,6 +7,8 @@
 package ci.saydos.markazcompta.dao.entity;
 
 import java.io.Serializable;
+
+import ci.saydos.markazcompta.utils.enums.EtatStockEnum;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -47,8 +49,8 @@ public class StockHistorique implements Serializable, Cloneable {
     @Column(name="quantite")
     private Integer    quantite     ;
 
-    @Column(name="etat", length=6)
-    private String     etat         ;
+    @Enumerated(EnumType.STRING)
+    private EtatStockEnum etat         ;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="date_mvt")

@@ -203,7 +203,7 @@ public class DemandeHistoriqueBusiness implements IBasicBusiness<Request<Demande
 				}
 				entityToSave.setDemande(existingDemande);
 			}
-			if (Utilities.notBlank(dto.getStatut())) {
+			if (Utilities.notBlank(dto.getStatut().toString())) {
 				entityToSave.setStatut(dto.getStatut());
 			}
 			if (dto.getCreatedBy() != null && dto.getCreatedBy() > 0) {

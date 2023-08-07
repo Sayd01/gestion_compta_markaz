@@ -235,7 +235,7 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 			if (Utilities.notBlank(dto.getDateApprovisionnement())) {
 				entityToSave.setDateApprovisionnement(dateFormat.parse(dto.getDateApprovisionnement()));
 			}
-			if (Utilities.notBlank(dto.getType())) {
+			if (Utilities.notBlank(dto.getType().toString())) {
 				entityToSave.setType(dto.getType());
 			}
 			if (dto.getCreatedBy() != null && dto.getCreatedBy() > 0) {

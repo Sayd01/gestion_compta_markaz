@@ -7,6 +7,8 @@
 package ci.saydos.markazcompta.dao.entity;
 
 import java.io.Serializable;
+
+import ci.saydos.markazcompta.utils.enums.TypeCaisseEnum;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -19,12 +21,11 @@ import java.util.Date;
  * Persistent class for entity stored in table "caisse"
  *
  * @author Telosys Tools Generator
- *
  */
 @Data
 @ToString
 @Entity
-@Table(name="caisse" )
+@Table(name = "caisse")
 public class Caisse implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
@@ -33,73 +34,73 @@ public class Caisse implements Serializable, Cloneable {
     // ENTITY PRIMARY KEY ( BASED ON A SINGLE FIELD )
     //----------------------------------------------------------------------
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id", nullable=false)
-    private Integer    id           ;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
 
     //----------------------------------------------------------------------
     // ENTITY DATA FIELDS 
     //----------------------------------------------------------------------    
-    @Column(name="montant")
-    private Double     montant      ;
+    @Column(name = "montant")
+    private Double montant;
 
-    @Column(name="montant_approvisionnement")
-    private Double     montantApprovisionnement ;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="date_approvisionnement")
-    private Date       dateApprovisionnement ;
-
-    @Column(name="type", length=6)
-    private String     type         ;
+    @Column(name = "montant_approvisionnement")
+    private Double montantApprovisionnement;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="created_at")
-    private Date       createdAt    ;
+    @Column(name = "date_approvisionnement")
+    private Date dateApprovisionnement;
 
-    @Column(name="created_by")
-    private Integer    createdBy    ;
-
-    @Column(name="is_deleted")
-    private Boolean    isDeleted    ;
+    @Enumerated(EnumType.STRING)
+    private TypeCaisseEnum type;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="updated_at")
-    private Date       updatedAt    ;
+    @Column(name = "created_at")
+    private Date createdAt;
 
-    @Column(name="updated_by")
-    private Integer    updatedBy    ;
+    @Column(name = "created_by")
+    private Integer createdBy;
 
-	// "idMarkaz" (column "id_markaz") is not defined by itself because used as FK in a link 
-	// "idUtilisateur" (column "id_utilisateur") is not defined by itself because used as FK in a link 
-	// "idDepense" (column "id_depense") is not defined by itself because used as FK in a link 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    @Column(name = "updated_by")
+    private Integer updatedBy;
+
+    // "idMarkaz" (column "id_markaz") is not defined by itself because used as FK in a link
+    // "idUtilisateur" (column "id_utilisateur") is not defined by itself because used as FK in a link
+    // "idDepense" (column "id_depense") is not defined by itself because used as FK in a link
 
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
     @ManyToOne
-    @JoinColumn(name="id_depense", referencedColumnName="id")
-    private Depense depense     ;
+    @JoinColumn(name = "id_depense", referencedColumnName = "id")
+    private Depense     depense;
     @ManyToOne
-    @JoinColumn(name="id_markaz", referencedColumnName="id")
-    private Markaz markaz      ;
+    @JoinColumn(name = "id_markaz", referencedColumnName = "id")
+    private Markaz      markaz;
     @ManyToOne
-    @JoinColumn(name="id_utilisateur", referencedColumnName="id")
-    private Utilisateur utilisateur ;
+    @JoinColumn(name = "id_utilisateur", referencedColumnName = "id")
+    private Utilisateur utilisateur;
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR(S)
     //----------------------------------------------------------------------
     public Caisse() {
-		super();
+        super();
     }
-    
-	//----------------------------------------------------------------------
+
+    //----------------------------------------------------------------------
     // clone METHOD
     //----------------------------------------------------------------------
-	@Override
-	public java.lang.Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    @Override
+    public java.lang.Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

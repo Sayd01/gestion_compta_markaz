@@ -202,7 +202,7 @@ public class StockHistoriqueBusiness implements IBasicBusiness<Request<StockHist
 			if (dto.getQuantite() != null && dto.getQuantite() > 0) {
 				entityToSave.setQuantite(dto.getQuantite());
 			}
-			if (Utilities.notBlank(dto.getEtat())) {
+			if (Utilities.notBlank(dto.getEtat().toString())) {
 				entityToSave.setEtat(dto.getEtat());
 			}
 			if (Utilities.notBlank(dto.getDateMvt())) {

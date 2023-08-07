@@ -8,6 +8,7 @@
 
 package ci.saydos.markazcompta.business;
 
+import ci.saydos.markazcompta.utils.enums.StatutDemandeEnum;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,7 +226,7 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
 			if (Utilities.notBlank(dto.getDateFin())) {
 				entityToSave.setDateFin(dateFormat.parse(dto.getDateFin()));
 			}
-			if (Utilities.notBlank(dto.getStatut())) {
+			if (Utilities.notBlank(dto.getStatut().toString())) {
 				entityToSave.setStatut(dto.getStatut());
 			}
 			if (dto.getCreatedBy() != null && dto.getCreatedBy() > 0) {

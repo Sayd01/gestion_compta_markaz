@@ -7,6 +7,7 @@
 package ci.saydos.markazcompta.dao.entity;
 
 import java.io.Serializable;
+import ci.saydos.markazcompta.utils.enums.StatutDemandeEnum;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -65,8 +66,8 @@ public class Demande implements Serializable, Cloneable {
     @Column(name="date_fin")
     private Date       dateFin      ;
 
-    @Column(name="statut", length=9)
-    private String     statut       ;
+    @Enumerated(EnumType.STRING)
+    private StatutDemandeEnum statut       ;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="created_at")

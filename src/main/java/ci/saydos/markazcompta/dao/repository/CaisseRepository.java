@@ -255,8 +255,8 @@ public interface CaisseRepository extends JpaRepository<Caisse, Integer>, _Caiss
 			if (Utilities.notBlank(dto.getDateApprovisionnement())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("dateApprovisionnement", dto.getDateApprovisionnement(), "e.dateApprovisionnement", "Date", dto.getDateApprovisionnementParam(), param, index, locale));
 			}
-			if (Utilities.notBlank(dto.getType())) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("type", dto.getType(), "e.type", "String", dto.getTypeParam(), param, index, locale));
+			if (dto.getType() != null) {
+				listOfQuery.add(CriteriaUtils.generateCriteria("type", dto.getType(), "e.type", "enum", dto.getTypeParam(), param, index, locale));
 			}
 			if (Utilities.notBlank(dto.getCreatedAt())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("createdAt", dto.getCreatedAt(), "e.createdAt", "Date", dto.getCreatedAtParam(), param, index, locale));

@@ -232,8 +232,8 @@ public interface StockHistoriqueRepository extends JpaRepository<StockHistorique
 			if (dto.getQuantite()!= null && dto.getQuantite() > 0) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("quantite", dto.getQuantite(), "e.quantite", "Integer", dto.getQuantiteParam(), param, index, locale));
 			}
-			if (Utilities.notBlank(dto.getEtat())) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("etat", dto.getEtat(), "e.etat", "String", dto.getEtatParam(), param, index, locale));
+			if (dto.getEtat() != null) {
+				listOfQuery.add(CriteriaUtils.generateCriteria("etat", dto.getEtat(), "e.etat", "enum", dto.getEtatParam(), param, index, locale));
 			}
 			if (Utilities.notBlank(dto.getDateMvt())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("dateMvt", dto.getDateMvt(), "e.dateMvt", "Date", dto.getDateMvtParam(), param, index, locale));

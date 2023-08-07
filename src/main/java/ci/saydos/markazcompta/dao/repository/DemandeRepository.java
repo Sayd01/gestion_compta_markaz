@@ -284,9 +284,11 @@ public interface DemandeRepository extends JpaRepository<Demande, Integer>, _Dem
 			if (Utilities.notBlank(dto.getDateFin())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("dateFin", dto.getDateFin(), "e.dateFin", "Date", dto.getDateFinParam(), param, index, locale));
 			}
-			if (Utilities.notBlank(dto.getStatut())) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("statut", dto.getStatut(), "e.statut", "String", dto.getStatutParam(), param, index, locale));
+
+			if (dto.getStatut() != null) {
+				listOfQuery.add(CriteriaUtils.generateCriteria("statut", dto.getStatut(), "e.statut", "enum", dto.getStatutParam(), param, index, locale));
 			}
+
 			if (Utilities.notBlank(dto.getCreatedAt())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("createdAt", dto.getCreatedAt(), "e.createdAt", "Date", dto.getCreatedAtParam(), param, index, locale));
 			}

@@ -209,8 +209,8 @@ public interface DemandeHistoriqueRepository extends JpaRepository<DemandeHistor
 			if (dto.getId()!= null && dto.getId() > 0) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("id", dto.getId(), "e.id", "Integer", dto.getIdParam(), param, index, locale));
 			}
-			if (Utilities.notBlank(dto.getStatut())) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("statut", dto.getStatut(), "e.statut", "String", dto.getStatutParam(), param, index, locale));
+			if (dto.getStatut() !=null) {
+				listOfQuery.add(CriteriaUtils.generateCriteria("statut", dto.getStatut(), "e.statut", "enum", dto.getStatutParam(), param, index, locale));
 			}
 			if (Utilities.notBlank(dto.getCreatedAt())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("createdAt", dto.getCreatedAt(), "e.createdAt", "Date", dto.getCreatedAtParam(), param, index, locale));

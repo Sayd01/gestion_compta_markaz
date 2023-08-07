@@ -210,6 +210,9 @@ public class CriteriaUtils {
 						break;
 				}
 				break;
+			case "enum":
+				req += fieldValue == "" ? "" : String.format(" %1$s = :%2$s ", jpqlFieldName, fieldName);
+				break;
 		}
 		if (!OperatorEnum.IS_BETWEEN_OPERATOR(operator) && "Date".equals(fieldType)) {
 			fieldValue = new SimpleDateFormat("dd/MM/yyyy").parse(fieldValue.toString());
