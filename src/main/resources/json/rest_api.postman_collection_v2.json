@@ -1,0 +1,1016 @@
+{
+    "info": {
+        "_postman_id": "project.id",
+        "name": "ci_saydos_markazcompta",
+        "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "caisse",
+            "item": [
+                {
+                    "name": "caisse-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"idMarkaz\": \"\",\n\t\t\"idUtilisateur\": \"\",\n\t\t\"idDepense\": \"\",\n\t\t\"montant\": \"\",\n\t\t\"montantApprovisionnement\": \"\",\n\t\t\"dateApprovisionnement\": \"\",\n\t\t\"type\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/caisse/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "caisse-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"idMarkaz\": \"\",\n\t\t\t\"idUtilisateur\": \"\",\n\t\t\t\"idDepense\": \"\",\n\t\t\t\"montant\": \"\",\n\t\t\t\"montantApprovisionnement\": \"\",\n\t\t\t\"dateApprovisionnement\": \"\",\n\t\t\t\"type\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/caisse/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "caisse-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"idMarkaz\": \"\",\n\t\t\t\"idUtilisateur\": \"\",\n\t\t\t\"idDepense\": \"\",\n\t\t\t\"montant\": \"\",\n\t\t\t\"montantApprovisionnement\": \"\",\n\t\t\t\"dateApprovisionnement\": \"\",\n\t\t\t\"type\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/caisse/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "caisse-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/caisse/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "chargeFixe",
+            "item": [
+                {
+                    "name": "chargeFixe-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"code\": \"\",\n\t\t\"label\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/chargeFixe/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "chargeFixe-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"code\": \"\",\n\t\t\t\"label\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/chargeFixe/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "chargeFixe-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"label\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/chargeFixe/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "chargeFixe-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/chargeFixe/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "demande",
+            "item": [
+                {
+                    "name": "demande-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"label\": \"\",\n\t\t\"code\": \"\",\n\t\t\"description\": \"\",\n\t\t\"montant\": \"\",\n\t\t\"imageUrl\": \"\",\n\t\t\"dateDebut\": \"\",\n\t\t\"dateFin\": \"\",\n\t\t\"statut\": \"\",\n\t\t\"idUtilisateur\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/demande/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "demande-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"label\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"description\": \"\",\n\t\t\t\"montant\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"dateDebut\": \"\",\n\t\t\t\"dateFin\": \"\",\n\t\t\t\"statut\": \"\",\n\t\t\t\"idUtilisateur\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/demande/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "demande-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"label\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"description\": \"\",\n\t\t\t\"montant\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"dateDebut\": \"\",\n\t\t\t\"dateFin\": \"\",\n\t\t\t\"statut\": \"\",\n\t\t\t\"idUtilisateur\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/demande/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "demande-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/demande/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "demandeHistorique",
+            "item": [
+                {
+                    "name": "demandeHistorique-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"idDemande\": \"\",\n\t\t\"idUtilisateur\": \"\",\n\t\t\"statut\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/demandeHistorique/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "demandeHistorique-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"idDemande\": \"\",\n\t\t\t\"idUtilisateur\": \"\",\n\t\t\t\"statut\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/demandeHistorique/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "demandeHistorique-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"idDemande\": \"\",\n\t\t\t\"idUtilisateur\": \"\",\n\t\t\t\"statut\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/demandeHistorique/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "demandeHistorique-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/demandeHistorique/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "depense",
+            "item": [
+                {
+                    "name": "depense-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"code\": \"\",\n\t\t\"idChargeFixe\": \"\",\n\t\t\"idDemande\": \"\",\n\t\t\"montant\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/depense/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "depense-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"code\": \"\",\n\t\t\t\"idChargeFixe\": \"\",\n\t\t\t\"idDemande\": \"\",\n\t\t\t\"montant\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/depense/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "depense-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"idChargeFixe\": \"\",\n\t\t\t\"idDemande\": \"\",\n\t\t\t\"montant\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/depense/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "depense-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/depense/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "direction",
+            "item": [
+                {
+                    "name": "direction-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"idMarkaz\": \"\",\n\t\t\"code\": \"\",\n\t\t\"intitule\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/direction/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "direction-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"idMarkaz\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"intitule\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/direction/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "direction-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"idMarkaz\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"intitule\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/direction/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "direction-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/direction/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "markaz",
+            "item": [
+                {
+                    "name": "markaz-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"code\": \"\",\n\t\t\"intitule\": \"\",\n\t\t\"adresse\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/markaz/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "markaz-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"code\": \"\",\n\t\t\t\"intitule\": \"\",\n\t\t\t\"adresse\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/markaz/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "markaz-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"intitule\": \"\",\n\t\t\t\"adresse\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/markaz/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "markaz-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/markaz/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "recette",
+            "item": [
+                {
+                    "name": "recette-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"source\": \"\",\n\t\t\"montant\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/recette/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "recette-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"source\": \"\",\n\t\t\t\"montant\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/recette/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "recette-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"source\": \"\",\n\t\t\t\"montant\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/recette/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "recette-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/recette/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "role",
+            "item": [
+                {
+                    "name": "role-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"name\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/role/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "role-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"name\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/role/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "role-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"name\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/role/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "role-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/role/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "stock",
+            "item": [
+                {
+                    "name": "stock-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"intitule\": \"\",\n\t\t\"quantite\": \"\",\n\t\t\"etat\": \"\",\n\t\t\"dateEntree\": \"\",\n\t\t\"dateSortie\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/stock/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "stock-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"intitule\": \"\",\n\t\t\t\"quantite\": \"\",\n\t\t\t\"etat\": \"\",\n\t\t\t\"dateEntree\": \"\",\n\t\t\t\"dateSortie\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/stock/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "stock-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"intitule\": \"\",\n\t\t\t\"quantite\": \"\",\n\t\t\t\"etat\": \"\",\n\t\t\t\"dateEntree\": \"\",\n\t\t\t\"dateSortie\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/stock/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "stock-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/stock/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "stockHistorique",
+            "item": [
+                {
+                    "name": "stockHistorique-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"intitule\": \"\",\n\t\t\"idStock\": \"\",\n\t\t\"quantite\": \"\",\n\t\t\"etat\": \"\",\n\t\t\"dateMvt\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/stockHistorique/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "stockHistorique-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"intitule\": \"\",\n\t\t\t\"idStock\": \"\",\n\t\t\t\"quantite\": \"\",\n\t\t\t\"etat\": \"\",\n\t\t\t\"dateMvt\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/stockHistorique/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "stockHistorique-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"intitule\": \"\",\n\t\t\t\"idStock\": \"\",\n\t\t\t\"quantite\": \"\",\n\t\t\t\"etat\": \"\",\n\t\t\t\"dateMvt\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/stockHistorique/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "stockHistorique-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/stockHistorique/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "utilisateur",
+            "item": [
+                {
+                    "name": "utilisateur-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"login\": \"\",\n\t\t\"firstName\": \"\",\n\t\t\"lastName\": \"\",\n\t\t\"email\": \"\",\n\t\t\"imageUrl\": \"\",\n\t\t\"idMarkaz\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateur/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "utilisateur-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"login\": \"\",\n\t\t\t\"firstName\": \"\",\n\t\t\t\"lastName\": \"\",\n\t\t\t\"email\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"idMarkaz\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateur/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "utilisateur-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"login\": \"\",\n\t\t\t\"firstName\": \"\",\n\t\t\t\"lastName\": \"\",\n\t\t\t\"email\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"idMarkaz\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateur/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "utilisateur-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateur/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "utilisateurRole",
+            "item": [
+                {
+                    "name": "utilisateurRole-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\",\n\t\t\"roleId\": \"\",\n\t\t\"utilisateurId\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateurRole/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "utilisateurRole-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"roleId\": \"\",\n\t\t\t\"utilisateurId\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateurRole/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "utilisateurRole-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"roleId\": \"\",\n\t\t\t\"utilisateurId\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateurRole/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "utilisateurRole-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateurRole/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		}
+    ],
+     "variable": [
+        {
+            "key": "main_url",
+            "value": "http://localhost:8080"
+        }
+    ]
+}
