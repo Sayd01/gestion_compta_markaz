@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Locale;
+
+import ci.saydos.markazcompta.utils.enums.StatutDemandeEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
@@ -30,11 +32,19 @@ import ci.saydos.markazcompta.dao.entity.*;
  */
 @Repository
 public interface _DemandeRepository {
-	default List<String> _generateCriteria(DemandeDto dto, HashMap<String, java.lang.Object> param, Integer index, Locale locale) throws Exception {
-		List<String> listOfQuery = new ArrayList<String>();
+    default List<String> _generateCriteria(DemandeDto dto, HashMap<String, java.lang.Object> param, Integer index, Locale locale) throws Exception {
+        List<String> listOfQuery = new ArrayList<String>();
 
-		// PUT YOUR RIGHT CUSTOM CRITERIA HERE
+        // PUT YOUR RIGHT CUSTOM CRITERIA HERE
 
-		return listOfQuery;
-	}
+        return listOfQuery;
+    }
+
+    @Query("select e from Demande e where e.code = :code and e.statut = :statut and e.isDeleted = :isDeleted")
+    Demande findByCodeAndStatut(@Param("code") String code, @Param("statut") StatutDemandeEnum statut, @Param("isDeleted") Boolean isDeleted);
+
+    @Query("select e from Demande e where e.label = :label and e.statut = :statut and e.utilisateur.login = :login and e.montant = :montant and e.isDeleted = :isDeleted")
+    Demande findByLabelAndStatutAndUserAndMontant(@Param("label") String label, @Param("statut") StatutDemandeEnum statut, @Param("login") String login, @Param("montant") Double montant, @Param("isDeleted") Boolean isDeleted);
+
+
 }

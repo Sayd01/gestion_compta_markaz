@@ -36,6 +36,7 @@ public class UtilisateurDto extends _UtilisateurDto implements Cloneable{
     private String     login                ;
     private String     firstName            ;
     private String     lastName             ;
+    private String     password             ;
     private String     email                ;
     private String     imageUrl             ;
     private Integer    idMarkaz             ;
@@ -57,7 +58,8 @@ public class UtilisateurDto extends _UtilisateurDto implements Cloneable{
 	private SearchParam<String>   firstNameParam        ;                     
 	private SearchParam<String>   lastNameParam         ;                     
 	private SearchParam<String>   emailParam            ;                     
-	private SearchParam<String>   imageUrlParam         ;                     
+	private SearchParam<String>   passwordParam            ;
+	private SearchParam<String>   imageUrlParam         ;
 	private SearchParam<Integer>  idMarkazParam         ;                     
 	private SearchParam<String>   createdAtParam        ;                     
 	private SearchParam<Integer>  createdByParam        ;                     

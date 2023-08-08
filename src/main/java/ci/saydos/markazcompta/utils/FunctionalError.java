@@ -70,6 +70,11 @@ public class FunctionalError {
 		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_EXIST", new Object[] {}, locale) + ": " + message);
 		return status;
 	}
+	public Status DATA_EXIST_DEMANDE(Locale locale) {
+		status.setCode(StatusCode.FUNC_DATA_EXIST);
+		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_EXIST_DEMANDE", new Object[] {}, locale));
+		return status;
+	}
 
 	public Status INVALID_CODE_LANGUAGE(String message, Locale locale) {
 		status.setCode(StatusCode.FUNC_INVALID_CODE_LANGUAGE);

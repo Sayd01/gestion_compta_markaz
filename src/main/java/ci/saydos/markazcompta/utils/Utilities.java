@@ -27,21 +27,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Objects;
 
 import javax.imageio.ImageIO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -628,5 +617,11 @@ public class Utilities {
 		Pattern emailPattern = Pattern.compile(".+@.+\\.[a-z]+");
 		Matcher emailMatcher = emailPattern.matcher(email);
 		return emailMatcher.matches();
+	}
+
+	public static String generateUniqueCode(String prefix, Integer longueur) {
+		UUID   uuid              = UUID.randomUUID();
+		String codeWithoutDashes = uuid.toString().replaceAll("-", ""); // Supprime les tirets
+        return prefix + codeWithoutDashes.substring(0, longueur);
 	}
 }

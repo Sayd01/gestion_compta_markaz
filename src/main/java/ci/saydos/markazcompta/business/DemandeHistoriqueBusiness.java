@@ -80,12 +80,13 @@ public class DemandeHistoriqueBusiness implements IBasicBusiness<Request<Demande
 
 		Response<DemandeHistoriqueDto> response = new Response<DemandeHistoriqueDto>();
 		List<DemandeHistorique>        items    = new ArrayList<DemandeHistorique>();
+
+		System.out.println(request.getDatas());
 			
 		for (DemandeHistoriqueDto dto : request.getDatas()) {
 			// Definir les parametres obligatoires
 			Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
 			fieldsToVerify.put("idDemande", dto.getIdDemande());
-			fieldsToVerify.put("idUtilisateur", dto.getIdUtilisateur());
 			fieldsToVerify.put("statut", dto.getStatut());
 			if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
 				throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -99,10 +100,10 @@ public class DemandeHistoriqueBusiness implements IBasicBusiness<Request<Demande
 
 			// Verify if utilisateur exist
 			Utilisateur existingUtilisateur = null;
-			if (dto.getIdUtilisateur() != null && dto.getIdUtilisateur() > 0){
-				existingUtilisateur = utilisateurRepository.findOne(dto.getIdUtilisateur(), false);
+			if (request.getUser() != null && request.getUser() > 0){
+				existingUtilisateur = utilisateurRepository.findOne(request.getUser(), false);
 				if (existingUtilisateur == null) {
-					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("utilisateur idUtilisateur -> " + dto.getIdUtilisateur(), locale));
+					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("utilisateur idUtilisateur -> " + request.getUser(), locale));
 				}
 			}
 			// Verify if demande exist
@@ -113,7 +114,7 @@ public class DemandeHistoriqueBusiness implements IBasicBusiness<Request<Demande
 					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("demande idDemande -> " + dto.getIdDemande(), locale));
 				}
 			}
-				DemandeHistorique entityToSave = null;
+			DemandeHistorique entityToSave = null;
 			entityToSave = DemandeHistoriqueTransformer.INSTANCE.toEntity(dto, existingUtilisateur, existingDemande);
 			entityToSave.setCreatedAt(Utilities.getCurrentDate());
 			entityToSave.setCreatedBy(request.getUser());

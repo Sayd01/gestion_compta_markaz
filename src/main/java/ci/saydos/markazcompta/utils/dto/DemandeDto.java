@@ -31,6 +31,7 @@ import ci.saydos.markazcompta.utils.dto.customize._DemandeDto;
 @ToString
 @JsonInclude(Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
+@AllArgsConstructor
 public class DemandeDto extends _DemandeDto implements Cloneable {
 
     private Integer id; // Primary Key

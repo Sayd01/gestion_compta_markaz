@@ -5,10 +5,8 @@ import lombok.Getter;
 
 
 public enum StatutDemandeEnum {
-    EN_COURS,
+    INITIE,
     INVALIDE,
     VALIDE,
-    EFFECTUEE;
-
-
+    TERMINE;
 }

@@ -76,6 +76,7 @@ public interface UtilisateurTransformer {
 		@Mapping(source="dto.login", target="login"),
 		@Mapping(source="dto.firstName", target="firstName"),
 		@Mapping(source="dto.lastName", target="lastName"),
+		@Mapping(source="dto.password", target="password"),
 		@Mapping(source="dto.email", target="email"),
 		@Mapping(source="dto.imageUrl", target="imageUrl"),
 		@Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
