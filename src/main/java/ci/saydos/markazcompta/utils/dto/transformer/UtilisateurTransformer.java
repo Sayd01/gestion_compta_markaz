@@ -2,7 +2,7 @@
 
 /*
  * Java transformer for entity table utilisateur 
- * Created on 2023-08-06 ( Time 01:31:06 )
+ * Created on 2023-08-08 ( Time 19:02:56 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -76,7 +76,6 @@ public interface UtilisateurTransformer {
 		@Mapping(source="dto.login", target="login"),
 		@Mapping(source="dto.firstName", target="firstName"),
 		@Mapping(source="dto.lastName", target="lastName"),
-		@Mapping(source="dto.password", target="password"),
 		@Mapping(source="dto.email", target="email"),
 		@Mapping(source="dto.imageUrl", target="imageUrl"),
 		@Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -84,6 +83,7 @@ public interface UtilisateurTransformer {
 		@Mapping(source="dto.isDeleted", target="isDeleted"),
 		@Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
 		@Mapping(source="dto.updatedBy", target="updatedBy"),
+		@Mapping(source="dto.password", target="password"),
 		@Mapping(source="markaz", target="markaz"),
 	})
     Utilisateur toEntity(UtilisateurDto dto, Markaz markaz) throws ParseException;

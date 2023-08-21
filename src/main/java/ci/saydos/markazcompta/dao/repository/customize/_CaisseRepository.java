@@ -36,4 +36,7 @@ public interface _CaisseRepository {
 
 		return listOfQuery;
 	}
+	@Query(value = "SELECT montant_disponible FROM Caisse ORDER BY date_montant_actuel DESC LIMIT 1",nativeQuery = true)
+	Double montantDisponible();
+
 }

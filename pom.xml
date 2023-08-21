@@ -6,7 +6,7 @@
 	<groupId>group.to.be.defined</groupId>
 	<artifactId>markaz_compta</artifactId>
 	<version>0.1</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>markaz_compta</name>
 	<description>markaz_compta</description>
@@ -30,21 +30,18 @@
        <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
+			<version>3.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			</dependency>
+			<version>3.0.4</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			</dependency>
+			<version>6.0.6</version>
+		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -85,7 +82,7 @@
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
-			<version>${org.mapstruct.version}</version>
+			<version>1.5.3.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scala-lang</groupId>
@@ -157,6 +154,10 @@
 			<artifactId>minio</artifactId>
 			<version>8.5.3</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
     </dependencies>
     <profiles>
         <profile>
@@ -164,7 +165,7 @@
             <properties>
                 <spring.profiles.active>local</spring.profiles.active>
             </properties>
-           <activation>
+            <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
@@ -173,9 +174,6 @@
             <properties>
                 <spring.profiles.active>dev</spring.profiles.active>
             </properties>
-<!--			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>-->
         </profile>
         <profile>
             <id>staging</id>
@@ -202,18 +200,6 @@
             </resource>
         </resources>
         <plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
             <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -230,7 +216,7 @@
 						<path>
 							<groupId>org.mapstruct</groupId>
 							<artifactId>mapstruct-processor</artifactId>
-							<version>${org.mapstruct.version}</version>
+							<version>1.5.5.Final</version>
 						</path>
 						<path>
 							<groupId>org.projectlombok</groupId>

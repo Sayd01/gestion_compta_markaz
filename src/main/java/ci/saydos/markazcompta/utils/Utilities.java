@@ -1,6 +1,6 @@
 
 /*
- * Created on 2023-08-06 ( Time 01:31:16 )
+ * Created on 2023-08-08 ( Time 19:03:08 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -622,6 +622,13 @@ public class Utilities {
 	public static String generateUniqueCode(String prefix, Integer longueur) {
 		UUID   uuid              = UUID.randomUUID();
 		String codeWithoutDashes = uuid.toString().replaceAll("-", ""); // Supprime les tirets
-        return prefix + codeWithoutDashes.substring(0, longueur);
+		return prefix + codeWithoutDashes.substring(0, longueur);
+	}
+
+	public static Double subtractMontant(double d1, double d2) {
+		return d1 - d2;
+	}
+	public static Double addMontant(double d1, double d2) {
+		return d1 + d2;
 	}
 }

@@ -1,7 +1,7 @@
-                                                        													
+            			
 /*
- * Java business for entity table caisse 
- * Created on 2023-08-10 ( Time 17:44:55 )
+ * Java business for entity table utilisateur_direction 
+ * Created on 2023-08-08 ( Time 19:02:57 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -27,29 +27,29 @@ import ci.saydos.markazcompta.utils.contract.IBasicBusiness;
 import ci.saydos.markazcompta.utils.contract.Request;
 import ci.saydos.markazcompta.utils.contract.Response;
 import ci.saydos.markazcompta.utils.dto.transformer.*;
-import ci.saydos.markazcompta.dao.entity.Caisse;
+import ci.saydos.markazcompta.dao.entity.UtilisateurDirection;
+import ci.saydos.markazcompta.dao.entity.Direction;
 import ci.saydos.markazcompta.dao.entity.Utilisateur;
-import ci.saydos.markazcompta.dao.entity.Depense;
 import ci.saydos.markazcompta.dao.entity.*;
 import ci.saydos.markazcompta.dao.repository.*;
 
 /**
-BUSINESS for table "caisse"
+BUSINESS for table "utilisateur_direction"
  * 
  * @author Geo
  *
  */
 @Log
 @Component
-public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Response<CaisseDto>> {
+public class UtilisateurDirectionBusiness implements IBasicBusiness<Request<UtilisateurDirectionDto>, Response<UtilisateurDirectionDto>> {
 
-	private Response<CaisseDto> response;
+	private Response<UtilisateurDirectionDto> response;
 	@Autowired
-	private CaisseRepository caisseRepository;
+	private UtilisateurDirectionRepository utilisateurDirectionRepository;
+	@Autowired
+	private DirectionRepository directionRepository;
 	@Autowired
 	private UtilisateurRepository utilisateurRepository;
-	@Autowired
-	private DepenseRepository depenseRepository;
 	@Autowired
 	private FunctionalError functionalError;
 	@Autowired
@@ -62,44 +62,48 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 	private SimpleDateFormat dateFormat;
 	private SimpleDateFormat dateTimeFormat;
 
-	public CaisseBusiness() {
+	public UtilisateurDirectionBusiness() {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	}
 	
 	/**
-	 * create Caisse by using CaisseDto as object.
+	 * create UtilisateurDirection by using UtilisateurDirectionDto as object.
 	 * 
 	 * @param request
 	 * @return response
 	 * 
 	 */
 	@Override
-	public Response<CaisseDto> create(Request<CaisseDto> request, Locale locale)  throws ParseException {
-		log.info("----begin create Caisse-----");
+	public Response<UtilisateurDirectionDto> create(Request<UtilisateurDirectionDto> request, Locale locale)  throws ParseException {
+		log.info("----begin create UtilisateurDirection-----");
 
-		Response<CaisseDto> response = new Response<CaisseDto>();
-		List<Caisse>        items    = new ArrayList<Caisse>();
+		Response<UtilisateurDirectionDto> response = new Response<UtilisateurDirectionDto>();
+		List<UtilisateurDirection>        items    = new ArrayList<UtilisateurDirection>();
 			
-		for (CaisseDto dto : request.getDatas()) {
+		for (UtilisateurDirectionDto dto : request.getDatas()) {
 			// Definir les parametres obligatoires
 			Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
-			fieldsToVerify.put("montantDisponible", dto.getMontantDisponible());
-			fieldsToVerify.put("montantEntre", dto.getMontantEntre());
-			fieldsToVerify.put("type", dto.getType());
-			//fieldsToVerify.put("idDepense", dto.getIdDepense());
+			fieldsToVerify.put("idDirection", dto.getIdDirection());
 			fieldsToVerify.put("idUtilisateur", dto.getIdUtilisateur());
-			fieldsToVerify.put("montantSortie", dto.getMontantSortie());
 			if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
 				throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
 			}
 
-			// Verify if caisse to insert do not exist
-			Caisse existingEntity = null;
+			// Verify if utilisateurDirection to insert do not exist
+			UtilisateurDirection existingEntity = null;
 			if (existingEntity != null) {
-				throw new InternalErrorException(functionalError.DATA_EXIST("caisse id -> " + dto.getId(), locale));
+				throw new InternalErrorException(functionalError.DATA_EXIST("utilisateurDirection id -> " + dto.getId(), locale));
 			}
 
+			// Verify if direction exist
+			Direction existingDirection = null;
+			if (dto.getIdDirection() != null && dto.getIdDirection() > 0){
+				existingDirection = directionRepository.findOne(dto.getIdDirection(), false);
+				if (existingDirection == null) {
+					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("direction idDirection -> " + dto.getIdDirection(), locale));
+				}
+			}
 			// Verify if utilisateur exist
 			Utilisateur existingUtilisateur = null;
 			if (dto.getIdUtilisateur() != null && dto.getIdUtilisateur() > 0){
@@ -108,30 +112,19 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("utilisateur idUtilisateur -> " + dto.getIdUtilisateur(), locale));
 				}
 			}
-			// Verify if depense exist
-			/*Depense existingDepense = null;
-			if (dto.getIdDepense() != null && dto.getIdDepense() > 0){
-				existingDepense = depenseRepository.findOne(dto.getIdDepense(), false);
-				if (existingDepense == null) {
-					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("depense idDepense -> " + dto.getIdDepense(), locale));
-				}
-			}*/
-				Caisse entityToSave = null;
-			entityToSave = CaisseTransformer.INSTANCE.toEntity(dto, existingUtilisateur, null);
-			entityToSave.setCreatedAt(Utilities.getCurrentDate());
-			entityToSave.setCreatedBy(request.getUser());
-			entityToSave.setIsDeleted(false);
+				UtilisateurDirection entityToSave = null;
+			entityToSave = UtilisateurDirectionTransformer.INSTANCE.toEntity(dto, existingDirection, existingUtilisateur);
 			items.add(entityToSave);
 		}
 
 		if (!items.isEmpty()) {
-			List<Caisse> itemsSaved = null;
+			List<UtilisateurDirection> itemsSaved = null;
 			// inserer les donnees en base de donnees
-			itemsSaved = caisseRepository.saveAll((Iterable<Caisse>) items);
+			itemsSaved = utilisateurDirectionRepository.saveAll((Iterable<UtilisateurDirection>) items);
 			if (itemsSaved == null) {
-				throw new InternalErrorException(functionalError.SAVE_FAIL("caisse", locale));
+				throw new InternalErrorException(functionalError.SAVE_FAIL("utilisateurDirection", locale));
 			}
-			List<CaisseDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? CaisseTransformer.INSTANCE.toLiteDtos(itemsSaved) : CaisseTransformer.INSTANCE.toDtos(itemsSaved);
+			List<UtilisateurDirectionDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? UtilisateurDirectionTransformer.INSTANCE.toLiteDtos(itemsSaved) : UtilisateurDirectionTransformer.INSTANCE.toDtos(itemsSaved);
 
 			final int size = itemsSaved.size();
 			List<String>  listOfError      = Collections.synchronizedList(new ArrayList<String>());
@@ -157,25 +150,25 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 			response.setHasError(false);
 		}
 
-		log.info("----end create Caisse-----");
+		log.info("----end create UtilisateurDirection-----");
 		return response;
 	}
 
 	/**
-	 * update Caisse by using CaisseDto as object.
+	 * update UtilisateurDirection by using UtilisateurDirectionDto as object.
 	 * 
 	 * @param request
 	 * @return response
 	 * 
 	 */
 	@Override
-	public Response<CaisseDto> update(Request<CaisseDto> request, Locale locale)  throws ParseException {
-		log.info("----begin update Caisse-----");
+	public Response<UtilisateurDirectionDto> update(Request<UtilisateurDirectionDto> request, Locale locale)  throws ParseException {
+		log.info("----begin update UtilisateurDirection-----");
 
-		Response<CaisseDto> response = new Response<CaisseDto>();
-		List<Caisse>        items    = new ArrayList<Caisse>();
+		Response<UtilisateurDirectionDto> response = new Response<UtilisateurDirectionDto>();
+		List<UtilisateurDirection>        items    = new ArrayList<UtilisateurDirection>();
 			
-		for (CaisseDto dto : request.getDatas()) {
+		for (UtilisateurDirectionDto dto : request.getDatas()) {
 			// Definir les parametres obligatoires
 			Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
 			fieldsToVerify.put("id", dto.getId());
@@ -183,13 +176,21 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 				throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
 			}
 
-			// Verifier si la caisse existe
-			Caisse entityToSave = null;
-			entityToSave = caisseRepository.findOne(dto.getId(), false);
+			// Verifier si la utilisateurDirection existe
+			UtilisateurDirection entityToSave = null;
+			entityToSave = utilisateurDirectionRepository.findOne(dto.getId());
 			if (entityToSave == null) {
-				throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("caisse id -> " + dto.getId(), locale));
+				throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("utilisateurDirection id -> " + dto.getId(), locale));
 			}
 
+			// Verify if direction exist
+			if (dto.getIdDirection() != null && dto.getIdDirection() > 0){
+				Direction existingDirection = directionRepository.findOne(dto.getIdDirection(), false);
+				if (existingDirection == null) {
+					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("direction idDirection -> " + dto.getIdDirection(), locale));
+				}
+				entityToSave.setDirection(existingDirection);
+			}
 			// Verify if utilisateur exist
 			if (dto.getIdUtilisateur() != null && dto.getIdUtilisateur() > 0){
 				Utilisateur existingUtilisateur = utilisateurRepository.findOne(dto.getIdUtilisateur(), false);
@@ -198,45 +199,17 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 				}
 				entityToSave.setUtilisateur(existingUtilisateur);
 			}
-			// Verify if depense exist
-			if (dto.getIdDepense() != null && dto.getIdDepense() > 0){
-				Depense existingDepense = depenseRepository.findOne(dto.getIdDepense(), false);
-				if (existingDepense == null) {
-					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("depense idDepense -> " + dto.getIdDepense(), locale));
-				}
-				entityToSave.setDepense(existingDepense);
-			}
-			if (dto.getCreatedBy() != null && dto.getCreatedBy() > 0) {
-				entityToSave.setCreatedBy(dto.getCreatedBy());
-			}
-			if (dto.getMontantDisponible() != null && dto.getMontantDisponible() > 0) {
-				entityToSave.setMontantDisponible(dto.getMontantDisponible());
-			}
-			if (dto.getMontantEntre() != null && dto.getMontantEntre() > 0) {
-				entityToSave.setMontantEntre(dto.getMontantEntre());
-			}
-			if (Utilities.notBlank(dto.getType().toString())) {
-				entityToSave.setType(dto.getType());
-			}
-			if (dto.getUpdatedBy() != null && dto.getUpdatedBy() > 0) {
-				entityToSave.setUpdatedBy(dto.getUpdatedBy());
-			}
-			if (dto.getMontantSortie() != null && dto.getMontantSortie() > 0) {
-				entityToSave.setMontantSortie(dto.getMontantSortie());
-			}
-			entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-			entityToSave.setUpdatedBy(request.getUser());
 			items.add(entityToSave);
 		}
 
 		if (!items.isEmpty()) {
-			List<Caisse> itemsSaved = null;
+			List<UtilisateurDirection> itemsSaved = null;
 			// maj les donnees en base
-			itemsSaved = caisseRepository.saveAll((Iterable<Caisse>) items);
+			itemsSaved = utilisateurDirectionRepository.saveAll((Iterable<UtilisateurDirection>) items);
 			if (itemsSaved == null) {
-				throw new InternalErrorException(functionalError.SAVE_FAIL("caisse", locale));
+				throw new InternalErrorException(functionalError.SAVE_FAIL("utilisateurDirection", locale));
 			}
-			List<CaisseDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? CaisseTransformer.INSTANCE.toLiteDtos(itemsSaved) : CaisseTransformer.INSTANCE.toDtos(itemsSaved);
+			List<UtilisateurDirectionDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? UtilisateurDirectionTransformer.INSTANCE.toLiteDtos(itemsSaved) : UtilisateurDirectionTransformer.INSTANCE.toDtos(itemsSaved);
 
 			final int size = itemsSaved.size();
 			List<String>  listOfError      = Collections.synchronizedList(new ArrayList<String>());
@@ -262,25 +235,25 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 			response.setStatus(status);
 		}
 
-		log.info("----end update Caisse-----");
+		log.info("----end update UtilisateurDirection-----");
 		return response;
 	}
 
 	/**
-	 * delete Caisse by using CaisseDto as object.
+	 * delete UtilisateurDirection by using UtilisateurDirectionDto as object.
 	 * 
 	 * @param request
 	 * @return response
 	 * 
 	 */
 	@Override
-	public Response<CaisseDto> delete(Request<CaisseDto> request, Locale locale)  {
-		log.info("----begin delete Caisse-----");
+	public Response<UtilisateurDirectionDto> delete(Request<UtilisateurDirectionDto> request, Locale locale)  {
+		log.info("----begin delete UtilisateurDirection-----");
 
-		Response<CaisseDto> response = new Response<CaisseDto>();
-		List<Caisse>        items    = new ArrayList<Caisse>();
+		Response<UtilisateurDirectionDto> response = new Response<UtilisateurDirectionDto>();
+		List<UtilisateurDirection>        items    = new ArrayList<UtilisateurDirection>();
 			
-		for (CaisseDto dto : request.getDatas()) {
+		for (UtilisateurDirectionDto dto : request.getDatas()) {
 			// Definir les parametres obligatoires
 			Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
 			fieldsToVerify.put("id", dto.getId());
@@ -288,11 +261,11 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 				throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
 			}
 
-			// Verifier si la caisse existe
-			Caisse existingEntity = null;
-			existingEntity = caisseRepository.findOne(dto.getId(), false);
+			// Verifier si la utilisateurDirection existe
+			UtilisateurDirection existingEntity = null;
+			existingEntity = utilisateurDirectionRepository.findOne(dto.getId());
 			if (existingEntity == null) {
-				throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("caisse -> " + dto.getId(), locale));
+				throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("utilisateurDirection -> " + dto.getId(), locale));
 			}
 
 			// -----------------------------------------------------------------------
@@ -301,13 +274,12 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 
 
 
-			existingEntity.setIsDeleted(true);
 			items.add(existingEntity);
 		}
 
 		if (!items.isEmpty()) {
 			// supprimer les donnees en base
-			caisseRepository.saveAll((Iterable<Caisse>) items);
+			utilisateurDirectionRepository.deleteAll((Iterable<UtilisateurDirection>) items);
 
 			Status status = new Status();
 			status.setCode(StatusCode.SUCCESS);
@@ -318,26 +290,26 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 			response.setStatus(status);
 		}
 
-		log.info("----end delete Caisse-----");
+		log.info("----end delete UtilisateurDirection-----");
 		return response;
 	}
 
 	/**
-	 * get Caisse by using CaisseDto as object.
+	 * get UtilisateurDirection by using UtilisateurDirectionDto as object.
 	 * 
 	 * @param request
 	 * @return response
 	 * 
 	 */
 	@Override
-	public Response<CaisseDto> getByCriteria(Request<CaisseDto> request, Locale locale)  throws Exception {
-		log.info("----begin get Caisse-----");
+	public Response<UtilisateurDirectionDto> getByCriteria(Request<UtilisateurDirectionDto> request, Locale locale)  throws Exception {
+		log.info("----begin get UtilisateurDirection-----");
 
-		Response<CaisseDto> response = new Response<CaisseDto>();
-		List<Caisse> items 			 = caisseRepository.getByCriteria(request, em, locale);
+		Response<UtilisateurDirectionDto> response = new Response<UtilisateurDirectionDto>();
+		List<UtilisateurDirection> items 			 = utilisateurDirectionRepository.getByCriteria(request, em, locale);
 
 		if (items != null && !items.isEmpty()) {
-			List<CaisseDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? CaisseTransformer.INSTANCE.toLiteDtos(items) : CaisseTransformer.INSTANCE.toDtos(items);
+			List<UtilisateurDirectionDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? UtilisateurDirectionTransformer.INSTANCE.toLiteDtos(items) : UtilisateurDirectionTransformer.INSTANCE.toDtos(items);
 
 			final int size = items.size();
 			List<String>  listOfError      = Collections.synchronizedList(new ArrayList<String>());
@@ -361,20 +333,20 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 			response.setHasError(false);
 			response.setHttpCode(HttpStatus.OK.value());
 			response.setStatus(status);
-			response.setCount(caisseRepository.count(request, em, locale));
+			response.setCount(utilisateurDirectionRepository.count(request, em, locale));
 			response.setHasError(false);
 		} else {
-			response.setStatus(functionalError.DATA_EMPTY("caisse", locale));
+			response.setStatus(functionalError.DATA_EMPTY("utilisateurDirection", locale));
 			response.setHasError(false);
 			return response;
 		}
 
-		log.info("----end get Caisse-----");
+		log.info("----end get UtilisateurDirection-----");
 		return response;
 	}
 
 	/**
-	 * get full CaisseDto by using Caisse as object.
+	 * get full UtilisateurDirectionDto by using UtilisateurDirection as object.
 	 * 
 	 * @param dto
 	 * @param size
@@ -383,7 +355,7 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 	 * @return
 	 * @throws Exception
 	 */
-	private CaisseDto getFullInfos(CaisseDto dto, Integer size, Boolean isSimpleLoading, Locale locale) throws Exception {
+	private UtilisateurDirectionDto getFullInfos(UtilisateurDirectionDto dto, Integer size, Boolean isSimpleLoading, Locale locale) throws Exception {
 		// put code here
 
 		if (Utilities.isTrue(isSimpleLoading)) {
@@ -396,14 +368,14 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 		return dto;
 	}
 
-	public Response<CaisseDto> custom(Request<CaisseDto> request, Locale locale) {
-		log.info("----begin custom CaisseDto-----");
-		Response<CaisseDto> response = new Response<CaisseDto>();
+	public Response<UtilisateurDirectionDto> custom(Request<UtilisateurDirectionDto> request, Locale locale) {
+		log.info("----begin custom UtilisateurDirectionDto-----");
+		Response<UtilisateurDirectionDto> response = new Response<UtilisateurDirectionDto>();
 		
 		response.setHasError(false);
 		response.setCount(1L);
-		response.setItems(Arrays.asList(new CaisseDto()));
-		log.info("----end custom CaisseDto-----");
+		response.setItems(Arrays.asList(new UtilisateurDirectionDto()));
+		log.info("----end custom UtilisateurDirectionDto-----");
 		return response;
 	}
 }

@@ -170,6 +170,16 @@ public interface DemandeRepository extends JpaRepository<Demande, Integer>, _Dem
 	List<Demande> findByIdUtilisateur(@Param("idUtilisateur")Integer idUtilisateur, @Param("isDeleted")Boolean isDeleted);
 
 	/**
+	 * Finds Demande by using idDirection as a search criteria.
+	 * 
+	 * @param idDirection
+	 * @return An Object Demande whose idDirection is equals to the given idDirection. If
+	 *         no Demande is found, this method returns null.
+	 */
+	@Query("select e from Demande e where e.direction.id = :idDirection and e.isDeleted = :isDeleted")
+	List<Demande> findByIdDirection(@Param("idDirection")Integer idDirection, @Param("isDeleted")Boolean isDeleted);
+
+	/**
 	 * Finds List of Demande by using demandeDto as a search criteria.
 	 * 
 	 * @param request, em
@@ -284,11 +294,9 @@ public interface DemandeRepository extends JpaRepository<Demande, Integer>, _Dem
 			if (Utilities.notBlank(dto.getDateFin())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("dateFin", dto.getDateFin(), "e.dateFin", "Date", dto.getDateFinParam(), param, index, locale));
 			}
-
-			if (dto.getStatut() != null) {
+			if (dto.getStatut() !=null ) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("statut", dto.getStatut(), "e.statut", "enum", dto.getStatutParam(), param, index, locale));
 			}
-
 			if (Utilities.notBlank(dto.getCreatedAt())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("createdAt", dto.getCreatedAt(), "e.createdAt", "Date", dto.getCreatedAtParam(), param, index, locale));
 			}
@@ -307,6 +315,9 @@ public interface DemandeRepository extends JpaRepository<Demande, Integer>, _Dem
 			if (dto.getIdUtilisateur()!= null && dto.getIdUtilisateur() > 0) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("idUtilisateur", dto.getIdUtilisateur(), "e.utilisateur.id", "Integer", dto.getIdUtilisateurParam(), param, index, locale));
 			}
+			if (dto.getIdDirection()!= null && dto.getIdDirection() > 0) {
+				listOfQuery.add(CriteriaUtils.generateCriteria("idDirection", dto.getIdDirection(), "e.direction.id", "Integer", dto.getIdDirectionParam(), param, index, locale));
+			}
 			if (Utilities.notBlank(dto.getUtilisateurLogin())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("utilisateurLogin", dto.getUtilisateurLogin(), "e.utilisateur.login", "String", dto.getUtilisateurLoginParam(), param, index, locale));
 			}
@@ -315,6 +326,12 @@ public interface DemandeRepository extends JpaRepository<Demande, Integer>, _Dem
 			}
 			if (Utilities.notBlank(dto.getUtilisateurLastName())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("utilisateurLastName", dto.getUtilisateurLastName(), "e.utilisateur.lastName", "String", dto.getUtilisateurLastNameParam(), param, index, locale));
+			}
+			if (Utilities.notBlank(dto.getDirectionCode())) {
+				listOfQuery.add(CriteriaUtils.generateCriteria("directionCode", dto.getDirectionCode(), "e.direction.code", "String", dto.getDirectionCodeParam(), param, index, locale));
+			}
+			if (Utilities.notBlank(dto.getDirectionIntitule())) {
+				listOfQuery.add(CriteriaUtils.generateCriteria("directionIntitule", dto.getDirectionIntitule(), "e.direction.intitule", "String", dto.getDirectionIntituleParam(), param, index, locale));
 			}
 			List<String> listOfCustomQuery = _generateCriteria(dto, param, index, locale);
 			if (Utilities.isNotEmpty(listOfCustomQuery)) {

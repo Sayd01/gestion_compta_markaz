@@ -2,270 +2,6 @@
 	"user": 1,
 	"datas": [
 		{
-			"code": "CAISSE",
-			"name": "CAISSE"
-		},
-		{
-			"code": "VIEW_CAISSE",
-			"parentCode": "CAISSE",
-			"name": "VIEW CAISSE"
-		},
-		{
-			"code": "CREATE_CAISSE",
-			"parentCode": "CAISSE",
-			"name": "CREATE CAISSE"
-		},
-		{
-			"code": "UPDATE_CAISSE",
-			"parentCode": "CAISSE",
-			"name": "UPDATE CAISSE"
-		},
-		{
-			"code": "DELETE_CAISSE",
-			"parentCode": "CAISSE",
-			"name": "DELETE CAISSE"
-		},
-		{
-			"code": "CHARGE_FIXE",
-			"name": "CHARGE_FIXE"
-		},
-		{
-			"code": "VIEW_CHARGE_FIXE",
-			"parentCode": "CHARGE_FIXE",
-			"name": "VIEW CHARGE_FIXE"
-		},
-		{
-			"code": "CREATE_CHARGE_FIXE",
-			"parentCode": "CHARGE_FIXE",
-			"name": "CREATE CHARGE_FIXE"
-		},
-		{
-			"code": "UPDATE_CHARGE_FIXE",
-			"parentCode": "CHARGE_FIXE",
-			"name": "UPDATE CHARGE_FIXE"
-		},
-		{
-			"code": "DELETE_CHARGE_FIXE",
-			"parentCode": "CHARGE_FIXE",
-			"name": "DELETE CHARGE_FIXE"
-		},
-		{
-			"code": "DEMANDE",
-			"name": "DEMANDE"
-		},
-		{
-			"code": "VIEW_DEMANDE",
-			"parentCode": "DEMANDE",
-			"name": "VIEW DEMANDE"
-		},
-		{
-			"code": "CREATE_DEMANDE",
-			"parentCode": "DEMANDE",
-			"name": "CREATE DEMANDE"
-		},
-		{
-			"code": "UPDATE_DEMANDE",
-			"parentCode": "DEMANDE",
-			"name": "UPDATE DEMANDE"
-		},
-		{
-			"code": "DELETE_DEMANDE",
-			"parentCode": "DEMANDE",
-			"name": "DELETE DEMANDE"
-		},
-		{
-			"code": "DEMANDE_HISTORIQUE",
-			"name": "DEMANDE_HISTORIQUE"
-		},
-		{
-			"code": "VIEW_DEMANDE_HISTORIQUE",
-			"parentCode": "DEMANDE_HISTORIQUE",
-			"name": "VIEW DEMANDE_HISTORIQUE"
-		},
-		{
-			"code": "CREATE_DEMANDE_HISTORIQUE",
-			"parentCode": "DEMANDE_HISTORIQUE",
-			"name": "CREATE DEMANDE_HISTORIQUE"
-		},
-		{
-			"code": "UPDATE_DEMANDE_HISTORIQUE",
-			"parentCode": "DEMANDE_HISTORIQUE",
-			"name": "UPDATE DEMANDE_HISTORIQUE"
-		},
-		{
-			"code": "DELETE_DEMANDE_HISTORIQUE",
-			"parentCode": "DEMANDE_HISTORIQUE",
-			"name": "DELETE DEMANDE_HISTORIQUE"
-		},
-		{
-			"code": "DEPENSE",
-			"name": "DEPENSE"
-		},
-		{
-			"code": "VIEW_DEPENSE",
-			"parentCode": "DEPENSE",
-			"name": "VIEW DEPENSE"
-		},
-		{
-			"code": "CREATE_DEPENSE",
-			"parentCode": "DEPENSE",
-			"name": "CREATE DEPENSE"
-		},
-		{
-			"code": "UPDATE_DEPENSE",
-			"parentCode": "DEPENSE",
-			"name": "UPDATE DEPENSE"
-		},
-		{
-			"code": "DELETE_DEPENSE",
-			"parentCode": "DEPENSE",
-			"name": "DELETE DEPENSE"
-		},
-		{
-			"code": "DIRECTION",
-			"name": "DIRECTION"
-		},
-		{
-			"code": "VIEW_DIRECTION",
-			"parentCode": "DIRECTION",
-			"name": "VIEW DIRECTION"
-		},
-		{
-			"code": "CREATE_DIRECTION",
-			"parentCode": "DIRECTION",
-			"name": "CREATE DIRECTION"
-		},
-		{
-			"code": "UPDATE_DIRECTION",
-			"parentCode": "DIRECTION",
-			"name": "UPDATE DIRECTION"
-		},
-		{
-			"code": "DELETE_DIRECTION",
-			"parentCode": "DIRECTION",
-			"name": "DELETE DIRECTION"
-		},
-		{
-			"code": "MARKAZ",
-			"name": "MARKAZ"
-		},
-		{
-			"code": "VIEW_MARKAZ",
-			"parentCode": "MARKAZ",
-			"name": "VIEW MARKAZ"
-		},
-		{
-			"code": "CREATE_MARKAZ",
-			"parentCode": "MARKAZ",
-			"name": "CREATE MARKAZ"
-		},
-		{
-			"code": "UPDATE_MARKAZ",
-			"parentCode": "MARKAZ",
-			"name": "UPDATE MARKAZ"
-		},
-		{
-			"code": "DELETE_MARKAZ",
-			"parentCode": "MARKAZ",
-			"name": "DELETE MARKAZ"
-		},
-		{
-			"code": "RECETTE",
-			"name": "RECETTE"
-		},
-		{
-			"code": "VIEW_RECETTE",
-			"parentCode": "RECETTE",
-			"name": "VIEW RECETTE"
-		},
-		{
-			"code": "CREATE_RECETTE",
-			"parentCode": "RECETTE",
-			"name": "CREATE RECETTE"
-		},
-		{
-			"code": "UPDATE_RECETTE",
-			"parentCode": "RECETTE",
-			"name": "UPDATE RECETTE"
-		},
-		{
-			"code": "DELETE_RECETTE",
-			"parentCode": "RECETTE",
-			"name": "DELETE RECETTE"
-		},
-		{
-			"code": "ROLE",
-			"name": "ROLE"
-		},
-		{
-			"code": "VIEW_ROLE",
-			"parentCode": "ROLE",
-			"name": "VIEW ROLE"
-		},
-		{
-			"code": "CREATE_ROLE",
-			"parentCode": "ROLE",
-			"name": "CREATE ROLE"
-		},
-		{
-			"code": "UPDATE_ROLE",
-			"parentCode": "ROLE",
-			"name": "UPDATE ROLE"
-		},
-		{
-			"code": "DELETE_ROLE",
-			"parentCode": "ROLE",
-			"name": "DELETE ROLE"
-		},
-		{
-			"code": "STOCK",
-			"name": "STOCK"
-		},
-		{
-			"code": "VIEW_STOCK",
-			"parentCode": "STOCK",
-			"name": "VIEW STOCK"
-		},
-		{
-			"code": "CREATE_STOCK",
-			"parentCode": "STOCK",
-			"name": "CREATE STOCK"
-		},
-		{
-			"code": "UPDATE_STOCK",
-			"parentCode": "STOCK",
-			"name": "UPDATE STOCK"
-		},
-		{
-			"code": "DELETE_STOCK",
-			"parentCode": "STOCK",
-			"name": "DELETE STOCK"
-		},
-		{
-			"code": "STOCK_HISTORIQUE",
-			"name": "STOCK_HISTORIQUE"
-		},
-		{
-			"code": "VIEW_STOCK_HISTORIQUE",
-			"parentCode": "STOCK_HISTORIQUE",
-			"name": "VIEW STOCK_HISTORIQUE"
-		},
-		{
-			"code": "CREATE_STOCK_HISTORIQUE",
-			"parentCode": "STOCK_HISTORIQUE",
-			"name": "CREATE STOCK_HISTORIQUE"
-		},
-		{
-			"code": "UPDATE_STOCK_HISTORIQUE",
-			"parentCode": "STOCK_HISTORIQUE",
-			"name": "UPDATE STOCK_HISTORIQUE"
-		},
-		{
-			"code": "DELETE_STOCK_HISTORIQUE",
-			"parentCode": "STOCK_HISTORIQUE",
-			"name": "DELETE STOCK_HISTORIQUE"
-		},
-		{
 			"code": "UTILISATEUR",
 			"name": "UTILISATEUR"
 		},
@@ -290,28 +26,28 @@
 			"name": "DELETE UTILISATEUR"
 		},
 		{
-			"code": "UTILISATEUR_ROLE",
-			"name": "UTILISATEUR_ROLE"
+			"code": "UTILISATEUR_DIRECTION",
+			"name": "UTILISATEUR_DIRECTION"
 		},
 		{
-			"code": "VIEW_UTILISATEUR_ROLE",
-			"parentCode": "UTILISATEUR_ROLE",
-			"name": "VIEW UTILISATEUR_ROLE"
+			"code": "VIEW_UTILISATEUR_DIRECTION",
+			"parentCode": "UTILISATEUR_DIRECTION",
+			"name": "VIEW UTILISATEUR_DIRECTION"
 		},
 		{
-			"code": "CREATE_UTILISATEUR_ROLE",
-			"parentCode": "UTILISATEUR_ROLE",
-			"name": "CREATE UTILISATEUR_ROLE"
+			"code": "CREATE_UTILISATEUR_DIRECTION",
+			"parentCode": "UTILISATEUR_DIRECTION",
+			"name": "CREATE UTILISATEUR_DIRECTION"
 		},
 		{
-			"code": "UPDATE_UTILISATEUR_ROLE",
-			"parentCode": "UTILISATEUR_ROLE",
-			"name": "UPDATE UTILISATEUR_ROLE"
+			"code": "UPDATE_UTILISATEUR_DIRECTION",
+			"parentCode": "UTILISATEUR_DIRECTION",
+			"name": "UPDATE UTILISATEUR_DIRECTION"
 		},
 		{
-			"code": "DELETE_UTILISATEUR_ROLE",
-			"parentCode": "UTILISATEUR_ROLE",
-			"name": "DELETE UTILISATEUR_ROLE"
+			"code": "DELETE_UTILISATEUR_DIRECTION",
+			"parentCode": "UTILISATEUR_DIRECTION",
+			"name": "DELETE UTILISATEUR_DIRECTION"
 		}
 
 	]

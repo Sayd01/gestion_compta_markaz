@@ -282,10 +282,7 @@ public class MarkazBusiness implements IBasicBusiness<Request<MarkazDto>, Respon
 			// -----------------------------------------------------------------------
 
 			// caisse
-			List<Caisse> listOfCaisse = caisseRepository.findByIdMarkaz(existingEntity.getId(), false);
-			if (listOfCaisse != null && !listOfCaisse.isEmpty()){
-				throw new InternalErrorException(functionalError.DATA_NOT_DELETABLE("(" + listOfCaisse.size() + ")", locale));
-			}
+
 			// utilisateur
 			List<Utilisateur> listOfUtilisateur = utilisateurRepository.findByIdMarkaz(existingEntity.getId(), false);
 			if (listOfUtilisateur != null && !listOfUtilisateur.isEmpty()){

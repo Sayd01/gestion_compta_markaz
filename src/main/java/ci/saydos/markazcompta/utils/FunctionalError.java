@@ -1,6 +1,6 @@
 
 /*
- * Created on 2023-08-06 ( Time 01:31:16 )
+ * Created on 2023-08-08 ( Time 19:03:08 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -70,6 +70,7 @@ public class FunctionalError {
 		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_EXIST", new Object[] {}, locale) + ": " + message);
 		return status;
 	}
+
 	public Status DATA_EXIST_DEMANDE(Locale locale) {
 		status.setCode(StatusCode.FUNC_DATA_EXIST);
 		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_EXIST_DEMANDE", new Object[] {}, locale));

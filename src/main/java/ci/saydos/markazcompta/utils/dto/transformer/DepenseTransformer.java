@@ -2,7 +2,7 @@
 
 /*
  * Java transformer for entity table depense 
- * Created on 2023-08-06 ( Time 01:31:05 )
+ * Created on 2023-08-10 ( Time 14:07:29 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -41,10 +41,8 @@ public interface DepenseTransformer {
 		@Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
 		@Mapping(source="entity.demande.id", target="idDemande"),
 		@Mapping(source="entity.demande.code", target="demandeCode"),
-		@Mapping(source="entity.utilisateur.id", target="idChargeFixe"),
-		@Mapping(source="entity.utilisateur.login", target="utilisateurLogin"),
-		@Mapping(source="entity.utilisateur.firstName", target="utilisateurFirstName"),
-		@Mapping(source="entity.utilisateur.lastName", target="utilisateurLastName"),
+		@Mapping(source="entity.chargeFixe.id", target="idChargeFixe"),
+		@Mapping(source="entity.chargeFixe.code", target="chargeFixeCode"),
 	})
 	DepenseDto toDto(Depense entity) throws ParseException;
 
@@ -74,16 +72,17 @@ public interface DepenseTransformer {
 	@Mappings({
 		@Mapping(source="dto.id", target="id"),
 		@Mapping(source="dto.code", target="code"),
-		@Mapping(source="dto.montant", target="montant"),
 		@Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
 		@Mapping(source="dto.createdBy", target="createdBy"),
 		@Mapping(source="dto.isDeleted", target="isDeleted"),
+		@Mapping(source="dto.montant", target="montant"),
 		@Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
 		@Mapping(source="dto.updatedBy", target="updatedBy"),
+		@Mapping(source="dto.typeDepense", target="typeDepense"),
 		@Mapping(source="demande", target="demande"),
-		@Mapping(source="utilisateur", target="utilisateur"),
+		@Mapping(source="chargeFixe", target="chargeFixe"),
 	})
-    Depense toEntity(DepenseDto dto, Demande demande, Utilisateur utilisateur) throws ParseException;
+    Depense toEntity(DepenseDto dto, Demande demande, ChargeFixe chargeFixe) throws ParseException;
 
     //List<Depense> toEntities(List<DepenseDto> dtos) throws ParseException;
 

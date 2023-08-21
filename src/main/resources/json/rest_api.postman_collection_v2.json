@@ -174,7 +174,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"label\": \"\",\n\t\t\"code\": \"\",\n\t\t\"description\": \"\",\n\t\t\"montant\": \"\",\n\t\t\"imageUrl\": \"\",\n\t\t\"dateDebut\": \"\",\n\t\t\"dateFin\": \"\",\n\t\t\"statut\": \"\",\n\t\t\"idUtilisateur\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"label\": \"\",\n\t\t\"code\": \"\",\n\t\t\"description\": \"\",\n\t\t\"montant\": \"\",\n\t\t\"imageUrl\": \"\",\n\t\t\"dateDebut\": \"\",\n\t\t\"dateFin\": \"\",\n\t\t\"statut\": \"\",\n\t\t\"idUtilisateur\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\",\n\t\t\"idDirection\": \"\"\n\t}  \n}"
                         },
                         "url": "{{main_url}}/demande/getByCriteria"
                     },
@@ -192,7 +192,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"label\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"description\": \"\",\n\t\t\t\"montant\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"dateDebut\": \"\",\n\t\t\t\"dateFin\": \"\",\n\t\t\t\"statut\": \"\",\n\t\t\t\"idUtilisateur\": \"\"\n\t\t} \n\t]  \n}"
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"label\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"description\": \"\",\n\t\t\t\"montant\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"dateDebut\": \"\",\n\t\t\t\"dateFin\": \"\",\n\t\t\t\"statut\": \"\",\n\t\t\t\"idUtilisateur\": \"\",\n\t\t\t\"idDirection\": \"\"\n\t\t} \n\t]  \n}"
                         },
                         "url": "{{main_url}}/demande/create"
                     },
@@ -210,7 +210,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"label\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"description\": \"\",\n\t\t\t\"montant\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"dateDebut\": \"\",\n\t\t\t\"dateFin\": \"\",\n\t\t\t\"statut\": \"\",\n\t\t\t\"idUtilisateur\": \"\"\n\t\t} \n\t]  \n}"
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"label\": \"\",\n\t\t\t\"code\": \"\",\n\t\t\t\"description\": \"\",\n\t\t\t\"montant\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"dateDebut\": \"\",\n\t\t\t\"dateFin\": \"\",\n\t\t\t\"statut\": \"\",\n\t\t\t\"idUtilisateur\": \"\",\n\t\t\t\"idDirection\": \"\"\n\t\t} \n\t]  \n}"
                         },
                         "url": "{{main_url}}/demande/update"
                     },
@@ -867,7 +867,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"login\": \"\",\n\t\t\"firstName\": \"\",\n\t\t\"lastName\": \"\",\n\t\t\"email\": \"\",\n\t\t\"imageUrl\": \"\",\n\t\t\"idMarkaz\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"login\": \"\",\n\t\t\"firstName\": \"\",\n\t\t\"lastName\": \"\",\n\t\t\"email\": \"\",\n\t\t\"imageUrl\": \"\",\n\t\t\"idMarkaz\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\",\n\t\t\"password\": \"\"\n\t}  \n}"
                         },
                         "url": "{{main_url}}/utilisateur/getByCriteria"
                     },
@@ -885,7 +885,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"login\": \"\",\n\t\t\t\"firstName\": \"\",\n\t\t\t\"lastName\": \"\",\n\t\t\t\"email\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"idMarkaz\": \"\"\n\t\t} \n\t]  \n}"
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"login\": \"\",\n\t\t\t\"firstName\": \"\",\n\t\t\t\"lastName\": \"\",\n\t\t\t\"email\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"idMarkaz\": \"\",\n\t\t\t\"password\": \"\"\n\t\t} \n\t]  \n}"
                         },
                         "url": "{{main_url}}/utilisateur/create"
                     },
@@ -903,7 +903,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"login\": \"\",\n\t\t\t\"firstName\": \"\",\n\t\t\t\"lastName\": \"\",\n\t\t\t\"email\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"idMarkaz\": \"\"\n\t\t} \n\t]  \n}"
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"login\": \"\",\n\t\t\t\"firstName\": \"\",\n\t\t\t\"lastName\": \"\",\n\t\t\t\"email\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"idMarkaz\": \"\",\n\t\t\t\"password\": \"\"\n\t\t} \n\t]  \n}"
                         },
                         "url": "{{main_url}}/utilisateur/update"
                     },
@@ -924,6 +924,83 @@
                             "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
                         },
                         "url": "{{main_url}}/utilisateur/delete"
+                    },
+                    "response": []
+                }
+            ]
+     		},
+        {
+            "name": "utilisateurDirection",
+            "item": [
+                {
+                    "name": "utilisateurDirection-getByCriteria",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"idDirection\": \"\",\n\t\t\"idUtilisateur\": \"\"\n\t}  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateurDirection/getByCriteria"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "utilisateurDirection-create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"idDirection\": \"\",\n\t\t\t\"idUtilisateur\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateurDirection/create"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "utilisateurDirection-update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"idDirection\": \"\",\n\t\t\t\"idUtilisateur\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateurDirection/update"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "utilisateurDirection-delete",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
+                        },
+                        "url": "{{main_url}}/utilisateurDirection/delete"
                     },
                     "response": []
                 }

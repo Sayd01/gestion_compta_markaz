@@ -43,8 +43,11 @@ public interface _DemandeRepository {
     @Query("select e from Demande e where e.code = :code and e.statut = :statut and e.isDeleted = :isDeleted")
     Demande findByCodeAndStatut(@Param("code") String code, @Param("statut") StatutDemandeEnum statut, @Param("isDeleted") Boolean isDeleted);
 
-    @Query("select e from Demande e where e.label = :label and e.statut = :statut and e.utilisateur.login = :login and e.montant = :montant and e.isDeleted = :isDeleted")
-    Demande findByLabelAndStatutAndUserAndMontant(@Param("label") String label, @Param("statut") StatutDemandeEnum statut, @Param("login") String login, @Param("montant") Double montant, @Param("isDeleted") Boolean isDeleted);
+    @Query("select e from Demande e where e.utilisateur.id = :idUtilisateur and e.label = :label and e.statut = :statut and e.direction.id = :idDirection and e.montant = :montant and e.isDeleted = :isDeleted")
+    Demande findByStatutAndDirectionAndMontant(@Param("idUtilisateur") Integer idUtilisateur, @Param("label") String label, @Param("statut") StatutDemandeEnum statut, @Param("idDirection") Integer idDirection, @Param("montant") Double montant, @Param("isDeleted") Boolean isDeleted);
+
+    @Query("select e from Demande e where e.id = :id and e.statut = :statut and e.isDeleted = :isDeleted")
+    Demande findByIdAndStatut(@Param("id") Integer id, @Param("statut") StatutDemandeEnum statut, @Param("isDeleted") Boolean isDeleted);
 
 
 }

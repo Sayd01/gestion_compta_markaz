@@ -12,12 +12,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
-import java.util.Date;
-import java.util.List;
 
 
 /**
- * Persistent class for entity stored in table "utilisateur"
+ * Persistent class for entity stored in table "utilisateur_direction"
  *
  * @author Telosys Tools Generator
  *
@@ -25,8 +23,8 @@ import java.util.List;
 @Data
 @ToString
 @Entity
-@Table(name="utilisateur" )
-public class Utilisateur implements Serializable, Cloneable {
+@Table(name="utilisateur_direction" )
+public class UtilisateurDirection implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,54 +40,23 @@ public class Utilisateur implements Serializable, Cloneable {
     //----------------------------------------------------------------------
     // ENTITY DATA FIELDS 
     //----------------------------------------------------------------------    
-    @Column(name="login", length=255)
-    private String     login        ;
-
-    @Column(name="first_name", length=255)
-    private String     firstName    ;
-
-    @Column(name="last_name", length=255)
-    private String     lastName     ;
-
-    @Column(name="email", length=255)
-    private String     email        ;
-
-    @Column(name="image_url", length=255)
-    private String     imageUrl     ;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="created_at")
-    private Date       createdAt    ;
-
-    @Column(name="created_by")
-    private Integer    createdBy    ;
-
-    @Column(name="is_deleted")
-    private Boolean    isDeleted    ;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="updated_at")
-    private Date       updatedAt    ;
-
-    @Column(name="updated_by")
-    private Integer    updatedBy    ;
-
-    @Column(name="password", length=255)
-    private String     password     ;
-
-	// "idMarkaz" (column "id_markaz") is not defined by itself because used as FK in a link 
+	// "idDirection" (column "id_direction") is not defined by itself because used as FK in a link 
+	// "idUtilisateur" (column "id_utilisateur") is not defined by itself because used as FK in a link 
 
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
     @ManyToOne
-    @JoinColumn(name="id_markaz", referencedColumnName="id")
-    private Markaz markaz      ;
+    @JoinColumn(name="id_direction", referencedColumnName="id")
+    private Direction direction   ;
+    @ManyToOne
+    @JoinColumn(name="id_utilisateur", referencedColumnName="id")
+    private Utilisateur utilisateur ;
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR(S)
     //----------------------------------------------------------------------
-    public Utilisateur() {
+    public UtilisateurDirection() {
 		super();
     }
     

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Locale;
+
+import ci.saydos.markazcompta.utils.enums.TypeDepenseEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
@@ -37,4 +39,15 @@ public interface _DepenseRepository {
 
 		return listOfQuery;
 	}
+
+	@Query("select e from Depense e " +
+			"where function('MONTH',e.createdAt)  = :mois and function('YEAR',e.createdAt)  = :annee " +
+			"and e.chargeFixe.id = :idChargeFixe and e.montant = :montant " +
+			"and e.isDeleted = :isDeleted")
+	Depense findByDateAndIdChargeAndMontant(@Param("mois") Integer mois,
+											@Param("annee") Integer annee,
+											@Param("idChargeFixe") Integer idChargeFixe,
+											@Param("montant") Double montant, @Param("isDeleted") Boolean isDeleted);
+	@Query("select e from Depense e where  e.demande.id = :idDemande and e.typeDepense = :typeDepense and e.isDeleted = :isDeleted")
+	Depense findByIdDemandeAndType(@Param("idDemande")Integer idDemande, @Param("typeDepense") TypeDepenseEnum typeDepense, @Param("isDeleted") Boolean isDeleted );
 }

@@ -1,7 +1,7 @@
-                                                        													
+                                                            														
 /*
  * Java business for entity table utilisateur 
- * Created on 2023-08-06 ( Time 01:31:06 )
+ * Created on 2023-08-08 ( Time 19:02:56 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -46,17 +46,19 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 	@Autowired
 	private UtilisateurRepository utilisateurRepository;
 	@Autowired
-	private DemandeRepository demandeRepository;
-	@Autowired
-	private CaisseRepository caisseRepository;
-	@Autowired
 	private DepenseRepository depenseRepository;
 	@Autowired
 	private DemandeHistoriqueRepository demandeHistoriqueRepository;
 	@Autowired
-	private MarkazRepository markazRepository;
-	@Autowired
 	private UtilisateurRoleRepository utilisateurRoleRepository;
+	@Autowired
+	private CaisseRepository caisseRepository;
+	@Autowired
+	private DemandeRepository demandeRepository;
+	@Autowired
+	private UtilisateurDirectionRepository utilisateurDirectionRepository;
+	@Autowired
+	private MarkazRepository markazRepository;
 	@Autowired
 	private FunctionalError functionalError;
 	@Autowired
@@ -97,6 +99,7 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 			fieldsToVerify.put("email", dto.getEmail());
 			fieldsToVerify.put("imageUrl", dto.getImageUrl());
 			fieldsToVerify.put("idMarkaz", dto.getIdMarkaz());
+			fieldsToVerify.put("password", dto.getPassword());
 			if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
 				throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
 			}
@@ -238,6 +241,9 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 			if (dto.getUpdatedBy() != null && dto.getUpdatedBy() > 0) {
 				entityToSave.setUpdatedBy(dto.getUpdatedBy());
 			}
+			if (Utilities.notBlank(dto.getPassword())) {
+				entityToSave.setPassword(dto.getPassword());
+			}
 			entityToSave.setUpdatedAt(Utilities.getCurrentDate());
 			entityToSave.setUpdatedBy(request.getUser());
 			items.add(entityToSave);
@@ -313,16 +319,6 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 			// ----------- CHECK IF DATA IS USED
 			// -----------------------------------------------------------------------
 
-			// demande
-			List<Demande> listOfDemande = demandeRepository.findByIdUtilisateur(existingEntity.getId(), false);
-			if (listOfDemande != null && !listOfDemande.isEmpty()){
-				throw new InternalErrorException(functionalError.DATA_NOT_DELETABLE("(" + listOfDemande.size() + ")", locale));
-			}
-			// caisse
-			List<Caisse> listOfCaisse = caisseRepository.findByIdUtilisateur(existingEntity.getId(), false);
-			if (listOfCaisse != null && !listOfCaisse.isEmpty()){
-				throw new InternalErrorException(functionalError.DATA_NOT_DELETABLE("(" + listOfCaisse.size() + ")", locale));
-			}
 			// depense
 			List<Depense> listOfDepense = depenseRepository.findByIdChargeFixe(existingEntity.getId(), false);
 			if (listOfDepense != null && !listOfDepense.isEmpty()){
@@ -337,6 +333,21 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 			List<UtilisateurRole> listOfUtilisateurRole = utilisateurRoleRepository.findByUtilisateurId(existingEntity.getId(), false);
 			if (listOfUtilisateurRole != null && !listOfUtilisateurRole.isEmpty()){
 				throw new InternalErrorException(functionalError.DATA_NOT_DELETABLE("(" + listOfUtilisateurRole.size() + ")", locale));
+			}
+			// caisse
+			List<Caisse> listOfCaisse = caisseRepository.findByIdUtilisateur(existingEntity.getId(), false);
+			if (listOfCaisse != null && !listOfCaisse.isEmpty()){
+				throw new InternalErrorException(functionalError.DATA_NOT_DELETABLE("(" + listOfCaisse.size() + ")", locale));
+			}
+			// demande
+			List<Demande> listOfDemande = demandeRepository.findByIdUtilisateur(existingEntity.getId(), false);
+			if (listOfDemande != null && !listOfDemande.isEmpty()){
+				throw new InternalErrorException(functionalError.DATA_NOT_DELETABLE("(" + listOfDemande.size() + ")", locale));
+			}
+			// utilisateurDirection
+			List<UtilisateurDirection> listOfUtilisateurDirection = utilisateurDirectionRepository.findByIdUtilisateur(existingEntity.getId());
+			if (listOfUtilisateurDirection != null && !listOfUtilisateurDirection.isEmpty()){
+				throw new InternalErrorException(functionalError.DATA_NOT_DELETABLE("(" + listOfUtilisateurDirection.size() + ")", locale));
 			}
 
 

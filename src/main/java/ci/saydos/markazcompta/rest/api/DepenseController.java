@@ -2,13 +2,14 @@
 
 /*
  * Java controller for entity table depense 
- * Created on 2023-08-06 ( Time 01:31:05 )
+ * Created on 2023-08-09 ( Time 18:01:30 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2017 Savoir Faire Linux. All Rights Reserved.
  */
 
 package ci.saydos.markazcompta.rest.api;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -48,21 +49,15 @@ Controller for table "depense"
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value="/depense")
+@RequiredArgsConstructor
 public class DepenseController {
 
-     @Autowired
-	 private HttpServletRequest requestBasic;
-	 @Autowired
-	 private FunctionalError functionalError;
-	 @Autowired
-	 private ExceptionUtils exceptionUtils;
-
-	 private Logger slf4jLogger = LoggerFactory.getLogger(getClass());
-
-	@Autowired
-    private ControllerFactory<DepenseDto> controllerFactory;
-	@Autowired
-	private DepenseBusiness depenseBusiness;
+	 private final HttpServletRequest requestBasic;
+	 private final FunctionalError functionalError;
+	 private final ExceptionUtils exceptionUtils;
+	 private final Logger slf4jLogger = LoggerFactory.getLogger(getClass());
+    private final ControllerFactory<DepenseDto> controllerFactory;
+	private final DepenseBusiness depenseBusiness;
 
 	@RequestMapping(value="/create",method=RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public ResponseEntity<Response<DepenseDto>> create(@RequestBody Request<DepenseDto> request) throws Exception {
@@ -131,4 +126,62 @@ public class DepenseController {
 	  slf4jLogger.info("end method /DepenseDto/custom");
 	  return response;
 	 }
+
+	@RequestMapping(value = "/fixe", method = RequestMethod.POST, consumes = {
+			"application/json"}, produces = {"application/json"})
+	public Response<DepenseDto> fixe(@RequestBody Request<DepenseDto> request) throws Exception {
+		log.info("start method /Depense/fixe");
+		Response<DepenseDto> response   = new Response<>();
+		String               languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+		Locale               locale     = new Locale(languageID, "");
+		try {
+			response = Validate.validateList(request, response, functionalError, locale);
+			if (!response.isHasError()) {
+				response = depenseBusiness.fixe(request, locale);
+			} else {
+				slf4jLogger.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+				return response;
+			}
+			if (!response.isHasError()) {
+				slf4jLogger.info(String.format("code: {} -  message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+			} else {
+				slf4jLogger.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+			}
+		} catch (CannotCreateTransactionException e) {
+			exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response, locale, e);
+		} catch (TransactionSystemException e) {
+			exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response, locale, e);
+		}
+		log.info("end method /Depense/fixe");
+		return response;
+	}
+
+	@RequestMapping(value = "/variable", method = RequestMethod.POST, consumes = {
+			"application/json"}, produces = {"application/json"})
+	public Response<DepenseDto> variable(@RequestBody Request<DepenseDto> request) throws Exception {
+		log.info("start method /Depense/variable");
+		Response<DepenseDto> response   = new Response<>();
+		String               languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+		Locale               locale     = new Locale(languageID, "");
+		try {
+			response = Validate.validateList(request, response, functionalError, locale);
+			if (!response.isHasError()) {
+				response = depenseBusiness.varible(request, locale);
+			} else {
+				slf4jLogger.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+				return response;
+			}
+			if (!response.isHasError()) {
+				slf4jLogger.info(String.format("code: {} -  message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+			} else {
+				slf4jLogger.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+			}
+		} catch (CannotCreateTransactionException e) {
+			exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response, locale, e);
+		} catch (TransactionSystemException e) {
+			exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response, locale, e);
+		}
+		log.info("end method /Depense/variable");
+		return response;
+	}
 }

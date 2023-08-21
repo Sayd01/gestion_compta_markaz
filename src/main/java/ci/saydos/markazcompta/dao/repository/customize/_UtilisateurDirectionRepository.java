@@ -1,6 +1,5 @@
 package ci.saydos.markazcompta.dao.repository.customize;
 
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -8,8 +7,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Locale;
-
-import ci.saydos.markazcompta.utils.enums.StatutDemandeEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
@@ -27,20 +24,15 @@ import ci.saydos.markazcompta.utils.contract.Response;
 import ci.saydos.markazcompta.dao.entity.*;
 
 /**
- * Repository customize : DemandeHistorique.
+ * Repository customize : UtilisateurDirection.
  */
 @Repository
-public interface _DemandeHistoriqueRepository {
-    default List<String> _generateCriteria(DemandeHistoriqueDto dto, HashMap<String, java.lang.Object> param, Integer index, Locale locale) throws Exception {
-        List<String> listOfQuery = new ArrayList<String>();
+public interface _UtilisateurDirectionRepository {
+	default List<String> _generateCriteria(UtilisateurDirectionDto dto, HashMap<String, java.lang.Object> param, Integer index, Locale locale) throws Exception {
+		List<String> listOfQuery = new ArrayList<String>();
 
-        // PUT YOUR RIGHT CUSTOM CRITERIA HERE
+		// PUT YOUR RIGHT CUSTOM CRITERIA HERE
 
-        return listOfQuery;
-    }
-
-    @Query("select e from DemandeHistorique e where e.utilisateur.id = :idUtilisateur and e.demande.id = :idDemande and e.statut = :statut and e.isDeleted = :isDeleted")
-    DemandeHistorique findByUserAndDemandeAndStatut(@Param("idUtilisateur") Integer idUtilisateur, @Param("idDemande") Integer idDemande, @Param("statut") StatutDemandeEnum statut, @Param("isDeleted") Boolean isDeleted);
-
-
+		return listOfQuery;
+	}
 }

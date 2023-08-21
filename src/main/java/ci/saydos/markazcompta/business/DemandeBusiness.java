@@ -44,20 +44,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Response<DemandeDto>> {
 
-    private       Response<DemandeDto>        response;
+    private final DirectionRepository         directionRepository;
     private final DemandeRepository           demandeRepository;
     private final DepenseRepository           depenseRepository;
     private final DemandeHistoriqueRepository demandeHistoriqueRepository;
     private final DemandeHistoriqueBusiness   demandeHistoriqueBusiness;
     private final UtilisateurRepository       utilisateurRepository;
     private final FunctionalError             functionalError;
-    private final TechnicalError              technicalError;
-    private final ExceptionUtils              exceptionUtils;
-    @PersistenceContext
-    private       EntityManager               em;
 
-    private final SimpleDateFormat dateFormat     = new SimpleDateFormat("dd/MM/yyyy");
-    private final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    @PersistenceContext
+    private       EntityManager    em;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 
     /**
@@ -79,25 +76,31 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
             Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
             fieldsToVerify.put("label", dto.getLabel());
             fieldsToVerify.put("montant", dto.getMontant());
-            fieldsToVerify.put("idUtilisateur", dto.getIdUtilisateur());
+            fieldsToVerify.put("idDirection", dto.getIdDirection());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
             }
 
             // Verify if utilisateur exist
             Utilisateur existingUtilisateur = null;
-            if (dto.getIdUtilisateur() != null && dto.getIdUtilisateur() > 0) {
-                existingUtilisateur = utilisateurRepository.findOne(dto.getIdUtilisateur(), false);
+            if (request.getUser() != null && request.getUser() > 0) {
+                existingUtilisateur = utilisateurRepository.findOne(request.getUser(), false);
                 if (existingUtilisateur == null) {
-                    throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("utilisateur idUtilisateur -> " + dto.getIdUtilisateur(), locale));
+                    throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("utilisateur idUtilisateur -> " + request.getUser(), locale));
+                }
+            }
+            Direction existingDirection = null;
+            if (dto.getIdDirection() != null && dto.getIdDirection() > 0) {
+                existingDirection = directionRepository.findOne(dto.getIdDirection(), false);
+                if (existingDirection == null) {
+                    throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("Direction idDirection -> " + dto.getIdDirection(), locale));
                 }
             }
 
 
-
-            String  Prefix       = "dm";
+            String  Prefix       = "dem";
             Demande entityToSave = null;
-            entityToSave = DemandeTransformer.INSTANCE.toEntity(dto, existingUtilisateur);
+            entityToSave = DemandeTransformer.INSTANCE.toEntity(dto, existingUtilisateur, existingDirection);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
             entityToSave.setCreatedBy(request.getUser());
             entityToSave.setIsDeleted(false);
@@ -106,7 +109,12 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
             entityToSave.setStatut(StatutDemandeEnum.INITIE);
             items.add(entityToSave);
 
-            Demande demandeStatut = demandeRepository.findByLabelAndStatutAndUserAndMontant(entityToSave.getLabel(),entityToSave.getStatut(),entityToSave.getUtilisateur().getLogin(),entityToSave.getMontant(),false);
+            Demande demandeStatut = demandeRepository.findByStatutAndDirectionAndMontant(
+                    entityToSave.getUtilisateur().getId(),
+                    entityToSave.getLabel(), entityToSave.getStatut(),
+                    entityToSave.getDirection().getId(),
+                    entityToSave.getMontant(), false);
+
             if (demandeStatut != null) {
                 throw new InternalErrorException(functionalError.DATA_EXIST_DEMANDE(locale));
             }
@@ -455,9 +463,14 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
                 }
             }
 
-            Demande demandeStatut = demandeRepository.findByCodeAndStatut(entityToSave.getCode(), dto.getStatut(), false);
-            if (demandeStatut != null) {
-                throw new InternalErrorException(functionalError.DATA_EXIST("demande id -> " + demandeStatut.getId(), locale));
+            DemandeHistorique demandeHistorique = demandeHistoriqueRepository.findByUserAndDemandeAndStatut(
+                    entityToSave.getUtilisateur().getId(),
+                    entityToSave.getId(),
+                    dto.getStatut(),
+                    false);
+
+            if (demandeHistorique != null) {
+                throw new InternalErrorException(functionalError.DATA_EXIST("demande id -> " + dto.getId(),locale));
             }
 
             if (dto.getStatut().equals(StatutDemandeEnum.INVALIDE)) {
@@ -467,6 +480,14 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
                 entityToSave.setUpdatedBy(request.getUser());
                 entityToSave.setDateFin(Utilities.getCurrentDate());
                 items.add(entityToSave);
+            } else if (dto.getStatut().equals(StatutDemandeEnum.VALIDE)) {
+                entityToSave.setStatut(dto.getStatut());
+                entityToSave.setUtilisateur(existingUtilisateur);
+                entityToSave.setUpdatedAt(Utilities.getCurrentDate());
+                entityToSave.setUpdatedBy(request.getUser());
+                items.add(entityToSave);
+            } else {
+                throw new InternalErrorException(functionalError.DISALLOWED_OPERATION("Cette demande est en cours de traitement ou terminée",locale));
             }
 
             DemandeHistoriqueDto demandeHistoriqueDto = new DemandeHistoriqueDto();
@@ -478,9 +499,8 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
             Request<DemandeHistoriqueDto> requestHistorique = new Request<>();
             requestHistorique.setUser(request.getUser());
             requestHistorique.setDatas(Arrays.asList(demandeHistoriqueDto));
-            responseHistorique = demandeHistoriqueBusiness.create(requestHistorique, locale);
+            demandeHistoriqueBusiness.create(requestHistorique, locale);
 
-            System.out.println(responseHistorique);
 
         }
 

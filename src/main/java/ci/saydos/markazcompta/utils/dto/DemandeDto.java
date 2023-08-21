@@ -1,7 +1,7 @@
 
 /*
  * Java dto for entity table demande
- * Created on 2023-08-06 ( Time 01:31:05 )
+ * Created on 2023-08-08 ( Time 19:27:54 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -31,7 +31,6 @@ import ci.saydos.markazcompta.utils.dto.customize._DemandeDto;
 @ToString
 @JsonInclude(Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
-@AllArgsConstructor
 public class DemandeDto extends _DemandeDto implements Cloneable {
 
     private Integer id; // Primary Key
@@ -50,6 +49,7 @@ public class DemandeDto extends _DemandeDto implements Cloneable {
     private Boolean           isDeleted;
     private String            updatedAt;
     private Integer           updatedBy;
+    private Integer           idDirection;
 
     //----------------------------------------------------------------------
     // ENTITY LINKS FIELD ( RELATIONSHIP )
@@ -57,26 +57,31 @@ public class DemandeDto extends _DemandeDto implements Cloneable {
     private String utilisateurLogin;
     private String utilisateurFirstName;
     private String utilisateurLastName;
+    private String directionCode;
+    private String directionIntitule;
 
     // Search param
-    private SearchParam<Integer> idParam;
-    private SearchParam<String>  labelParam;
-    private SearchParam<String>  codeParam;
-    private SearchParam<String>  descriptionParam;
-    private SearchParam<Double>  montantParam;
-    private SearchParam<String>  imageUrlParam;
-    private SearchParam<String>  dateDebutParam;
-    private SearchParam<String>  dateFinParam;
-    private SearchParam<StatutDemandeEnum>  statutParam;
-    private SearchParam<Integer> idUtilisateurParam;
-    private SearchParam<String>  createdAtParam;
-    private SearchParam<Integer> createdByParam;
-    private SearchParam<Boolean> isDeletedParam;
-    private SearchParam<String>  updatedAtParam;
-    private SearchParam<Integer> updatedByParam;
-    private SearchParam<String>  utilisateurLoginParam;
-    private SearchParam<String>  utilisateurFirstNameParam;
-    private SearchParam<String>  utilisateurLastNameParam;
+    private SearchParam<Integer>           idParam;
+    private SearchParam<String>            labelParam;
+    private SearchParam<String>            codeParam;
+    private SearchParam<String>            descriptionParam;
+    private SearchParam<Double>            montantParam;
+    private SearchParam<String>            imageUrlParam;
+    private SearchParam<String>            dateDebutParam;
+    private SearchParam<String>            dateFinParam;
+    private SearchParam<StatutDemandeEnum> statutParam;
+    private SearchParam<Integer>           idUtilisateurParam;
+    private SearchParam<String>            createdAtParam;
+    private SearchParam<Integer>           createdByParam;
+    private SearchParam<Boolean>           isDeletedParam;
+    private SearchParam<String>            updatedAtParam;
+    private SearchParam<Integer>           updatedByParam;
+    private SearchParam<Integer>           idDirectionParam;
+    private SearchParam<String>            utilisateurLoginParam;
+    private SearchParam<String>            utilisateurFirstNameParam;
+    private SearchParam<String>            utilisateurLastNameParam;
+    private SearchParam<String>            directionCodeParam;
+    private SearchParam<String>            directionIntituleParam;
 
     /**
      * Default constructor

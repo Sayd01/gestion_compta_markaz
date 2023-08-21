@@ -78,7 +78,6 @@ public class ChargeFixeBusiness implements IBasicBusiness<Request<ChargeFixeDto>
 		for (ChargeFixeDto dto : request.getDatas()) {
 			// Definir les parametres obligatoires
 			Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
-			fieldsToVerify.put("code", dto.getCode());
 			fieldsToVerify.put("label", dto.getLabel());
 			if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
 				throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -100,10 +99,11 @@ public class ChargeFixeBusiness implements IBasicBusiness<Request<ChargeFixeDto>
 				throw new InternalErrorException(functionalError.DATA_DUPLICATE(" code ", locale));
 			}
 
-				ChargeFixe entityToSave = null;
+			ChargeFixe entityToSave = null;
 			entityToSave = ChargeFixeTransformer.INSTANCE.toEntity(dto);
 			entityToSave.setCreatedAt(Utilities.getCurrentDate());
 			entityToSave.setCreatedBy(request.getUser());
+			entityToSave.setCode("chf"+Utilities.generateCode());
 			entityToSave.setIsDeleted(false);
 			items.add(entityToSave);
 		}

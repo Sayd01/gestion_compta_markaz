@@ -1,7 +1,7 @@
 
 /*
  * Java dto for entity table caisse
- * Created on 2023-08-06 ( Time 01:31:04 )
+ * Created on 2023-08-10 ( Time 18:38:42 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -34,49 +34,45 @@ public class CaisseDto extends _CaisseDto implements Cloneable {
 
     private Integer id; // Primary Key
 
-    private Integer        idMarkaz;
-    private Integer        idUtilisateur;
-    private Integer        idDepense;
-    private Double         montant;
-    private Double         montantApprovisionnement;
-    private String         dateApprovisionnement;
-    private TypeCaisseEnum type;
     private String         createdAt;
     private Integer        createdBy;
     private Boolean        isDeleted;
+    private Double         montantDisponible;
+    private Double         montantEntre;
+    private TypeCaisseEnum type;
     private String         updatedAt;
     private Integer        updatedBy;
+    private Integer        idDepense;
+    private Integer        idUtilisateur;
+    private Double         montantSortie;
+    private String         dateMontantActuel;
 
     //----------------------------------------------------------------------
     // ENTITY LINKS FIELD ( RELATIONSHIP )
     //----------------------------------------------------------------------
-    private String depenseCode;
-    private String markazCode;
-    private String markazIntitule;
-    private String utilisateurLogin;
     private String utilisateurFirstName;
     private String utilisateurLastName;
+    private String utilisateurLogin;
+    private String depenseCode;
 
     // Search param
     private SearchParam<Integer>        idParam;
-    private SearchParam<Integer>        idMarkazParam;
-    private SearchParam<Integer>        idUtilisateurParam;
-    private SearchParam<Integer>        idDepenseParam;
-    private SearchParam<Double>         montantParam;
-    private SearchParam<Double>         montantApprovisionnementParam;
-    private SearchParam<String>         dateApprovisionnementParam;
-    private SearchParam<TypeCaisseEnum> typeParam;
     private SearchParam<String>         createdAtParam;
     private SearchParam<Integer>        createdByParam;
     private SearchParam<Boolean>        isDeletedParam;
+    private SearchParam<Double>         montantDisponibleParam;
+    private SearchParam<Double>         montantEntreParam;
+    private SearchParam<TypeCaisseEnum> typeParam;
     private SearchParam<String>         updatedAtParam;
     private SearchParam<Integer>        updatedByParam;
-    private SearchParam<String>         depenseCodeParam;
-    private SearchParam<String>         markazCodeParam;
-    private SearchParam<String>         markazIntituleParam;
-    private SearchParam<String>         utilisateurLoginParam;
+    private SearchParam<Integer>        idDepenseParam;
+    private SearchParam<Integer>        idUtilisateurParam;
+    private SearchParam<Double>         montantSortieParam;
+    private SearchParam<String>         dateMontantActuelParam;
     private SearchParam<String>         utilisateurFirstNameParam;
     private SearchParam<String>         utilisateurLastNameParam;
+    private SearchParam<String>         utilisateurLoginParam;
+    private SearchParam<String>         depenseCodeParam;
 
     /**
      * Default constructor

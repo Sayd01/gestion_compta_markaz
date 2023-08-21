@@ -2,7 +2,7 @@
 
 /*
  * Java controller for entity table utilisateur 
- * Created on 2023-08-06 ( Time 01:31:06 )
+ * Created on 2023-08-08 ( Time 19:02:56 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2017 Savoir Faire Linux. All Rights Reserved.
  */

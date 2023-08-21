@@ -131,6 +131,15 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
 	 */
 	@Query("select e from Utilisateur e where e.updatedBy = :updatedBy and e.isDeleted = :isDeleted")
 	List<Utilisateur> findByUpdatedBy(@Param("updatedBy")Integer updatedBy, @Param("isDeleted")Boolean isDeleted);
+	/**
+	 * Finds Utilisateur by using password as a search criteria.
+	 * 
+	 * @param password
+	 * @return An Object Utilisateur whose password is equals to the given password. If
+	 *         no Utilisateur is found, this method returns null.
+	 */
+	@Query("select e from Utilisateur e where e.password = :password and e.isDeleted = :isDeleted")
+	List<Utilisateur> findByPassword(@Param("password")String password, @Param("isDeleted")Boolean isDeleted);
 
 	/**
 	 * Finds Utilisateur by using idMarkaz as a search criteria.
@@ -265,6 +274,9 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
 			}
 			if (dto.getUpdatedBy()!= null && dto.getUpdatedBy() > 0) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("updatedBy", dto.getUpdatedBy(), "e.updatedBy", "Integer", dto.getUpdatedByParam(), param, index, locale));
+			}
+			if (Utilities.notBlank(dto.getPassword())) {
+				listOfQuery.add(CriteriaUtils.generateCriteria("password", dto.getPassword(), "e.password", "String", dto.getPasswordParam(), param, index, locale));
 			}
 			if (dto.getIdMarkaz()!= null && dto.getIdMarkaz() > 0) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("idMarkaz", dto.getIdMarkaz(), "e.markaz.id", "Integer", dto.getIdMarkazParam(), param, index, locale));

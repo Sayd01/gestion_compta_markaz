@@ -1,8 +1,8 @@
 
 
 /*
- * Java controller for entity table caisse 
- * Created on 2023-08-10 ( Time 17:44:55 )
+ * Java controller for entity table utilisateur_direction 
+ * Created on 2023-08-08 ( Time 19:02:57 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2017 Savoir Faire Linux. All Rights Reserved.
  */
@@ -39,7 +39,7 @@ import ci.saydos.markazcompta.business.*;
 import ci.saydos.markazcompta.rest.fact.ControllerFactory;
 
 /**
-Controller for table "caisse"
+Controller for table "utilisateur_direction"
  * 
  * @author SFL Back-End developper
  *
@@ -47,8 +47,8 @@ Controller for table "caisse"
 @Log
 @CrossOrigin("*")
 @RestController
-@RequestMapping(value="/caisse")
-public class CaisseController {
+@RequestMapping(value="/utilisateurDirection")
+public class UtilisateurDirectionController {
 
      @Autowired
 	 private HttpServletRequest requestBasic;
@@ -60,57 +60,57 @@ public class CaisseController {
 	 private Logger slf4jLogger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-    private ControllerFactory<CaisseDto> controllerFactory;
+    private ControllerFactory<UtilisateurDirectionDto> controllerFactory;
 	@Autowired
-	private CaisseBusiness caisseBusiness;
+	private UtilisateurDirectionBusiness utilisateurDirectionBusiness;
 
 	@RequestMapping(value="/create",method=RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
-    public ResponseEntity<Response<CaisseDto>> create(@RequestBody Request<CaisseDto> request) throws Exception {
-    	log.info("start method /caisse/create");
-        Response<CaisseDto> response = controllerFactory.create(caisseBusiness, request, FunctionalityEnum.CREATE_CAISSE);
+    public ResponseEntity<Response<UtilisateurDirectionDto>> create(@RequestBody Request<UtilisateurDirectionDto> request) throws Exception {
+    	log.info("start method /utilisateurDirection/create");
+        Response<UtilisateurDirectionDto> response = controllerFactory.create(utilisateurDirectionBusiness, request, FunctionalityEnum.CREATE_UTILISATEUR_DIRECTION);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.buildAndExpand(response.getItems().get(0))
 				.toUri();
-		log.info("end method /caisse/create");
+		log.info("end method /utilisateurDirection/create");
         return ResponseEntity.created(uri).body(response);
     }
 
 	@RequestMapping(value="/update",method=RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
-    public Response<CaisseDto> update(@RequestBody Request<CaisseDto> request) throws Exception{
-    	log.info("start method /caisse/update");
-        Response<CaisseDto> response = controllerFactory.update(caisseBusiness, request, FunctionalityEnum.UPDATE_CAISSE);
-		log.info("end method /caisse/update");
+    public Response<UtilisateurDirectionDto> update(@RequestBody Request<UtilisateurDirectionDto> request) throws Exception{
+    	log.info("start method /utilisateurDirection/update");
+        Response<UtilisateurDirectionDto> response = controllerFactory.update(utilisateurDirectionBusiness, request, FunctionalityEnum.UPDATE_UTILISATEUR_DIRECTION);
+		log.info("end method /utilisateurDirection/update");
         return response;
     }
 
 	@RequestMapping(value="/delete",method=RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
-    public Response<CaisseDto> delete(@RequestBody Request<CaisseDto> request) throws Exception{
-    	log.info("start method /caisse/delete");
-        Response<CaisseDto> response = controllerFactory.delete(caisseBusiness, request, FunctionalityEnum.DELETE_CAISSE);
-		log.info("end method /caisse/delete");
+    public Response<UtilisateurDirectionDto> delete(@RequestBody Request<UtilisateurDirectionDto> request) throws Exception{
+    	log.info("start method /utilisateurDirection/delete");
+        Response<UtilisateurDirectionDto> response = controllerFactory.delete(utilisateurDirectionBusiness, request, FunctionalityEnum.DELETE_UTILISATEUR_DIRECTION);
+		log.info("end method /utilisateurDirection/delete");
         return response;
     }
 
 	@RequestMapping(value="/getByCriteria",method=RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
-    public Response<CaisseDto> getByCriteria(@RequestBody Request<CaisseDto> request) throws Exception{
-    	log.info("start method /caisse/getByCriteria");
-        Response<CaisseDto> response = controllerFactory.getByCriteria(caisseBusiness, request, FunctionalityEnum.VIEW_CAISSE);
-		log.info("end method /caisse/getByCriteria");
+    public Response<UtilisateurDirectionDto> getByCriteria(@RequestBody Request<UtilisateurDirectionDto> request) throws Exception{
+    	log.info("start method /utilisateurDirection/getByCriteria");
+        Response<UtilisateurDirectionDto> response = controllerFactory.getByCriteria(utilisateurDirectionBusiness, request, FunctionalityEnum.VIEW_UTILISATEUR_DIRECTION);
+		log.info("end method /utilisateurDirection/getByCriteria");
         return response;
     }
 
     @RequestMapping(value = "/custom", method = RequestMethod.POST, consumes = {
 	   "application/json" }, produces = { "application/json" })
-	 public Response<CaisseDto> custom(@RequestBody Request<CaisseDto> request) throws Exception{
-	  log.info("CaisseDto method /$/custom");
-	  Response<CaisseDto> response = new Response<CaisseDto>();
+	 public Response<UtilisateurDirectionDto> custom(@RequestBody Request<UtilisateurDirectionDto> request) throws Exception{
+	  log.info("UtilisateurDirectionDto method /$/custom");
+	  Response<UtilisateurDirectionDto> response = new Response<UtilisateurDirectionDto>();
 	  String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
 	  Locale locale = new Locale(languageID, "");
 	  try {
 	   response = Validate.validateList(request, response, functionalError, locale);
 	   if (!response.isHasError()) {
-	    response = caisseBusiness.custom(request, locale);
+	    response = utilisateurDirectionBusiness.custom(request, locale);
 	   } else {
 	    slf4jLogger.info("Erreur| code: {} -  message: {}", response.getStatus().getCode(),
 	      response.getStatus().getMessage());
@@ -128,7 +128,7 @@ public class CaisseController {
 	  } catch (TransactionSystemException e) {
 	   exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response, locale, e);
 	  }
-	  slf4jLogger.info("end method /CaisseDto/custom");
+	  slf4jLogger.info("end method /UtilisateurDirectionDto/custom");
 	  return response;
 	 }
 }
