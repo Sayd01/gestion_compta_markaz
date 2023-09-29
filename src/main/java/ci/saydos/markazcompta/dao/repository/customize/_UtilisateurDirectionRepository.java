@@ -35,4 +35,6 @@ public interface _UtilisateurDirectionRepository {
 
 		return listOfQuery;
 	}
+	@Query("select e from UtilisateurDirection e where e.utilisateur.email = :email and e.direction.code = :code and e.isDeleted = :isDeleted")
+    UtilisateurDirection findByDirectionAndUser(@Param("email")String email,@Param("code")String code, @Param("isDeleted")Boolean isDeleted);
 }

@@ -131,4 +131,33 @@ public class CaisseController {
 	  slf4jLogger.info("end method /CaisseDto/custom");
 	  return response;
 	 }
+
+	@RequestMapping(value = "/approvisionnement", method = RequestMethod.POST, consumes = {
+			"application/json"}, produces = {"application/json"})
+	public Response<CaisseDto> variable(@RequestBody Request<CaisseDto> request) throws Exception {
+		log.info("start method /Caisse/approvisionnement");
+		Response<CaisseDto> response   = new Response<>();
+		String               languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+		Locale               locale     = new Locale(languageID, "");
+		try {
+			response = Validate.validateList(request, response, functionalError, locale);
+			if (!response.isHasError()) {
+				response = caisseBusiness.approvisionnement(request, locale);
+			} else {
+				slf4jLogger.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+				return response;
+			}
+			if (!response.isHasError()) {
+				slf4jLogger.info(String.format("code: {} -  message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+			} else {
+				slf4jLogger.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+			}
+		} catch (CannotCreateTransactionException e) {
+			exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response, locale, e);
+		} catch (TransactionSystemException e) {
+			exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response, locale, e);
+		}
+		log.info("end method /Caisse/approvisionnement");
+		return response;
+	}
 }

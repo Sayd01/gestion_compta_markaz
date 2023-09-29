@@ -1,14 +1,17 @@
+/*
 package ci.saydos.markazcompta.utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
+*/
 /**
  * BUSINESS factory
  *
  * @author Diomande Souleymane
- */
+ *//*
+
  
 @Data
 @Component
@@ -228,3 +231,4 @@ private String defaultBaseFolder;
 	
 
 }
+*/

@@ -38,7 +38,6 @@ public class UtilisateurDto extends _UtilisateurDto implements Cloneable{
     private String     lastName             ;
     private String     email                ;
     private String     imageUrl             ;
-    private Integer    idMarkaz             ;
 	private String     createdAt            ;
     private Integer    createdBy            ;
     private Boolean    isDeleted            ;
@@ -49,8 +48,6 @@ public class UtilisateurDto extends _UtilisateurDto implements Cloneable{
     //----------------------------------------------------------------------
     // ENTITY LINKS FIELD ( RELATIONSHIP )
     //----------------------------------------------------------------------
-	private String markazCode;
-	private String markazIntitule;
 
 	// Search param
 	private SearchParam<Integer>  idParam               ;                     
@@ -58,16 +55,14 @@ public class UtilisateurDto extends _UtilisateurDto implements Cloneable{
 	private SearchParam<String>   firstNameParam        ;                     
 	private SearchParam<String>   lastNameParam         ;                     
 	private SearchParam<String>   emailParam            ;                     
-	private SearchParam<String>   imageUrlParam         ;                     
-	private SearchParam<Integer>  idMarkazParam         ;                     
+	private SearchParam<String>   imageUrlParam         ;
 	private SearchParam<String>   createdAtParam        ;                     
 	private SearchParam<Integer>  createdByParam        ;                     
 	private SearchParam<Boolean>  isDeletedParam        ;                     
 	private SearchParam<String>   updatedAtParam        ;                     
 	private SearchParam<Integer>  updatedByParam        ;                     
 	private SearchParam<String>   passwordParam         ;                     
-	private SearchParam<String>   markazCodeParam       ;                     
-	private SearchParam<String>   markazIntituleParam   ;                     
+
     /**
      * Default constructor
      */

@@ -32,6 +32,7 @@ import ci.saydos.markazcompta.dao.entity.Utilisateur;
 import ci.saydos.markazcompta.dao.entity.Demande;
 import ci.saydos.markazcompta.dao.entity.*;
 import ci.saydos.markazcompta.dao.repository.*;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
 BUSINESS for table "demande_historique"
@@ -41,6 +42,7 @@ BUSINESS for table "demande_historique"
  */
 @Log
 @Component
+@Transactional
 public class DemandeHistoriqueBusiness implements IBasicBusiness<Request<DemandeHistoriqueDto>, Response<DemandeHistoriqueDto>> {
 
 	private Response<DemandeHistoriqueDto> response;

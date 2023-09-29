@@ -2,7 +2,7 @@
 
 /*
  * Java controller for entity table utilisateur_direction 
- * Created on 2023-08-08 ( Time 19:02:57 )
+ * Created on 2023-08-29 ( Time 13:35:25 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2017 Savoir Faire Linux. All Rights Reserved.
  */

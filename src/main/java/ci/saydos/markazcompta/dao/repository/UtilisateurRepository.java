@@ -141,15 +141,6 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
 	@Query("select e from Utilisateur e where e.password = :password and e.isDeleted = :isDeleted")
 	List<Utilisateur> findByPassword(@Param("password")String password, @Param("isDeleted")Boolean isDeleted);
 
-	/**
-	 * Finds Utilisateur by using idMarkaz as a search criteria.
-	 * 
-	 * @param idMarkaz
-	 * @return An Object Utilisateur whose idMarkaz is equals to the given idMarkaz. If
-	 *         no Utilisateur is found, this method returns null.
-	 */
-	@Query("select e from Utilisateur e where e.markaz.id = :idMarkaz and e.isDeleted = :isDeleted")
-	List<Utilisateur> findByIdMarkaz(@Param("idMarkaz")Integer idMarkaz, @Param("isDeleted")Boolean isDeleted);
 
 	/**
 	 * Finds List of Utilisateur by using utilisateurDto as a search criteria.
@@ -278,15 +269,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
 			if (Utilities.notBlank(dto.getPassword())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("password", dto.getPassword(), "e.password", "String", dto.getPasswordParam(), param, index, locale));
 			}
-			if (dto.getIdMarkaz()!= null && dto.getIdMarkaz() > 0) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("idMarkaz", dto.getIdMarkaz(), "e.markaz.id", "Integer", dto.getIdMarkazParam(), param, index, locale));
-			}
-			if (Utilities.notBlank(dto.getMarkazCode())) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("markazCode", dto.getMarkazCode(), "e.markaz.code", "String", dto.getMarkazCodeParam(), param, index, locale));
-			}
-			if (Utilities.notBlank(dto.getMarkazIntitule())) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("markazIntitule", dto.getMarkazIntitule(), "e.markaz.intitule", "String", dto.getMarkazIntituleParam(), param, index, locale));
-			}
+
 			List<String> listOfCustomQuery = _generateCriteria(dto, param, index, locale);
 			if (Utilities.isNotEmpty(listOfCustomQuery)) {
 				listOfQuery.addAll(listOfCustomQuery);

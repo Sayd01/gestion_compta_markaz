@@ -13,6 +13,7 @@ import jakarta.persistence.TypedQuery;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -29,7 +30,7 @@ import ci.saydos.markazcompta.dao.repository.customize._DemandeHistoriqueReposit
  * Repository : DemandeHistorique.
  */
 @Repository
-public interface DemandeHistoriqueRepository extends JpaRepository<DemandeHistorique, Integer>, _DemandeHistoriqueRepository {
+public interface DemandeHistoriqueRepository extends JpaRepository<DemandeHistorique, Integer>, _DemandeHistoriqueRepository, JpaSpecificationExecutor<DemandeHistorique> {
 	/**
 	 * Finds DemandeHistorique by using id as a search criteria.
 	 * 

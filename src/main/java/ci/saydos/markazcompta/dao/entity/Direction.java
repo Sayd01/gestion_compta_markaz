@@ -69,7 +69,7 @@ public class Direction implements Serializable, Cloneable {
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_markaz", referencedColumnName="id")
     private Markaz markaz      ;
 

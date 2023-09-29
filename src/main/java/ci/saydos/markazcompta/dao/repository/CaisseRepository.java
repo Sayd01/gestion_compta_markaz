@@ -74,12 +74,12 @@ public interface CaisseRepository extends JpaRepository<Caisse, Integer>, _Caiss
     /**
      * Finds Caisse by using montantDisponible as a search criteria.
      *
-     * @param montantDisponible
+     * @param solde
      * @return An Object Caisse whose montantDisponible is equals to the given montantDisponible. If
      * no Caisse is found, this method returns null.
      */
-    @Query("select e from Caisse e where e.montantDisponible = :montantDisponible and e.isDeleted = :isDeleted")
-    List<Caisse> findByMontantDisponible(@Param("montantDisponible") Double montantDisponible, @Param("isDeleted") Boolean isDeleted);
+    @Query("select e from Caisse e where e.solde = :solde and e.isDeleted = :isDeleted")
+    List<Caisse> findByMontantDisponible(@Param("solde") Double solde, @Param("isDeleted") Boolean isDeleted);
 
     /**
      * Finds Caisse by using montantEntre as a search criteria.
@@ -255,14 +255,14 @@ public interface CaisseRepository extends JpaRepository<Caisse, Integer>, _Caiss
             if (dto.getIsDeleted() != null) {
                 listOfQuery.add(CriteriaUtils.generateCriteria("isDeleted", dto.getIsDeleted(), "e.isDeleted", "Boolean", dto.getIsDeletedParam(), param, index, locale));
             }
-            if (dto.getMontantDisponible() != null && dto.getMontantDisponible() > 0) {
-                listOfQuery.add(CriteriaUtils.generateCriteria("montantDisponible", dto.getMontantDisponible(), "e.montantDisponible", "Double", dto.getMontantDisponibleParam(), param, index, locale));
+            if (dto.getSolde() != null && dto.getSolde() > 0) {
+                listOfQuery.add(CriteriaUtils.generateCriteria("solde", dto.getSolde(), "e.solde", "Double", dto.getSoldeParam(), param, index, locale));
             }
             if (dto.getMontantEntre() != null && dto.getMontantEntre() > 0) {
                 listOfQuery.add(CriteriaUtils.generateCriteria("montantEntre", dto.getMontantEntre(), "e.montantEntre", "Double", dto.getMontantEntreParam(), param, index, locale));
             }
             if (dto.getType() != null) {
-                listOfQuery.add(CriteriaUtils.generateCriteria("type", dto.getType(), "e.type", "String", dto.getTypeParam(), param, index, locale));
+                listOfQuery.add(CriteriaUtils.generateCriteria("type", dto.getType(), "e.type", "enum", dto.getTypeParam(), param, index, locale));
             }
             if (Utilities.notBlank(dto.getUpdatedAt())) {
                 listOfQuery.add(CriteriaUtils.generateCriteria("updatedAt", dto.getUpdatedAt(), "e.updatedAt", "Date", dto.getUpdatedAtParam(), param, index, locale));

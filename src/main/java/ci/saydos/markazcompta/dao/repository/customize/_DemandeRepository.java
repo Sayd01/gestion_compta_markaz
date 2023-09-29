@@ -50,4 +50,6 @@ public interface _DemandeRepository {
     Demande findByIdAndStatut(@Param("id") Integer id, @Param("statut") StatutDemandeEnum statut, @Param("isDeleted") Boolean isDeleted);
 
 
+
+
 }

@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Locale;
+
+import ci.saydos.markazcompta.utils.enums.TypeCaisseEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
@@ -36,7 +38,8 @@ public interface _CaisseRepository {
 
 		return listOfQuery;
 	}
-	@Query(value = "SELECT montant_disponible FROM Caisse ORDER BY date_montant_actuel DESC LIMIT 1",nativeQuery = true)
-	Double montantDisponible();
-
+	@Query("select sum(c.montantEntre) from Caisse c where c.isDeleted = :isDeleted")
+	Double montantTotalEntre(@Param("isDeleted") Boolean isDeleted) ;
+	@Query("select sum(c.montantSortie) from Caisse c where c.isDeleted = :isDeleted")
+	Double montantTotalSortie(@Param("isDeleted") Boolean isDeleted);
 }

@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Telosys Database Repository --><root>
-    <tableList databaseId="0" databaseName="MYSQL" databaseProductName="MySQL" generation="2023-08-10 18:38:18">
+    <tableList databaseId="0" databaseName="MYSQL" databaseProductName="MySQL" generation="2023-08-29 13:33:10">
+        <table catalog="markaz_compta" databaseComment="" databaseType="TABLE" javaBean="Article" name="article" schema="">
+            <column dbAutoIncremented="true" dbComment="" dbDefaultValue="" dbName="id" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INT" inputType="number" javaName="id" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id" notNull="true" selected="true"/>
+            <column dbComment="" dbDefaultValue="" dbName="libelle" dbNotNull="false" dbPosition="2" dbSize="255" dbTypeName="VARCHAR" inputType="text" javaName="libelle" javaType="java.lang.String" jdbcTypeCode="12" label="Libelle" maxLength="255" notNull="false" selected="true"/>
+            <column dateType="DT" dbComment="" dbDefaultValue="" dbName="created_at" dbNotNull="false" dbPosition="3" dbSize="26" dbTypeName="DATETIME" inputType="" javaName="createdAt" javaType="java.util.Date" jdbcTypeCode="93" label="Created at" notNull="false" selected="true"/>
+            <column dbComment="" dbDefaultValue="" dbName="created_by" dbNotNull="false" dbPosition="4" dbSize="10" dbTypeName="INT" inputType="number" javaName="createdBy" javaType="java.lang.Integer" jdbcTypeCode="4" label="Created by" notNull="false" selected="true"/>
+            <column dbComment="" dbDefaultValue="" dbName="is_deleted" dbNotNull="false" dbPosition="5" dbSize="1" dbTypeName="BIT" inputType="checkbox" javaName="isDeleted" javaType="java.lang.Boolean" jdbcTypeCode="-7" label="Is deleted" notNull="false" selected="true"/>
+            <column dateType="DT" dbComment="" dbDefaultValue="" dbName="updated_at" dbNotNull="false" dbPosition="6" dbSize="26" dbTypeName="DATETIME" inputType="" javaName="updatedAt" javaType="java.util.Date" jdbcTypeCode="93" label="Updated at" notNull="false" selected="true"/>
+            <column dbComment="" dbDefaultValue="" dbName="updated_by" dbNotNull="false" dbPosition="7" dbSize="10" dbTypeName="INT" inputType="number" javaName="updatedBy" javaType="java.lang.Integer" jdbcTypeCode="4" label="Updated by" notNull="false" selected="true"/>
+            <link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="stock_article_id_fk" id="LINK_FK_stock_article_id_fk_I" inverseSideOf="LINK_FK_stock_article_id_fk_O" javaName="listOfStock" javaType="unused" joinTableName="" mappedBy="article" optional="" owningSide="false" sourceTableName="article" targetEntity="Stock" targetTableName="stock" used="true"/>
+        </table>
         <table catalog="markaz_compta" databaseComment="" databaseType="TABLE" javaBean="Caisse" name="caisse" schema="">
             <column dbAutoIncremented="true" dbComment="" dbDefaultValue="" dbName="id" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INT" inputType="number" javaName="id" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id" notNull="true" selected="true"/>
             <column dateType="DT" dbComment="" dbDefaultValue="" dbName="created_at" dbNotNull="false" dbPosition="2" dbSize="26" dbTypeName="DATETIME" inputType="" javaName="createdAt" javaType="java.util.Date" jdbcTypeCode="93" label="Created at" notNull="false" selected="true"/>
@@ -8,7 +18,7 @@
             <column dbComment="" dbDefaultValue="" dbName="is_deleted" dbNotNull="false" dbPosition="4" dbSize="1" dbTypeName="BIT" inputType="checkbox" javaName="isDeleted" javaType="java.lang.Boolean" jdbcTypeCode="-7" label="Is deleted" notNull="false" selected="true"/>
             <column dbComment="" dbDefaultValue="" dbName="montant_disponible" dbNotNull="false" dbPosition="5" dbSize="22" dbTypeName="DOUBLE" inputType="number" javaName="montantDisponible" javaType="java.lang.Double" jdbcTypeCode="8" label="Montant disponible" notNull="false" selected="true"/>
             <column dbComment="" dbDefaultValue="" dbName="montant_entre" dbNotNull="false" dbPosition="6" dbSize="22" dbTypeName="DOUBLE" inputType="number" javaName="montantEntre" javaType="java.lang.Double" jdbcTypeCode="8" label="Montant entre" notNull="false" selected="true"/>
-            <column dbComment="" dbDefaultValue="" dbName="type" dbNotNull="false" dbPosition="7" dbSize="6" dbTypeName="VARCHAR" inputType="text" javaName="type" javaType="java.lang.String" jdbcTypeCode="12" label="Type" maxLength="6" notNull="false" selected="true"/>
+            <column dbComment="" dbDefaultValue="" dbName="type" dbNotNull="false" dbPosition="7" dbSize="6" dbTypeName="ENUM" inputType="text" javaName="type" javaType="java.lang.String" jdbcTypeCode="1" label="Type" maxLength="6" notNull="false" selected="true"/>
             <column dateType="DT" dbComment="" dbDefaultValue="" dbName="updated_at" dbNotNull="false" dbPosition="8" dbSize="26" dbTypeName="DATETIME" inputType="" javaName="updatedAt" javaType="java.util.Date" jdbcTypeCode="93" label="Updated at" notNull="false" selected="true"/>
             <column dbComment="" dbDefaultValue="" dbName="updated_by" dbNotNull="false" dbPosition="9" dbSize="10" dbTypeName="INT" inputType="number" javaName="updatedBy" javaType="java.lang.Integer" jdbcTypeCode="4" label="Updated by" notNull="false" selected="true"/>
             <column dbComment="" dbDefaultValue="" dbName="id_depense" dbNotNull="false" dbPosition="10" dbSize="10" dbTypeName="INT" inputType="number" javaName="idDepense" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id depense" notNull="false" selected="true"/>
@@ -31,9 +41,6 @@
                     <joinColumn insertable="false" name="id_depense" nullable="true" referencedColumnName="id" unique="false" updatable="false"/>
                 </joinColumns>
             </link>
-        </table>
-        <table catalog="markaz_compta" databaseComment="" databaseType="TABLE" javaBean="CaisseSeq" name="caisse_seq" schema="">
-            <column dbComment="" dbDefaultValue="" dbName="next_val" dbNotNull="false" dbPosition="1" dbSize="19" dbTypeName="BIGINT" inputType="number" javaName="nextVal" javaType="java.lang.Long" jdbcTypeCode="-5" label="Next val" notNull="false" selected="true"/>
         </table>
         <table catalog="markaz_compta" databaseComment="" databaseType="TABLE" javaBean="ChargeFixe" name="charge_fixe" schema="">
             <column dbAutoIncremented="true" dbComment="" dbDefaultValue="" dbName="id" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INT" inputType="number" javaName="id" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id" notNull="true" selected="true"/>
@@ -120,8 +127,7 @@
             <column dbComment="" dbDefaultValue="" dbName="updated_by" dbNotNull="false" dbPosition="8" dbSize="10" dbTypeName="INT" inputType="number" javaName="updatedBy" javaType="java.lang.Integer" jdbcTypeCode="4" label="Updated by" notNull="false" selected="true"/>
             <column dbComment="" dbDefaultValue="" dbName="id_demande" dbNotNull="false" dbPosition="9" dbSize="10" dbTypeName="INT" inputType="number" javaName="idDemande" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id demande" notNull="false" selected="true"/>
             <column dbComment="" dbDefaultValue="" dbName="id_charge_fixe" dbNotNull="false" dbPosition="10" dbSize="10" dbTypeName="INT" inputType="number" javaName="idChargeFixe" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id charge fixe" notNull="false" selected="true"/>
-            <column dbComment="" dbDefaultValue="" dbName="typeDepense" dbNotNull="false" dbPosition="11" dbSize="7" dbTypeName="ENUM" inputType="text" javaName="typeDepense" javaType="java.lang.String" jdbcTypeCode="1" label="Typedepense" maxLength="7" notNull="false" selected="true"/>
-            <column dbComment="" dbDefaultValue="" dbName="type_depense" dbNotNull="false" dbPosition="12" dbSize="7" dbTypeName="VARCHAR" inputType="text" javaName="typeDepense" javaType="java.lang.String" jdbcTypeCode="12" label="Type depense" maxLength="7" notNull="false" selected="true"/>
+            <column dbComment="" dbDefaultValue="" dbName="type_depense" dbNotNull="false" dbPosition="11" dbSize="7" dbTypeName="ENUM" inputType="text" javaName="typeDepense" javaType="java.lang.String" jdbcTypeCode="1" label="Type depense" maxLength="7" notNull="false" selected="true"/>
             <fk name="FK62vwmwrt1u63g8e7urhswvtd3">
                 <fkcol colname="id_demande" colref="id" deferrable="7" deleterule="3" sequence="1" tablename="depense" tableref="demande" updaterule="3"/>
             </fk>
@@ -139,9 +145,6 @@
                 </joinColumns>
             </link>
             <link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK1gynwm407xubbdofghmx54qo3" id="LINK_FK_FK1gynwm407xubbdofghmx54qo3_I" inverseSideOf="LINK_FK_FK1gynwm407xubbdofghmx54qo3_O" javaName="listOfCaisse" javaType="unused" joinTableName="" mappedBy="depense" optional="" owningSide="false" sourceTableName="depense" targetEntity="Caisse" targetTableName="caisse" used="true"/>
-        </table>
-        <table catalog="markaz_compta" databaseComment="" databaseType="TABLE" javaBean="DepenseSeq" name="depense_seq" schema="">
-            <column dbComment="" dbDefaultValue="" dbName="next_val" dbNotNull="false" dbPosition="1" dbSize="19" dbTypeName="BIGINT" inputType="number" javaName="nextVal" javaType="java.lang.Long" jdbcTypeCode="-5" label="Next val" notNull="false" selected="true"/>
         </table>
         <table catalog="markaz_compta" databaseComment="" databaseType="TABLE" javaBean="Direction" name="direction" schema="">
             <column dbAutoIncremented="true" dbComment="" dbDefaultValue="" dbName="id" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INT" inputType="number" javaName="id" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id" notNull="true" selected="true"/>
@@ -209,6 +212,15 @@
             <column dbComment="" dbDefaultValue="" dbName="quantite" dbNotNull="false" dbPosition="9" dbSize="10" dbTypeName="INT" inputType="number" javaName="quantite" javaType="java.lang.Integer" jdbcTypeCode="4" label="Quantite" notNull="false" selected="true"/>
             <column dateType="DT" dbComment="" dbDefaultValue="" dbName="updated_at" dbNotNull="false" dbPosition="10" dbSize="26" dbTypeName="DATETIME" inputType="" javaName="updatedAt" javaType="java.util.Date" jdbcTypeCode="93" label="Updated at" notNull="false" selected="true"/>
             <column dbComment="" dbDefaultValue="" dbName="updated_by" dbNotNull="false" dbPosition="11" dbSize="10" dbTypeName="INT" inputType="number" javaName="updatedBy" javaType="java.lang.Integer" jdbcTypeCode="4" label="Updated by" notNull="false" selected="true"/>
+            <column dbComment="" dbDefaultValue="" dbName="id_article" dbNotNull="false" dbPosition="12" dbSize="10" dbTypeName="INT" inputType="number" javaName="idArticle" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id article" notNull="false" selected="true"/>
+            <fk name="stock_article_id_fk">
+                <fkcol colname="id_article" colref="id" deferrable="7" deleterule="3" sequence="1" tablename="stock" tableref="article" updaterule="3"/>
+            </fk>
+            <link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="stock_article_id_fk" id="LINK_FK_stock_article_id_fk_O" inverseSideOf="" javaName="article" javaType="unused" joinTableName="" mappedBy="" optional="" owningSide="true" sourceTableName="stock" targetEntity="Article" targetTableName="article" used="true">
+                <joinColumns>
+                    <joinColumn insertable="false" name="id_article" nullable="true" referencedColumnName="id" unique="false" updatable="false"/>
+                </joinColumns>
+            </link>
             <link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FKqe2hsxlbxhxsiiugxyo1wjgc4" id="LINK_FK_FKqe2hsxlbxhxsiiugxyo1wjgc4_I" inverseSideOf="LINK_FK_FKqe2hsxlbxhxsiiugxyo1wjgc4_O" javaName="listOfStockHistorique" javaType="unused" joinTableName="" mappedBy="stock" optional="" owningSide="false" sourceTableName="stock" targetEntity="StockHistorique" targetTableName="stock_historique" used="true"/>
         </table>
         <table catalog="markaz_compta" databaseComment="" databaseType="TABLE" javaBean="StockHistorique" name="stock_historique" schema="">
@@ -264,6 +276,11 @@
             <column dbAutoIncremented="true" dbComment="" dbDefaultValue="" dbName="id" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INT" inputType="number" javaName="id" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id" notNull="true" selected="true"/>
             <column dbComment="" dbDefaultValue="" dbName="id_direction" dbNotNull="false" dbPosition="2" dbSize="10" dbTypeName="INT" inputType="number" javaName="idDirection" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id direction" notNull="false" selected="true"/>
             <column dbComment="" dbDefaultValue="" dbName="id_utilisateur" dbNotNull="false" dbPosition="3" dbSize="10" dbTypeName="INT" inputType="number" javaName="idUtilisateur" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id utilisateur" notNull="false" selected="true"/>
+            <column dateType="DT" dbComment="" dbDefaultValue="" dbName="created_at" dbNotNull="false" dbPosition="4" dbSize="26" dbTypeName="DATETIME" inputType="" javaName="createdAt" javaType="java.util.Date" jdbcTypeCode="93" label="Created at" notNull="false" selected="true"/>
+            <column dbComment="" dbDefaultValue="" dbName="created_by" dbNotNull="false" dbPosition="5" dbSize="10" dbTypeName="INT" inputType="number" javaName="createdBy" javaType="java.lang.Integer" jdbcTypeCode="4" label="Created by" notNull="false" selected="true"/>
+            <column dbComment="" dbDefaultValue="" dbName="is_deleted" dbNotNull="false" dbPosition="6" dbSize="1" dbTypeName="BIT" inputType="checkbox" javaName="isDeleted" javaType="java.lang.Boolean" jdbcTypeCode="-7" label="Is deleted" notNull="false" selected="true"/>
+            <column dateType="DT" dbComment="" dbDefaultValue="" dbName="updated_at" dbNotNull="false" dbPosition="7" dbSize="26" dbTypeName="DATETIME" inputType="" javaName="updatedAt" javaType="java.util.Date" jdbcTypeCode="93" label="Updated at" notNull="false" selected="true"/>
+            <column dbComment="" dbDefaultValue="" dbName="updated_by" dbNotNull="false" dbPosition="8" dbSize="10" dbTypeName="INT" inputType="number" javaName="updatedBy" javaType="java.lang.Integer" jdbcTypeCode="4" label="Updated by" notNull="false" selected="true"/>
             <fk name="FKmpooxs3ixu3ua51p0qsqm29ib">
                 <fkcol colname="id_utilisateur" colref="id" deferrable="7" deleterule="3" sequence="1" tablename="utilisateur_direction" tableref="utilisateur" updaterule="3"/>
             </fk>

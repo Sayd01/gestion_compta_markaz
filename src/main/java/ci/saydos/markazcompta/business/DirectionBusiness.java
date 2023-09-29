@@ -82,7 +82,6 @@ public class DirectionBusiness implements IBasicBusiness<Request<DirectionDto>, 
 			// Definir les parametres obligatoires
 			Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
 			fieldsToVerify.put("idMarkaz", dto.getIdMarkaz());
-			fieldsToVerify.put("code", dto.getCode());
 			fieldsToVerify.put("intitule", dto.getIntitule());
 			if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
 				throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -122,10 +121,11 @@ public class DirectionBusiness implements IBasicBusiness<Request<DirectionDto>, 
 					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("markaz idMarkaz -> " + dto.getIdMarkaz(), locale));
 				}
 			}
-				Direction entityToSave = null;
+			Direction entityToSave = null;
 			entityToSave = DirectionTransformer.INSTANCE.toEntity(dto, existingMarkaz);
 			entityToSave.setCreatedAt(Utilities.getCurrentDate());
 			entityToSave.setCreatedBy(request.getUser());
+			entityToSave.setCode("D-"+Utilities.generateCode());
 			entityToSave.setIsDeleted(false);
 			items.add(entityToSave);
 		}

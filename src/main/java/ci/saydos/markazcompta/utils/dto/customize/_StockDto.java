@@ -1,7 +1,7 @@
 
 /*
  * Java dto for entity table stock 
- * Created on 2023-08-06 ( Time 01:31:06 )
+ * Created on 2023-08-28 ( Time 14:55:50 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */

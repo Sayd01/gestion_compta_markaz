@@ -36,9 +36,9 @@ public interface DemandeTransformer {
 
     @FullTransformerQualifier
     @Mappings({
-            @Mapping(source = "entity.dateDebut", dateFormat = "dd/MM/yyyy", target = "dateDebut"),
-            @Mapping(source = "entity.dateFin", dateFormat = "dd/MM/yyyy", target = "dateFin"),
-            @Mapping(source = "entity.createdAt", dateFormat = "dd/MM/yyyy", target = "createdAt"),
+            @Mapping(source = "entity.dateDebut", dateFormat = "dd/MM/yyyy HH:mm:ss", target = "dateDebut"),
+            @Mapping(source = "entity.dateFin", dateFormat = "dd/MM/yyyy HH:mm:ss", target = "dateFin"),
+            @Mapping(source = "entity.createdAt", dateFormat = "dd/MM/yyyy HH:mm:ss", target = "createdAt"),
             @Mapping(source = "entity.updatedAt", dateFormat = "dd/MM/yyyy", target = "updatedAt"),
             @Mapping(source = "entity.utilisateur.id", target = "idUtilisateur"),
             @Mapping(source = "entity.utilisateur.login", target = "utilisateurLogin"),

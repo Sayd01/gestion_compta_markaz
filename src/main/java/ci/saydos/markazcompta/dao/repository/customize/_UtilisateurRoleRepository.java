@@ -36,4 +36,10 @@ public interface _UtilisateurRoleRepository {
 
 		return listOfQuery;
 	}
+
+	@Query("select e from UtilisateurRole e where e.utilisateur.email = :userEmail and e.role.name = :roleName and e.isDeleted = :isDeleted")
+	UtilisateurRole findByUserAndRole(@Param("userEmail")String userEmail,@Param("roleName")String roleName, @Param("isDeleted")Boolean isDeleted);
+
+	@Query("select e from UtilisateurRole e where e.utilisateur.email= :email")
+	List<UtilisateurRole> findUserRoleByEmail(@Param("email")String email);
 }

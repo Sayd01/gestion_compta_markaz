@@ -2,7 +2,7 @@
 
 /*
  * Java transformer for entity table utilisateur_direction 
- * Created on 2023-08-08 ( Time 19:02:57 )
+ * Created on 2023-08-29 ( Time 13:35:25 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -37,13 +37,15 @@ public interface UtilisateurDirectionTransformer {
 
 	@FullTransformerQualifier
 	@Mappings({
+		@Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
+		@Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
+		@Mapping(source="entity.utilisateur.id", target="idUtilisateur"),
+		@Mapping(source="entity.utilisateur.firstName", target="utilisateurFirstName"),
+		@Mapping(source="entity.utilisateur.lastName", target="utilisateurLastName"),
+		@Mapping(source="entity.utilisateur.login", target="utilisateurLogin"),
 		@Mapping(source="entity.direction.id", target="idDirection"),
 		@Mapping(source="entity.direction.code", target="directionCode"),
 		@Mapping(source="entity.direction.intitule", target="directionIntitule"),
-		@Mapping(source="entity.utilisateur.id", target="idUtilisateur"),
-		@Mapping(source="entity.utilisateur.login", target="utilisateurLogin"),
-		@Mapping(source="entity.utilisateur.firstName", target="utilisateurFirstName"),
-		@Mapping(source="entity.utilisateur.lastName", target="utilisateurLastName"),
 	})
 	UtilisateurDirectionDto toDto(UtilisateurDirection entity) throws ParseException;
 
@@ -72,10 +74,15 @@ public interface UtilisateurDirectionTransformer {
 
 	@Mappings({
 		@Mapping(source="dto.id", target="id"),
-		@Mapping(source="direction", target="direction"),
+		@Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
+		@Mapping(source="dto.createdBy", target="createdBy"),
+		@Mapping(source="dto.isDeleted", target="isDeleted"),
+		@Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
+		@Mapping(source="dto.updatedBy", target="updatedBy"),
 		@Mapping(source="utilisateur", target="utilisateur"),
+		@Mapping(source="direction", target="direction"),
 	})
-    UtilisateurDirection toEntity(UtilisateurDirectionDto dto, Direction direction, Utilisateur utilisateur) throws ParseException;
+    UtilisateurDirection toEntity(UtilisateurDirectionDto dto, Utilisateur utilisateur, Direction direction) throws ParseException;
 
     //List<UtilisateurDirection> toEntities(List<UtilisateurDirectionDto> dtos) throws ParseException;
 

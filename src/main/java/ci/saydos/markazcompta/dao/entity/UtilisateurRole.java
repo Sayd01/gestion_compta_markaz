@@ -64,10 +64,10 @@ public class UtilisateurRole implements Serializable, Cloneable {
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="role_id", referencedColumnName="id")
     private Role role        ;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="utilisateur_id", referencedColumnName="id")
     private Utilisateur utilisateur ;
 

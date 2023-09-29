@@ -1,4 +1,4 @@
-                                                                    																
+
 /*
  * Java business for entity table demande
  * Created on 2023-08-06 ( Time 01:31:05 )
@@ -33,6 +33,7 @@ import ci.saydos.markazcompta.dao.entity.Utilisateur;
 import ci.saydos.markazcompta.dao.entity.*;
 import ci.saydos.markazcompta.dao.repository.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * BUSINESS for table "demande"
@@ -42,6 +43,7 @@ import org.springframework.stereotype.Service;
 @Log
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Response<DemandeDto>> {
 
     private final DirectionRepository         directionRepository;
@@ -127,8 +129,6 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
             demandeHistorique.setStatut(StatutDemandeEnum.INITIE);
             demandeHistorique.setIsDeleted(false);
             itemsHistorique.add(demandeHistorique);
-
-
         }
 
         if (!items.isEmpty()) {
@@ -231,7 +231,7 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
             if (Utilities.notBlank(dto.getDateFin())) {
                 entityToSave.setDateFin(dateFormat.parse(dto.getDateFin()));
             }
-            if (Utilities.notBlank(dto.getStatut().toString())) {
+            if (dto.getStatut() != null) {
                 entityToSave.setStatut(dto.getStatut());
             }
             if (dto.getCreatedBy() != null && dto.getCreatedBy() > 0) {

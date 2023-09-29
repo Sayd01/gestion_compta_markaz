@@ -1,6 +1,6 @@
 
 /*
- * Created on 2023-08-08 ( Time 19:03:08 )
+ * Created on 2023-08-28 ( Time 13:26:32 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -68,12 +68,6 @@ public class FunctionalError {
 	public Status DATA_EXIST(String message, Locale locale) {
 		status.setCode(StatusCode.FUNC_DATA_EXIST);
 		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_EXIST", new Object[] {}, locale) + ": " + message);
-		return status;
-	}
-
-	public Status DATA_EXIST_DEMANDE(Locale locale) {
-		status.setCode(StatusCode.FUNC_DATA_EXIST);
-		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_EXIST_DEMANDE", new Object[] {}, locale));
 		return status;
 	}
 
@@ -182,6 +176,12 @@ public class FunctionalError {
 	public Status DATA_DUPLICATE(String message, Locale locale) {
 		status.setCode(StatusCode.FUNC_DATA_DUPLICATE);
 		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_DUPLICATE", new Object[] {}, locale) + ": " + message);
+		return status;
+	}
+	
+	public Status DATA_EXIST_DEMANDE(Locale locale) {
+		status.setCode(StatusCode.FUNC_DATA_EXIST);
+		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_EXIST_DEMANDE", new Object[] {}, locale));
 		return status;
 	}
 }

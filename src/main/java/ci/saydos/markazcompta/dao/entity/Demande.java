@@ -93,10 +93,10 @@ public class Demande implements Serializable, Cloneable {
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_utilisateur", referencedColumnName="id")
     private Utilisateur utilisateur ;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_direction", referencedColumnName="id")
     private Direction direction   ;
 

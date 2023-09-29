@@ -39,9 +39,6 @@ public interface UtilisateurTransformer {
 	@Mappings({
 		@Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
 		@Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
-		@Mapping(source="entity.markaz.id", target="idMarkaz"),
-		@Mapping(source="entity.markaz.code", target="markazCode"),
-		@Mapping(source="entity.markaz.intitule", target="markazIntitule"),
 	})
 	UtilisateurDto toDto(Utilisateur entity) throws ParseException;
 
@@ -84,9 +81,8 @@ public interface UtilisateurTransformer {
 		@Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
 		@Mapping(source="dto.updatedBy", target="updatedBy"),
 		@Mapping(source="dto.password", target="password"),
-		@Mapping(source="markaz", target="markaz"),
 	})
-    Utilisateur toEntity(UtilisateurDto dto, Markaz markaz) throws ParseException;
+    Utilisateur toEntity(UtilisateurDto dto) throws ParseException;
 
     //List<Utilisateur> toEntities(List<UtilisateurDto> dtos) throws ParseException;
 

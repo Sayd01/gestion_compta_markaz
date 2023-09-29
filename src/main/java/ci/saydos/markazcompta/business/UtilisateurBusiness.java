@@ -8,29 +8,37 @@
 
 package ci.saydos.markazcompta.business;
 
-import lombok.extern.java.Log;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.http.HttpStatus;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
+import ci.saydos.markazcompta.dao.entity.*;
+import ci.saydos.markazcompta.dao.repository.*;
 import ci.saydos.markazcompta.utils.*;
-import ci.saydos.markazcompta.utils.dto.*;
-import ci.saydos.markazcompta.utils.exception.*;
 import ci.saydos.markazcompta.utils.contract.IBasicBusiness;
 import ci.saydos.markazcompta.utils.contract.Request;
 import ci.saydos.markazcompta.utils.contract.Response;
-import ci.saydos.markazcompta.utils.dto.transformer.*;
-import ci.saydos.markazcompta.dao.entity.Utilisateur;
-import ci.saydos.markazcompta.dao.entity.Markaz;
-import ci.saydos.markazcompta.dao.entity.*;
-import ci.saydos.markazcompta.dao.repository.*;
+import ci.saydos.markazcompta.utils.dto.UtilisateurDto;
+import ci.saydos.markazcompta.utils.dto.transformer.UtilisateurTransformer;
+import ci.saydos.markazcompta.utils.exception.EntityNotFoundException;
+import ci.saydos.markazcompta.utils.exception.InternalErrorException;
+import ci.saydos.markazcompta.utils.exception.InvalidEntityException;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.*;
 
 /**
 BUSINESS for table "utilisateur"
@@ -40,41 +48,35 @@ BUSINESS for table "utilisateur"
  */
 @Log
 @Component
+@RequiredArgsConstructor
 public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDto>, Response<UtilisateurDto>> {
 
-	private Response<UtilisateurDto> response;
-	@Autowired
-	private UtilisateurRepository utilisateurRepository;
-	@Autowired
-	private DepenseRepository depenseRepository;
-	@Autowired
-	private DemandeHistoriqueRepository demandeHistoriqueRepository;
-	@Autowired
-	private UtilisateurRoleRepository utilisateurRoleRepository;
-	@Autowired
-	private CaisseRepository caisseRepository;
-	@Autowired
-	private DemandeRepository demandeRepository;
-	@Autowired
-	private UtilisateurDirectionRepository utilisateurDirectionRepository;
-	@Autowired
-	private MarkazRepository markazRepository;
-	@Autowired
-	private FunctionalError functionalError;
-	@Autowired
-	private TechnicalError technicalError;
-	@Autowired
-	private ExceptionUtils exceptionUtils;
+	@Value("${application.security.jwt.secret}")
+	private String SECRET;
+	@Value("${application.security.jwt.access-token.expiration}")
+	private long ACCESS_TOKEN_EXPIRATION;
+
+	private final UtilisateurRepository utilisateurRepository;
+
+	private final DepenseRepository depenseRepository;
+
+	private final DemandeHistoriqueRepository demandeHistoriqueRepository;
+
+	private final UtilisateurRoleRepository utilisateurRoleRepository;
+
+	private final CaisseRepository caisseRepository;
+
+	private final DemandeRepository demandeRepository;
+
+	private final UtilisateurDirectionRepository utilisateurDirectionRepository;
+
+	private final FunctionalError functionalError;
+
+
 	@PersistenceContext
 	private EntityManager em;
 
-	private SimpleDateFormat dateFormat;
-	private SimpleDateFormat dateTimeFormat;
 
-	public UtilisateurBusiness() {
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-	}
 	
 	/**
 	 * create Utilisateur by using UtilisateurDto as object.
@@ -93,12 +95,7 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 		for (UtilisateurDto dto : request.getDatas()) {
 			// Definir les parametres obligatoires
 			Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
-			fieldsToVerify.put("login", dto.getLogin());
-			fieldsToVerify.put("firstName", dto.getFirstName());
-			fieldsToVerify.put("lastName", dto.getLastName());
 			fieldsToVerify.put("email", dto.getEmail());
-			fieldsToVerify.put("imageUrl", dto.getImageUrl());
-			fieldsToVerify.put("idMarkaz", dto.getIdMarkaz());
 			fieldsToVerify.put("password", dto.getPassword());
 			if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
 				throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -108,16 +105,6 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 			Utilisateur existingEntity = null;
 			if (existingEntity != null) {
 				throw new InternalErrorException(functionalError.DATA_EXIST("utilisateur id -> " + dto.getId(), locale));
-			}
-
-			// verif unique login in db
-			existingEntity = utilisateurRepository.findByLogin(dto.getLogin(), false);
-			if (existingEntity != null) {
-				throw new InternalErrorException(functionalError.DATA_EXIST("utilisateur login -> " + dto.getLogin(), locale));
-			}
-			// verif unique login in items to save
-			if (items.stream().anyMatch(a -> a.getLogin().equalsIgnoreCase(dto.getLogin()))) {
-				throw new InternalErrorException(functionalError.DATA_DUPLICATE(" login ", locale));
 			}
 
 			// verif unique email in db
@@ -130,18 +117,12 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 				throw new InternalErrorException(functionalError.DATA_DUPLICATE(" email ", locale));
 			}
 
-			// Verify if markaz exist
-			Markaz existingMarkaz = null;
-			if (dto.getIdMarkaz() != null && dto.getIdMarkaz() > 0){
-				existingMarkaz = markazRepository.findOne(dto.getIdMarkaz(), false);
-				if (existingMarkaz == null) {
-					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("markaz idMarkaz -> " + dto.getIdMarkaz(), locale));
-				}
-			}
-				Utilisateur entityToSave = null;
-			entityToSave = UtilisateurTransformer.INSTANCE.toEntity(dto, existingMarkaz);
+
+			Utilisateur entityToSave = null;
+			entityToSave = UtilisateurTransformer.INSTANCE.toEntity(dto);
 			entityToSave.setCreatedAt(Utilities.getCurrentDate());
 			entityToSave.setCreatedBy(request.getUser());
+//			entityToSave.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
 			entityToSave.setIsDeleted(false);
 			items.add(entityToSave);
 		}
@@ -212,14 +193,6 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 				throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("utilisateur id -> " + dto.getId(), locale));
 			}
 
-			// Verify if markaz exist
-			if (dto.getIdMarkaz() != null && dto.getIdMarkaz() > 0){
-				Markaz existingMarkaz = markazRepository.findOne(dto.getIdMarkaz(), false);
-				if (existingMarkaz == null) {
-					throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("markaz idMarkaz -> " + dto.getIdMarkaz(), locale));
-				}
-				entityToSave.setMarkaz(existingMarkaz);
-			}
 			if (Utilities.notBlank(dto.getLogin())) {
 				entityToSave.setLogin(dto.getLogin());
 			}
@@ -242,6 +215,7 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 				entityToSave.setUpdatedBy(dto.getUpdatedBy());
 			}
 			if (Utilities.notBlank(dto.getPassword())) {
+//				entityToSave.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
 				entityToSave.setPassword(dto.getPassword());
 			}
 			entityToSave.setUpdatedAt(Utilities.getCurrentDate());
@@ -345,7 +319,7 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 				throw new InternalErrorException(functionalError.DATA_NOT_DELETABLE("(" + listOfDemande.size() + ")", locale));
 			}
 			// utilisateurDirection
-			List<UtilisateurDirection> listOfUtilisateurDirection = utilisateurDirectionRepository.findByIdUtilisateur(existingEntity.getId());
+			List<UtilisateurDirection> listOfUtilisateurDirection = utilisateurDirectionRepository.findByIdUtilisateur(existingEntity.getId(),false);
 			if (listOfUtilisateurDirection != null && !listOfUtilisateurDirection.isEmpty()){
 				throw new InternalErrorException(functionalError.DATA_NOT_DELETABLE("(" + listOfUtilisateurDirection.size() + ")", locale));
 			}
@@ -455,5 +429,49 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 		response.setItems(Arrays.asList(new UtilisateurDto()));
 		log.info("----end custom UtilisateurDto-----");
 		return response;
+	}
+
+	public void refreshToken(
+			@NotNull HttpServletRequest request,
+			@NotNull HttpServletResponse response
+	) throws IOException {
+
+		String authToken = request.getHeader("Authorization");
+
+		if (authToken != null && authToken.startsWith("Bearer ")) {
+			try {
+				String      refreshtoken = authToken.substring(7);
+				Algorithm   algorithm    = Algorithm.HMAC256(SECRET);
+				JWTVerifier jwtVerifier  = JWT.require(algorithm).build();
+				DecodedJWT  decodedJWT   = jwtVerifier.verify(refreshtoken);
+				String      username     = decodedJWT.getSubject();
+				Utilisateur utilisateur = utilisateurRepository.findByEmail(username,false);
+				List<Role>  roles       = new ArrayList<>();
+
+				utilisateurRoleRepository.findUserRoleByEmail(utilisateur.getEmail())
+						.forEach(userRole -> roles.add(userRole.getRole()));
+				List<String> authorities = new ArrayList<>();
+
+				roles.forEach(role -> authorities.add(role.getName()));
+				System.out.println(authorities);
+
+				String accessToken = JWT.create()
+						.withSubject(utilisateur.getEmail()) //
+						.withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
+						.withClaim("roles",authorities)
+						.sign(algorithm);
+
+				Map<String, String> idToken = new HashMap<>();
+				idToken.put("access_token", accessToken);
+				idToken.put("refresh_token", refreshtoken);
+				response.setContentType("application/json");
+				new ObjectMapper().writeValue(response.getOutputStream(), idToken);
+			} catch (Exception e) {
+				response.addHeader("error-Messsage", e.getMessage());
+				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+			}
+		} else {
+			throw new RuntimeException("Refresh token required !!!");
+		}
 	}
 }

@@ -79,12 +79,7 @@ public class Utilisateur implements Serializable, Cloneable {
 
 	// "idMarkaz" (column "id_markaz") is not defined by itself because used as FK in a link 
 
-    //----------------------------------------------------------------------
-    // ENTITY LINKS ( RELATIONSHIP )
-    //----------------------------------------------------------------------
-    @ManyToOne
-    @JoinColumn(name="id_markaz", referencedColumnName="id")
-    private Markaz markaz      ;
+
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR(S)

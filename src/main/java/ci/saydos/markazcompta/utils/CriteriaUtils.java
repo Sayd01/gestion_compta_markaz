@@ -1,6 +1,6 @@
 
 /*
- * Created on 2023-08-08 ( Time 19:03:08 )
+ * Created on 2023-08-28 ( Time 13:26:32 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -210,6 +210,9 @@ public class CriteriaUtils {
 						break;
 				}
 				break;
+			case "enum":
+				req += fieldValue == "" ? "" : String.format(" %1$s = :%2$s ", jpqlFieldName, fieldName);
+
 		}
 		if (!OperatorEnum.IS_BETWEEN_OPERATOR(operator) && "Date".equals(fieldType)) {
 			fieldValue = new SimpleDateFormat("dd/MM/yyyy").parse(fieldValue.toString());

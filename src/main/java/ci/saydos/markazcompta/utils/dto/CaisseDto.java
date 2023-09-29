@@ -37,15 +37,15 @@ public class CaisseDto extends _CaisseDto implements Cloneable {
     private String         createdAt;
     private Integer        createdBy;
     private Boolean        isDeleted;
-    private Double         montantDisponible;
-    private Double         montantEntre;
     private TypeCaisseEnum type;
     private String         updatedAt;
+    private String         libelle;
     private Integer        updatedBy;
     private Integer        idDepense;
     private Integer        idUtilisateur;
+    private Double         montantEntre;
     private Double         montantSortie;
-    private String         dateMontantActuel;
+    private Double         solde;
 
     //----------------------------------------------------------------------
     // ENTITY LINKS FIELD ( RELATIONSHIP )
@@ -60,7 +60,7 @@ public class CaisseDto extends _CaisseDto implements Cloneable {
     private SearchParam<String>         createdAtParam;
     private SearchParam<Integer>        createdByParam;
     private SearchParam<Boolean>        isDeletedParam;
-    private SearchParam<Double>         montantDisponibleParam;
+    private SearchParam<Double>         soldeParam;
     private SearchParam<Double>         montantEntreParam;
     private SearchParam<TypeCaisseEnum> typeParam;
     private SearchParam<String>         updatedAtParam;
@@ -68,7 +68,6 @@ public class CaisseDto extends _CaisseDto implements Cloneable {
     private SearchParam<Integer>        idDepenseParam;
     private SearchParam<Integer>        idUtilisateurParam;
     private SearchParam<Double>         montantSortieParam;
-    private SearchParam<String>         dateMontantActuelParam;
     private SearchParam<String>         utilisateurFirstNameParam;
     private SearchParam<String>         utilisateurLastNameParam;
     private SearchParam<String>         utilisateurLoginParam;

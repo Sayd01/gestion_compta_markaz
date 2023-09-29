@@ -76,10 +76,10 @@ public class Depense implements Serializable, Cloneable {
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_demande", referencedColumnName="id")
     private Demande demande     ;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_charge_fixe", referencedColumnName="id")
     private ChargeFixe chargeFixe  ;
 

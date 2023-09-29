@@ -84,7 +84,6 @@ public class MarkazBusiness implements IBasicBusiness<Request<MarkazDto>, Respon
 		for (MarkazDto dto : request.getDatas()) {
 			// Definir les parametres obligatoires
 			Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
-			fieldsToVerify.put("code", dto.getCode());
 			fieldsToVerify.put("intitule", dto.getIntitule());
 			fieldsToVerify.put("adresse", dto.getAdresse());
 			if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
@@ -119,6 +118,7 @@ public class MarkazBusiness implements IBasicBusiness<Request<MarkazDto>, Respon
 
 				Markaz entityToSave = null;
 			entityToSave = MarkazTransformer.INSTANCE.toEntity(dto);
+			entityToSave.setCode("MK-"+Utilities.generateCode());
 			entityToSave.setCreatedAt(Utilities.getCurrentDate());
 			entityToSave.setCreatedBy(request.getUser());
 			entityToSave.setIsDeleted(false);
@@ -281,13 +281,6 @@ public class MarkazBusiness implements IBasicBusiness<Request<MarkazDto>, Respon
 			// ----------- CHECK IF DATA IS USED
 			// -----------------------------------------------------------------------
 
-			// caisse
-
-			// utilisateur
-			List<Utilisateur> listOfUtilisateur = utilisateurRepository.findByIdMarkaz(existingEntity.getId(), false);
-			if (listOfUtilisateur != null && !listOfUtilisateur.isEmpty()){
-				throw new InternalErrorException(functionalError.DATA_NOT_DELETABLE("(" + listOfUtilisateur.size() + ")", locale));
-			}
 			// direction
 			List<Direction> listOfDirection = directionRepository.findByIdMarkaz(existingEntity.getId(), false);
 			if (listOfDirection != null && !listOfDirection.isEmpty()){

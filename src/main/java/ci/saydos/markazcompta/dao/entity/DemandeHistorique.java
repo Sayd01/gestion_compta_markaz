@@ -69,10 +69,11 @@ public class DemandeHistorique implements Serializable, Cloneable {
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_utilisateur", referencedColumnName="id")
     private Utilisateur utilisateur ;
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_demande", referencedColumnName="id")
     private Demande demande     ;
 

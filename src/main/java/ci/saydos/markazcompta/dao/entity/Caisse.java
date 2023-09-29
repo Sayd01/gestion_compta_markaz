@@ -9,24 +9,27 @@ package ci.saydos.markazcompta.dao.entity;
 import java.io.Serializable;
 
 import ci.saydos.markazcompta.utils.enums.TypeCaisseEnum;
+import ci.saydos.markazcompta.utils.enums.TypeDepenseEnum;
 import jakarta.persistence.*;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.beans.factory.annotation.Value;
 
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
  * Persistent class for entity stored in table "caisse"
  *
  * @author Telosys Tools Generator
- *
  */
 @Data
 @ToString
 @Entity
-@Table(name="caisse" )
+@Table(name = "caisse")
 public class Caisse implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
@@ -35,72 +38,77 @@ public class Caisse implements Serializable, Cloneable {
     // ENTITY PRIMARY KEY ( BASED ON A SINGLE FIELD )
     //----------------------------------------------------------------------
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id", nullable=false)
-    private Integer    id           ;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
 
     //----------------------------------------------------------------------
     // ENTITY DATA FIELDS 
     //----------------------------------------------------------------------    
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="created_at")
-    private Date       createdAt    ;
+    @Column(name = "created_at")
+    private Date createdAt;
 
-    @Column(name="created_by")
-    private Integer    createdBy    ;
+    @Column(name = "created_by")
+    private Integer createdBy;
 
-    @Column(name="is_deleted")
-    private Boolean    isDeleted    ;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 
-    @Column(name="montant_disponible")
-    private Double     montantDisponible ;
+    @Column(name = "solde")
+    private Double solde = 0.0;
 
-    @Column(name="montant_entre")
-    private Double     montantEntre ;
+    @Column(name = "montant_entre")
+    private Double montantEntre = 0.0;
+
+    @Column(name = "montant_sortie")
+    private Double montantSortie = 0.0;
+
+
 
     @Enumerated(EnumType.STRING)
-    private TypeCaisseEnum type         ;
+    private TypeCaisseEnum type;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="updated_at")
-    private Date       updatedAt    ;
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
-    @Column(name="updated_by")
-    private Integer    updatedBy    ;
+    @Column(name = "updated_by")
+    private Integer updatedBy;
 
-    @Column(name="montant_sortie")
-    private Double     montantSortie ;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="date_montant_actuel")
-    private Date       dateMontantActuel ;
-
-	// "idDepense" (column "id_depense") is not defined by itself because used as FK in a link 
-	// "idUtilisateur" (column "id_utilisateur") is not defined by itself because used as FK in a link 
+    // "idDepense" (column "id_depense") is not defined by itself because used as FK in a link
+    // "idUtilisateur" (column "id_utilisateur") is not defined by itself because used as FK in a link
 
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
-    @ManyToOne
-    @JoinColumn(name="id_utilisateur", referencedColumnName="id")
-    private Utilisateur utilisateur ;
-    @ManyToOne
-    @JoinColumn(name="id_depense", referencedColumnName="id")
-    private Depense depense     ;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_utilisateur", referencedColumnName = "id")
+    private Utilisateur utilisateur;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_depense", referencedColumnName = "id")
+    private Depense depense;
+
+    @Column(name="libelle", length=255)
+    private String     libelle      ;
+
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR(S)
     //----------------------------------------------------------------------
     public Caisse() {
-		super();
+        super();
     }
-    
-	//----------------------------------------------------------------------
+
+    //----------------------------------------------------------------------
     // clone METHOD
     //----------------------------------------------------------------------
-	@Override
-	public java.lang.Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    @Override
+    public java.lang.Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+
 }

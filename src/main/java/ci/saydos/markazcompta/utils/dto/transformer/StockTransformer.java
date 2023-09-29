@@ -2,7 +2,7 @@
 
 /*
  * Java transformer for entity table stock 
- * Created on 2023-08-06 ( Time 01:31:06 )
+ * Created on 2023-08-28 ( Time 14:55:50 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -37,10 +37,12 @@ public interface StockTransformer {
 
 	@FullTransformerQualifier
 	@Mappings({
+		@Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
 		@Mapping(source="entity.dateEntree", dateFormat="dd/MM/yyyy",target="dateEntree"),
 		@Mapping(source="entity.dateSortie", dateFormat="dd/MM/yyyy",target="dateSortie"),
-		@Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
 		@Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
+		@Mapping(source="entity.article.id", target="idArticle"),
+		@Mapping(source="entity.article.libelle", target="articleLibelle"),
 	})
 	StockDto toDto(Stock entity) throws ParseException;
 
@@ -70,18 +72,19 @@ public interface StockTransformer {
 
 	@Mappings({
 		@Mapping(source="dto.id", target="id"),
-		@Mapping(source="dto.intitule", target="intitule"),
-		@Mapping(source="dto.quantite", target="quantite"),
-		@Mapping(source="dto.etat", target="etat"),
-		@Mapping(source="dto.dateEntree", dateFormat="dd/MM/yyyy",target="dateEntree"),
-		@Mapping(source="dto.dateSortie", dateFormat="dd/MM/yyyy",target="dateSortie"),
 		@Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
 		@Mapping(source="dto.createdBy", target="createdBy"),
+		@Mapping(source="dto.dateEntree", dateFormat="dd/MM/yyyy",target="dateEntree"),
+		@Mapping(source="dto.dateSortie", dateFormat="dd/MM/yyyy",target="dateSortie"),
+		@Mapping(source="dto.etat", target="etat"),
+		@Mapping(source="dto.intitule", target="intitule"),
 		@Mapping(source="dto.isDeleted", target="isDeleted"),
+		@Mapping(source="dto.quantite", target="quantite"),
 		@Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
 		@Mapping(source="dto.updatedBy", target="updatedBy"),
+		@Mapping(source="article", target="article"),
 	})
-    Stock toEntity(StockDto dto) throws ParseException;
+    Stock toEntity(StockDto dto, Article article) throws ParseException;
 
     //List<Stock> toEntities(List<StockDto> dtos) throws ParseException;
 

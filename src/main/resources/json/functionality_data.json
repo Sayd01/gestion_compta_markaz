@@ -2,52 +2,52 @@
 	"user": 1,
 	"datas": [
 		{
-			"code": "UTILISATEUR",
-			"name": "UTILISATEUR"
+			"code": "ARTICLE",
+			"name": "ARTICLE"
 		},
 		{
-			"code": "VIEW_UTILISATEUR",
-			"parentCode": "UTILISATEUR",
-			"name": "VIEW UTILISATEUR"
+			"code": "VIEW_ARTICLE",
+			"parentCode": "ARTICLE",
+			"name": "VIEW ARTICLE"
 		},
 		{
-			"code": "CREATE_UTILISATEUR",
-			"parentCode": "UTILISATEUR",
-			"name": "CREATE UTILISATEUR"
+			"code": "CREATE_ARTICLE",
+			"parentCode": "ARTICLE",
+			"name": "CREATE ARTICLE"
 		},
 		{
-			"code": "UPDATE_UTILISATEUR",
-			"parentCode": "UTILISATEUR",
-			"name": "UPDATE UTILISATEUR"
+			"code": "UPDATE_ARTICLE",
+			"parentCode": "ARTICLE",
+			"name": "UPDATE ARTICLE"
 		},
 		{
-			"code": "DELETE_UTILISATEUR",
-			"parentCode": "UTILISATEUR",
-			"name": "DELETE UTILISATEUR"
+			"code": "DELETE_ARTICLE",
+			"parentCode": "ARTICLE",
+			"name": "DELETE ARTICLE"
 		},
 		{
-			"code": "UTILISATEUR_DIRECTION",
-			"name": "UTILISATEUR_DIRECTION"
+			"code": "STOCK",
+			"name": "STOCK"
 		},
 		{
-			"code": "VIEW_UTILISATEUR_DIRECTION",
-			"parentCode": "UTILISATEUR_DIRECTION",
-			"name": "VIEW UTILISATEUR_DIRECTION"
+			"code": "VIEW_STOCK",
+			"parentCode": "STOCK",
+			"name": "VIEW STOCK"
 		},
 		{
-			"code": "CREATE_UTILISATEUR_DIRECTION",
-			"parentCode": "UTILISATEUR_DIRECTION",
-			"name": "CREATE UTILISATEUR_DIRECTION"
+			"code": "CREATE_STOCK",
+			"parentCode": "STOCK",
+			"name": "CREATE STOCK"
 		},
 		{
-			"code": "UPDATE_UTILISATEUR_DIRECTION",
-			"parentCode": "UTILISATEUR_DIRECTION",
-			"name": "UPDATE UTILISATEUR_DIRECTION"
+			"code": "UPDATE_STOCK",
+			"parentCode": "STOCK",
+			"name": "UPDATE STOCK"
 		},
 		{
-			"code": "DELETE_UTILISATEUR_DIRECTION",
-			"parentCode": "UTILISATEUR_DIRECTION",
-			"name": "DELETE UTILISATEUR_DIRECTION"
+			"code": "DELETE_STOCK",
+			"parentCode": "STOCK",
+			"name": "DELETE STOCK"
 		}
 
 	]

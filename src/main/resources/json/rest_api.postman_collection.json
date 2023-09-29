@@ -9,33 +9,33 @@
 	"public": false,
 	"folders": [
 		{
-			"id": "utilisateur.id",
-			"name": "utilisateur",
+			"id": "article.id",
+			"name": "article",
 			"description": "",
 			"order": [
-				"utilisateur.getByCriteria",
-				"utilisateur.create",
-				"utilisateur.update",
-				"utilisateur.delete"
+				"article.getByCriteria",
+				"article.create",
+				"article.update",
+				"article.delete"
 			],
 			"owner": "1151918"
 		},
 		{
-			"id": "utilisateurDirection.id",
-			"name": "utilisateurDirection",
+			"id": "stock.id",
+			"name": "stock",
 			"description": "",
 			"order": [
-				"utilisateurDirection.getByCriteria",
-				"utilisateurDirection.create",
-				"utilisateurDirection.update",
-				"utilisateurDirection.delete"
+				"stock.getByCriteria",
+				"stock.create",
+				"stock.update",
+				"stock.delete"
 			],
 			"owner": "1151918"
 		}
 	],
 	"requests": [
 		{
-			"id": "utilisateur.create",
+			"id": "article.create",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -45,7 +45,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/utilisateur/create",
+			"url": "{{main_url}}/article/create",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -58,14 +58,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "utilisateur-create",
+			"name": "article-create",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"login\": \"\",\n\t\t\t\"firstName\": \"\",\n\t\t\t\"lastName\": \"\",\n\t\t\t\"email\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"idMarkaz\": \"\",\n\t\t\t\"password\": \"\"\n\t\t} \n\t]  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"libelle\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "utilisateur.update",
+			"id": "article.update",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -75,7 +75,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/utilisateur/update",
+			"url": "{{main_url}}/article/update",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -88,14 +88,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "utilisateur-update",
+			"name": "article-update",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"login\": \"\",\n\t\t\t\"firstName\": \"\",\n\t\t\t\"lastName\": \"\",\n\t\t\t\"email\": \"\",\n\t\t\t\"imageUrl\": \"\",\n\t\t\t\"idMarkaz\": \"\",\n\t\t\t\"password\": \"\"\n\t\t} \n\t]  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"libelle\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "utilisateur.delete",
+			"id": "article.delete",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -105,7 +105,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/utilisateur/delete",
+			"url": "{{main_url}}/article/delete",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -118,14 +118,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "utilisateur-delete",
+			"name": "article-delete",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
 			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "utilisateur.getByCriteria",
+			"id": "article.getByCriteria",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -135,7 +135,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/utilisateur/getByCriteria",
+			"url": "{{main_url}}/article/getByCriteria",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -148,14 +148,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439015040,
-			"name": "utilisateur-getByCriteria",
+			"name": "article-getByCriteria",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"login\": \"\",\n\t\t\"firstName\": \"\",\n\t\t\"lastName\": \"\",\n\t\t\"email\": \"\",\n\t\t\"imageUrl\": \"\",\n\t\t\"idMarkaz\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\",\n\t\t\"password\": \"\"\n\t}  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"libelle\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
 		},
 		{
-			"id": "utilisateurDirection.create",
+			"id": "stock.create",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -165,7 +165,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/utilisateurDirection/create",
+			"url": "{{main_url}}/stock/create",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -178,14 +178,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "utilisateurDirection-create",
+			"name": "stock-create",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"idDirection\": \"\",\n\t\t\t\"idUtilisateur\": \"\"\n\t\t} \n\t]  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"dateEntree\": \"\",\n\t\t\t\"dateSortie\": \"\",\n\t\t\t\"etat\": \"\",\n\t\t\t\"intitule\": \"\",\n\t\t\t\"quantite\": \"\",\n\t\t\t\"idArticle\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "utilisateurDirection.update",
+			"id": "stock.update",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -195,7 +195,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/utilisateurDirection/update",
+			"url": "{{main_url}}/stock/update",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -208,14 +208,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "utilisateurDirection-update",
+			"name": "stock-update",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"idDirection\": \"\",\n\t\t\t\"idUtilisateur\": \"\"\n\t\t} \n\t]  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"dateEntree\": \"\",\n\t\t\t\"dateSortie\": \"\",\n\t\t\t\"etat\": \"\",\n\t\t\t\"intitule\": \"\",\n\t\t\t\"quantite\": \"\",\n\t\t\t\"idArticle\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "utilisateurDirection.delete",
+			"id": "stock.delete",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -225,7 +225,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/utilisateurDirection/delete",
+			"url": "{{main_url}}/stock/delete",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -238,14 +238,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "utilisateurDirection-delete",
+			"name": "stock-delete",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
 			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "utilisateurDirection.getByCriteria",
+			"id": "stock.getByCriteria",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -255,7 +255,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/utilisateurDirection/getByCriteria",
+			"url": "{{main_url}}/stock/getByCriteria",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -268,11 +268,11 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439015040,
-			"name": "utilisateurDirection-getByCriteria",
+			"name": "stock-getByCriteria",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"idDirection\": \"\",\n\t\t\"idUtilisateur\": \"\"\n\t}  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"dateEntree\": \"\",\n\t\t\"dateSortie\": \"\",\n\t\t\"etat\": \"\",\n\t\t\"intitule\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"quantite\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\",\n\t\t\"idArticle\": \"\"\n\t}  \n}"
 		}
 	]
 }

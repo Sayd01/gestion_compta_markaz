@@ -78,7 +78,7 @@ public class StockHistorique implements Serializable, Cloneable {
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_stock", referencedColumnName="id")
     private Stock stock       ;
 

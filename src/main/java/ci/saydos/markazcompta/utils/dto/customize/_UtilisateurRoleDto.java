@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import ci.saydos.markazcompta.utils.contract.*;
+import lombok.Data;
 
 /**
  * DTO customize for table "utilisateur_role"
@@ -22,6 +23,8 @@ import ci.saydos.markazcompta.utils.contract.*;
  *
  */
 @JsonInclude(Include.NON_NULL)
+@Data
 public class _UtilisateurRoleDto {
+    private String userEmail;
 
 }

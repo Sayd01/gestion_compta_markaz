@@ -42,5 +42,16 @@ public interface _DemandeHistoriqueRepository {
     @Query("select e from DemandeHistorique e where e.utilisateur.id = :idUtilisateur and e.demande.id = :idDemande and e.statut = :statut and e.isDeleted = :isDeleted")
     DemandeHistorique findByUserAndDemandeAndStatut(@Param("idUtilisateur") Integer idUtilisateur, @Param("idDemande") Integer idDemande, @Param("statut") StatutDemandeEnum statut, @Param("isDeleted") Boolean isDeleted);
 
+    @Query("SELECT d.statut, COUNT(*) " +
+            "FROM DemandeHistorique dh " +
+            "JOIN Demande d ON dh.id = d.id " +
+            "WHERE :dateParam IS NULL OR dh.createdAt = :dateParam " +
+            "OR (:dateDebut IS NULL AND :dateFin IS NULL) OR (dh.createdAt BETWEEN :dateDebut AND :dateFin) " +
+            "GROUP BY d.statut")
+    List<Object[]> countDemandesByTypeAndDate(
+            @Param("dateParam") String dateParam,
+            @Param("dateDebut") String dateDebut,
+            @Param("dateFin") String dateFin);
+
 
 }
