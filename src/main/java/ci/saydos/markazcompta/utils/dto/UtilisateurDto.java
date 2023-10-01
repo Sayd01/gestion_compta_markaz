@@ -32,8 +32,6 @@ import ci.saydos.markazcompta.utils.dto.customize._UtilisateurDto;
 public class UtilisateurDto extends _UtilisateurDto implements Cloneable{
 
     private Integer    id                   ; // Primary Key
-
-    private String     login                ;
     private String     firstName            ;
     private String     lastName             ;
     private String     email                ;
@@ -50,8 +48,7 @@ public class UtilisateurDto extends _UtilisateurDto implements Cloneable{
     //----------------------------------------------------------------------
 
 	// Search param
-	private SearchParam<Integer>  idParam               ;                     
-	private SearchParam<String>   loginParam            ;                     
+	private SearchParam<Integer>  idParam               ;
 	private SearchParam<String>   firstNameParam        ;                     
 	private SearchParam<String>   lastNameParam         ;                     
 	private SearchParam<String>   emailParam            ;                     

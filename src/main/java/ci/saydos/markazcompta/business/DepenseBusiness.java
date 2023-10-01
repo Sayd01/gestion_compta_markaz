@@ -50,8 +50,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Response<DepenseDto>> {
     private final UtilisateurRepository utilisateurRepository;
-
-
     private final DepenseRepository         depenseRepository;
     private final DemandeRepository         demandeRepository;
     private final ChargeFixeRepository      chargeFixeRepository;
@@ -433,7 +431,7 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
 
             Double montantActuel = caisseBusiness.getMontantDisponible();
             if (montantActuel <= dto.getMontant()) {
-                throw new InternalErrorException(functionalError.DISALLOWED_OPERATION("le montant disponible dans la caisse est inssufisant", locale));
+                throw new FunctionalException(functionalError.DISALLOWED_OPERATION("Solde insuffisant pour effectuer la transaction.", locale));
             }
 
 

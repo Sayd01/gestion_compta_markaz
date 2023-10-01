@@ -227,9 +227,7 @@ public interface UtilisateurDirectionRepository extends JpaRepository<Utilisateu
 			if (Utilities.notBlank(dto.getUtilisateurLastName())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("utilisateurLastName", dto.getUtilisateurLastName(), "e.utilisateur.lastName", "String", dto.getUtilisateurLastNameParam(), param, index, locale));
 			}
-			if (Utilities.notBlank(dto.getUtilisateurLogin())) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("utilisateurLogin", dto.getUtilisateurLogin(), "e.utilisateur.login", "String", dto.getUtilisateurLoginParam(), param, index, locale));
-			}
+
 			if (Utilities.notBlank(dto.getDirectionCode())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("directionCode", dto.getDirectionCode(), "e.direction.code", "String", dto.getDirectionCodeParam(), param, index, locale));
 			}

@@ -3,7 +3,9 @@ package ci.saydos.markazcompta.rest.api;
 import ci.saydos.markazcompta.business.StatistiqueBusiness;
 import ci.saydos.markazcompta.utils.contract.Request;
 import ci.saydos.markazcompta.utils.contract.Response;
+import ci.saydos.markazcompta.utils.dto.CaisseDto;
 import ci.saydos.markazcompta.utils.dto.DemandeHistoriqueDto;
+import ci.saydos.markazcompta.utils.dto.StatCaisseDto;
 import ci.saydos.markazcompta.utils.dto.StatDemandeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +33,11 @@ public class StatistiqueController {
 
     @PostMapping("/demandes-par-periode")
     public Response<StatDemandeDto> getStatistiquesDemandesParMois(@RequestBody Request<DemandeHistoriqueDto> request) {
-        Response<StatDemandeDto> statistiques = statistiqueBusiness.getStatistiquesParMois(request);
-        System.out.println(statistiques);
-        return statistiques;
+        return statistiqueBusiness.getStatistiquesParMois(request);
+    }
+    @PostMapping("/caisse-par-periode")
+    public Response<StatCaisseDto> getStatistiquesCaisseParPeriode(@RequestBody Request<CaisseDto> request) throws ParseException {
+        return statistiqueBusiness.getStatistiquesCaisseParPeriode(request);
     }
 
 

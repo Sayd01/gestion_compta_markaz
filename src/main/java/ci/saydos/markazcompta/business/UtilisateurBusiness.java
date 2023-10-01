@@ -15,6 +15,7 @@ import ci.saydos.markazcompta.utils.contract.IBasicBusiness;
 import ci.saydos.markazcompta.utils.contract.Request;
 import ci.saydos.markazcompta.utils.contract.Response;
 import ci.saydos.markazcompta.utils.dto.UtilisateurDto;
+import ci.saydos.markazcompta.utils.dto.transformer.DirectionTransformer;
 import ci.saydos.markazcompta.utils.dto.transformer.UtilisateurTransformer;
 import ci.saydos.markazcompta.utils.exception.EntityNotFoundException;
 import ci.saydos.markazcompta.utils.exception.InternalErrorException;
@@ -193,9 +194,6 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 				throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("utilisateur id -> " + dto.getId(), locale));
 			}
 
-			if (Utilities.notBlank(dto.getLogin())) {
-				entityToSave.setLogin(dto.getLogin());
-			}
 			if (Utilities.notBlank(dto.getFirstName())) {
 				entityToSave.setFirstName(dto.getFirstName());
 			}
@@ -405,10 +403,16 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 	 * @param isSimpleLoading
 	 * @param locale
 	 * @return
-	 * @throws Exception
 	 */
-	private UtilisateurDto getFullInfos(UtilisateurDto dto, Integer size, Boolean isSimpleLoading, Locale locale) throws Exception {
-		// put code here
+	private UtilisateurDto getFullInfos(UtilisateurDto dto, Integer size, Boolean isSimpleLoading, Locale locale) {
+		Utilisateur utilisateur = utilisateurRepository.findOne(dto.getId(), false);
+		List<UtilisateurDirection> utilisateurDirections = utilisateurDirectionRepository.findByIdUtilisateur(dto.getId(),false);
+		List<Direction> directions = new ArrayList<>();
+		for (UtilisateurDirection userDirection : utilisateurDirections){
+			directions.add(userDirection.getDirection());
+		}
+		dto.setDirections(DirectionTransformer.INSTANCE.toLiteDtos(directions));
+		dto.setPassword(null);
 
 		if (Utilities.isTrue(isSimpleLoading)) {
 			return dto;

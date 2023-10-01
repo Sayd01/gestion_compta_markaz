@@ -42,7 +42,6 @@ public interface CaisseTransformer {
             @Mapping(source="entity.utilisateur.id", target="idUtilisateur"),
             @Mapping(source="entity.utilisateur.firstName", target="utilisateurFirstName"),
             @Mapping(source="entity.utilisateur.lastName", target="utilisateurLastName"),
-            @Mapping(source="entity.utilisateur.login", target="utilisateurLogin"),
             @Mapping(source="entity.depense.id", target="idDepense"),
             @Mapping(source="entity.depense.code", target="depenseCode"),
     })

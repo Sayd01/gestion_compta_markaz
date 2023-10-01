@@ -1,9 +1,12 @@
 package ci.saydos.markazcompta.business;
 
+import ci.saydos.markazcompta.utils.FunctionalError;
 import ci.saydos.markazcompta.utils.Utilities;
 import ci.saydos.markazcompta.utils.contract.Request;
 import ci.saydos.markazcompta.utils.contract.Response;
 import ci.saydos.markazcompta.utils.dto.*;
+import ci.saydos.markazcompta.utils.enums.StatutDemandeEnum;
+import ci.saydos.markazcompta.utils.exception.InternalErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,47 +15,34 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Log
 @Component
 @RequiredArgsConstructor
 public class StatistiqueBusiness {
-    private final JdbcTemplate mysqlTemplate;
+    private final JdbcTemplate    mysqlTemplate;
+    private final FunctionalError functionalError;
+    private final String          formatDate     = "yyyy-MM-dd";
+    private final String          formatDateTime = "yyyy-MM-dd HH:mm:ss";
+
 
     public Response<Map<String, Object>> demande(Request<DemandeHistoriqueDto> request) throws ParseException {
-        Response<Map<String, Object>> response = new Response<>();
+        Response<Map<String, Object>> response  = new Response<>();
+        DemandeHistoriqueDto          dto       = request.getData();
+        String                        dateDebut = Utilities.formatDate(dto.getCreatedAtParam().getStart(), formatDateTime);
+        String                        dateFin   = Utilities.formatDate(dto.getCreatedAtParam().getEnd(), formatDateTime);
+        List<Map<String, Object>>     rows      = new ArrayList<>();
+        Map<String, Object>           countMap  = new HashMap<>();
 
-        DemandeHistoriqueDto dto       = request.getData();
-        String               dateParam = dto.getCreatedAt();
-        String               dateDebut = dto.getCreatedAtParam().getStart();
-        String               dateFin   = dto.getCreatedAtParam().getEnd();
-        System.out.println("dateParam: " + dateParam);
-        List<Map<String, Object>> rows     = new ArrayList<>();
-        Map<String, Object>       countMap = new HashMap<>();
-
-        if (Utilities.notBlank(dateParam)) {
-            String sql = "SELECT dh.statut, COUNT(*) AS nombre_total_demandes_par_type " +
-                    "FROM demande d " +
-                    "JOIN demande_historique dh ON d.id = dh.id_demande " +
-                    "WHERE dh.created_at = ? " +
-                    "GROUP BY dh.statut";
-
-            Timestamp timestampParam = Utilities.convertStringToTimestamp(dateParam);
-            rows = mysqlTemplate.queryForList(
-                    sql,
-                    timestampParam
-            );
-
-            Long totalDemandes = getTotalDemandesByDate(dateParam);
-            countMap.put("TotalDemandes", totalDemandes);
+        for (StatutDemandeEnum statut : StatutDemandeEnum.values()) {
+            countMap.put(statut.toString().toLowerCase(), 0L);
         }
+
         if (Utilities.notBlank(dateDebut) && Utilities.notBlank(dateFin)) {
-            String sql = "SELECT dh.statut, COUNT(*) AS nombre_total_demandes_par_type " +
+            String sql = "SELECT d.statut, COUNT(*) AS nombre_total_demandes_par_type " +
                     "FROM demande d " +
-                    "JOIN demande_historique dh ON d.id = dh.id_demande " +
-                    "WHERE dh.created_at BETWEEN ? AND ? " + // Utilisez BETWEEN pour une plage de dates
-                    "GROUP BY dh.statut";
+                    "WHERE d.created_at BETWEEN ? AND ? " + // Utilisez BETWEEN pour une plage de dates
+                    "GROUP BY d.statut";
 
             Timestamp timestampDebut = Utilities.convertStringToTimestamp(dateDebut);
             Timestamp timestampFin   = Utilities.convertStringToTimestamp(dateFin);
@@ -63,15 +53,21 @@ public class StatistiqueBusiness {
             );
 
             Long totalDemandes = getTotalDemandesByDateRange(dateDebut, dateFin);
-            countMap.put("TotalDemandes", totalDemandes);
+            countMap.put("totalDemandes", totalDemandes);
         }
 
 
-        for (Map<String, Object> row : rows) {
-            String statut = (String) row.get("statut"); // Utilisez "statut" au lieu de "type_demande"
-            Long   count  = (Long) row.get("nombre_total_demandes_par_type");
-            countMap.put(statut, count); // Utilisez "statut" comme clé
+        if (Utilities.isNotEmpty(rows)) {
+            for (Map<String, Object> row : rows) {
+                String statut = (String) row.get("statut");
+                Long   count  = (Long) row.get("nombre_total_demandes_par_type");
+                countMap.put(statut.toLowerCase(), count);
+            }
+
+        } else {
+            throw new InternalErrorException(functionalError.DATA_EMPTY("", Locale.FRANCE));
         }
+
 
         response.setItem(countMap);
         return response;
@@ -79,27 +75,19 @@ public class StatistiqueBusiness {
 
     public Response<Map<String, Object>> caisse(Request<DemandeHistoriqueDto> request) throws ParseException {
         Response<Map<String, Object>> response = new Response<>();
-
         DemandeHistoriqueDto dto       = request.getData();
-        String               dateParam = dto.getCreatedAt();
-        String               dateDebut = dto.getCreatedAtParam().getStart();
-        String               dateFin   = dto.getCreatedAtParam().getEnd();
-        System.out.println("dateParam: " + dateParam);
+        String                        dateDebut = Utilities.formatDate(dto.getCreatedAtParam().getStart(), formatDateTime);
+        String                        dateFin   = Utilities.formatDate(dto.getCreatedAtParam().getEnd(), formatDateTime);
+
         List<Map<String, Object>> rows     = new ArrayList<>();
         Map<String, Object>       countMap = new HashMap<>();
 
-        if (Utilities.notBlank(dateParam)) {
-            Double montantTotal       = getMontantDisponibleByDate(dateParam);
-            Double montantTotalSortie = getTotalMontantsSortieByDate(dateParam);
-            Double montantTotalEntre  = getTotalMontantsEntresByDate(dateParam);
-            countMap.put("montantTotal", montantTotal);
-            countMap.put("montantTotalSortie", montantTotalSortie);
-            countMap.put("montantTotalEntre", montantTotalEntre);
-        }
         if (Utilities.notBlank(dateDebut) && Utilities.notBlank(dateFin)) {
-            Double montantTotal       = getMontantDisponibleByDateRange(dateDebut, dateFin);
-            Double montantTotalSortie = getTotalMontantsSortieByDateRange(dateDebut, dateFin);
-            Double montantTotalEntre  = getTotalMontantsEntresByDateRange(dateDebut, dateFin);
+            Double montantTotal       = getMontantDisponibleByDateRange(dateDebut, dateFin) != null ? getMontantDisponibleByDateRange(dateDebut, dateFin) : 0.0;
+            Double montantTotalSortie = getTotalMontantsSortieByDateRange(dateDebut, dateFin) != null ? getTotalMontantsSortieByDateRange(dateDebut, dateFin) : 0.0;
+            Double montantTotalEntre  = getTotalMontantsEntresByDateRange(dateDebut, dateFin) != null ? getTotalMontantsEntresByDateRange(dateDebut, dateFin) : 0.0;
+
+            System.out.println(montantTotalEntre);
             countMap.put("montantTotal", montantTotal);
             countMap.put("montantTotalSortie", montantTotalSortie);
             countMap.put("montantTotalEntre", montantTotalEntre);
@@ -109,34 +97,15 @@ public class StatistiqueBusiness {
         return response;
     }
 
-    public Long getTotalDemandesByDate(String dateParam) throws ParseException {
-        String sql = "SELECT COUNT(*) AS nombre_total_demandes " +
-                "FROM demande d " +
-                "JOIN demande_historique dh ON d.id = dh.id_demande " +
-                "WHERE dh.created_at = ?";
-
-        Timestamp timestampParam = Utilities.convertStringToTimestamp(dateParam);
-
-        return mysqlTemplate.queryForObject(sql, Long.class, timestampParam);
-    }
-
     public Long getTotalDemandesByDateRange(String dateDebut, String dateFin) throws ParseException {
         String sql = "SELECT COUNT(*) AS nombre_total_demandes " +
                 "FROM demande d " +
-                "JOIN demande_historique dh ON d.id = dh.id_demande " +
-                "WHERE dh.created_at BETWEEN ? AND ?";
+                "WHERE d.created_at BETWEEN ? AND ?";
 
         Timestamp timestampDebut = Utilities.convertStringToTimestamp(dateDebut);
         Timestamp timestampFin   = Utilities.convertStringToTimestamp(dateFin);
 
         return mysqlTemplate.queryForObject(sql, Long.class, timestampDebut, timestampFin);
-    }
-
-    public Double getMontantDisponibleByDate(String dateParam) throws ParseException {
-        String sql = "SELECT SUM(CASE WHEN created_at <= ? THEN montant_entre - montant_sortie ELSE 0 END) AS montant_disponible FROM caisse";
-
-        Timestamp timestampParam = Utilities.convertStringToTimestamp(dateParam);
-        return mysqlTemplate.queryForObject(sql, Double.class, timestampParam);
     }
 
     public Double getMontantDisponibleByDateRange(String dateDebut, String dateFin) throws ParseException {
@@ -147,23 +116,11 @@ public class StatistiqueBusiness {
         return mysqlTemplate.queryForObject(sql, Double.class, timestampDebut, timestampFin);
     }
 
-    public Double getTotalMontantsEntresByDate(String dateParam) throws ParseException {
-        String    sql            = "SELECT SUM(montant_entre) AS total_montants_entres FROM caisse WHERE created_at = ?";
-        Timestamp timestampParam = Utilities.convertStringToTimestamp(dateParam);
-        return mysqlTemplate.queryForObject(sql, Double.class, timestampParam);
-    }
-
     public Double getTotalMontantsEntresByDateRange(String dateDebut, String dateFin) throws ParseException {
         String    sql            = "SELECT SUM(montant_entre) AS total_montants_entres FROM caisse WHERE created_at BETWEEN ? AND ?";
         Timestamp timestampDebut = Utilities.convertStringToTimestamp(dateDebut);
         Timestamp timestampFin   = Utilities.convertStringToTimestamp(dateFin);
         return mysqlTemplate.queryForObject(sql, Double.class, timestampDebut, timestampFin);
-    }
-
-    public Double getTotalMontantsSortieByDate(String dateParam) throws ParseException {
-        String    sql            = "SELECT SUM(montant_sortie) AS total_montants_entres FROM caisse WHERE created_at = ?";
-        Timestamp timestampParam = Utilities.convertStringToTimestamp(dateParam);
-        return mysqlTemplate.queryForObject(sql, Double.class, timestampParam);
     }
 
     public Double getTotalMontantsSortieByDateRange(String dateDebut, String dateFin) throws ParseException {
@@ -180,22 +137,25 @@ public class StatistiqueBusiness {
         String                   granularite = dto.getGranularite();
         Response<StatDemandeDto> response    = new Response<>();
 
+
+
         String                    sql  = "";
         List<Map<String, Object>> rows = new ArrayList<>();
         if ("jour".equalsIgnoreCase(granularite)) {
-            sql = "\n" +
-                    "WITH RECURSIVE Days AS (\n" +
+            sql = "WITH RECURSIVE Days AS (\n" +
                     "  SELECT\n" +
                     "    DATE_FORMAT(?, '%Y-%m-%d') AS day_start,\n" +
+                    "    DATE_FORMAT(?, '%Y-%m-%d') AS day_end,\n" +
                     "    DATE_FORMAT(?, '%Y-%m-%d') AS day\n" +
                     "  UNION ALL\n" +
                     "  SELECT\n" +
                     "    DATE_ADD(day_start, INTERVAL 1 DAY) AS day_start,\n" +
+                    "    day_end,\n" +
                     "    DATE_FORMAT(DATE_ADD(day_start, INTERVAL 1 DAY), '%Y-%m-%d') AS day\n" +
                     "  FROM\n" +
                     "    Days\n" +
                     "  WHERE\n" +
-                    "    day_start < ?\n" +
+                    "    DATE_ADD(day_start, INTERVAL 1 DAY) <= day_end\n" +
                     ")\n" +
                     "\n" +
                     "SELECT\n" +
@@ -205,47 +165,60 @@ public class StatistiqueBusiness {
                     "FROM\n" +
                     "  Days\n" +
                     "CROSS JOIN\n" +
-                    "  (SELECT DISTINCT statut FROM demande_historique) S\n" +
+                    "  (SELECT DISTINCT statut FROM demande) S\n" +
                     "LEFT JOIN\n" +
-                    "  demande_historique DH ON YEAR(DH.created_at) = YEAR(Days.day) AND MONTH(DH.created_at) = MONTH(Days.day) AND DAY(DH.created_at) = DAY(Days.day) AND DH.statut = S.statut\n" +
+                    "  demande DH ON YEAR(DH.created_at) = YEAR(Days.day) AND MONTH(DH.created_at) = MONTH(Days.day) AND DAY(DH.created_at) = DAY(Days.day) AND DH.statut = S.statut\n" +
                     "GROUP BY\n" +
                     "  date, S.statut\n" +
                     "ORDER BY\n" +
-                    "  date, S.statut;";
+                    "  date, S.statut;\n";
 
-            rows = mysqlTemplate.queryForList(sql, dateDebut, dateDebut, dateFin);
-
+            rows = mysqlTemplate.queryForList(sql, dateDebut, dateFin, dateDebut);
             List<StatDemandeDto> statDemandeDtos = new ArrayList<>();
+            System.out.println(rows);
 
-            Map<String, StatDemandeDto> resultatGroupeParDate = new HashMap<>();
+            // Créez une liste de tous les statuts possibles
+            List<String> statutsPossibles = Arrays.asList("initie", "valide", "invalide", "termine");
+
+            // Créez une structure de données pour stocker les statistiques par date et statut
+            Map<String, Map<String, Long>> statistiquesParDate = new HashMap<>();
 
             for (Map<String, Object> row : rows) {
                 String date           = (String) row.get("date");
-                String statut         = (String) row.get("statut");
+                String statut         = row.containsKey("statut") ? (String) row.get("statut") : "zero";
                 Long   nombreDemandes = (Long) row.get("nombre_demandes");
 
-                // Si la date n'existe pas encore dans la structure de données, créez-la
-                if (!resultatGroupeParDate.containsKey(date)) {
-                    StatDemandeDto statDemandeDto = new StatDemandeDto();
-                    statDemandeDto.setDate(date);
-                    statDemandeDto.setDatas(new ArrayList<>());
-                    resultatGroupeParDate.put(date, statDemandeDto);
+                // Vérifiez si la date existe dans la structure de données
+                if (!statistiquesParDate.containsKey(date)) {
+                    statistiquesParDate.put(date, new HashMap<>());
                 }
 
-                StatDemandeDto statDemandeDto = resultatGroupeParDate.get(date);
-                StatutDto      statutDto      = new StatutDto();
-                statutDto.setKey(statut);
-                statutDto.setValue(nombreDemandes);
-
-                statDemandeDto.getDatas().add(statutDto);
+                // Stockez la valeur du nombre de demandes pour le statut correspondant
+                statistiquesParDate.get(date).put(statut.toLowerCase(), nombreDemandes);
             }
 
-            statDemandeDtos.addAll(resultatGroupeParDate.values());
+            // Créez un StatDemandeDto pour chaque date
+            for (String date : statistiquesParDate.keySet()) {
+                StatDemandeDto statDemandeDto = new StatDemandeDto();
+                statDemandeDto.setDate(date);
+
+                List<StatutDto> statutDtos = new ArrayList<>();
+
+                for (String statut : statutsPossibles) {
+                    Long    valeur    = statistiquesParDate.get(date).getOrDefault(statut, 0L);
+                    StatutDto statutDto = new StatutDto();
+                    statutDto.setKey(statut);
+                    statutDto.setValue(Double.valueOf(valeur));
+                    statutDtos.add(statutDto);
+                }
+
+                statDemandeDto.setDatas(statutDtos);
+                statDemandeDtos.add(statDemandeDto);
+            }
 
             Comparator<StatDemandeDto> dateComparator = Comparator.comparing(StatDemandeDto::getDate);
-            Collections.sort(statDemandeDtos, dateComparator);
+            statDemandeDtos.sort(dateComparator);
             response.setItems(statDemandeDtos);
-            return response;
 
         } else if ("mois".equalsIgnoreCase(granularite)) {
             sql = "\n" +
@@ -281,38 +254,52 @@ public class StatistiqueBusiness {
                     "    date, statuts.statut;\n";
 
             rows = mysqlTemplate.queryForList(sql, dateDebut, dateDebut, dateDebut, dateFin);
+            List<StatDemandeDto> statDemandeDtos = new ArrayList<>();
+            System.out.println(rows);
 
+            // Créez une liste de tous les statuts possibles
+            List<String> statutsPossibles = Arrays.asList("initie", "valide", "invalide", "termine");
 
-            List<StatDemandeDto>        statDemandeDtos       = new ArrayList<>();
-            Map<String, StatDemandeDto> resultatGroupeParDate = new HashMap<>();
+            // Créez une structure de données pour stocker les statistiques par date et statut
+            Map<String, Map<String, Long>> statistiquesParDate = new HashMap<>();
 
             for (Map<String, Object> row : rows) {
                 String date           = (String) row.get("date");
-                String statut         = (String) row.get("statut");
+                String statut         = row.containsKey("statut") ? (String) row.get("statut") : "zero";
                 Long   nombreDemandes = (Long) row.get("nombre_demandes");
 
-                if (!resultatGroupeParDate.containsKey(date)) {
-                    StatDemandeDto statDemandeDto = new StatDemandeDto();
-                    statDemandeDto.setDate(date);
-                    statDemandeDto.setDatas(new ArrayList<>());
-                    resultatGroupeParDate.put(date, statDemandeDto);
+                // Vérifiez si la date existe dans la structure de données
+                if (!statistiquesParDate.containsKey(date)) {
+                    statistiquesParDate.put(date, new HashMap<>());
                 }
 
-                StatDemandeDto statDemandeDto = resultatGroupeParDate.get(date);
-
-                StatutDto statutDto = new StatutDto();
-                statutDto.setKey(statut);
-                statutDto.setValue((long) nombreDemandes);
-
-                statDemandeDto.getDatas().add(statutDto);
+                // Stockez la valeur du nombre de demandes pour le statut correspondant
+                statistiquesParDate.get(date).put(statut.toLowerCase(), nombreDemandes);
             }
 
+            // Créez un StatDemandeDto pour chaque date
+            for (String date : statistiquesParDate.keySet()) {
+                StatDemandeDto statDemandeDto = new StatDemandeDto();
+                statDemandeDto.setDate(date);
 
-            statDemandeDtos.addAll(resultatGroupeParDate.values());
+                List<StatutDto> statutDtos = new ArrayList<>();
+
+                for (String statut : statutsPossibles) {
+                    Long    valeur    = statistiquesParDate.get(date).getOrDefault(statut, 0L);
+                    StatutDto statutDto = new StatutDto();
+                    statutDto.setKey(statut);
+                    statutDto.setValue(Double.valueOf(valeur));
+                    statutDtos.add(statutDto);
+                }
+
+                statDemandeDto.setDatas(statutDtos);
+                statDemandeDtos.add(statDemandeDto);
+            }
+
             Comparator<StatDemandeDto> dateComparator = Comparator.comparing(StatDemandeDto::getDate);
-            Collections.sort(statDemandeDtos, dateComparator);
+            statDemandeDtos.sort(dateComparator);
             response.setItems(statDemandeDtos);
-            return response;
+
 
         } else if ("annee".equalsIgnoreCase(granularite)) {
             // Requête SQL pour obtenir des statistiques par année
@@ -340,67 +327,68 @@ public class StatistiqueBusiness {
                     "    annee, s.statut;";
 
             rows = mysqlTemplate.queryForList(sql, dateDebut, dateFin);
-
-
-            // Créez une liste d'objets StatDemandeDto
             List<StatDemandeDto> statDemandeDtos = new ArrayList<>();
+            System.out.println(rows);
 
-// Utilisez une structure de données pour regrouper les résultats par date
-            Map<String, StatDemandeDto> resultatGroupeParDate = new HashMap<>();
+            // Créez une liste de tous les statuts possibles
+            List<String> statutsPossibles = Arrays.asList("initie", "valide", "invalide", "termine");
+
+            // Créez une structure de données pour stocker les statistiques par date et statut
+            Map<String, Map<String, Long>> statistiquesParDate = new HashMap<>();
 
             for (Map<String, Object> row : rows) {
-                String date                = (String) row.get("annee");
-                String statut              = (String) row.get("statut");
-                Long   nombreDemandes      = (Long) row.get("nombre_demandes");
-                long   nombreDemandesValue = (nombreDemandes != null) ? nombreDemandes.longValue() : 0L;
+                String date           = (String) row.get("date");
+                String statut         = row.containsKey("statut") ? (String) row.get("statut") : "zero";
+                Long   nombreDemandes = (Long) row.get("nombre_demandes");
 
-
-                // Si la date n'existe pas encore dans la structure de données, créez-la
-                if (!resultatGroupeParDate.containsKey(date)) {
-                    StatDemandeDto statDemandeDto = new StatDemandeDto();
-                    statDemandeDto.setDate(date);
-                    statDemandeDto.setDatas(new ArrayList<>());
-                    resultatGroupeParDate.put(date, statDemandeDto);
+                // Vérifiez si la date existe dans la structure de données
+                if (!statistiquesParDate.containsKey(date)) {
+                    statistiquesParDate.put(date, new HashMap<>());
                 }
 
-                // Récupérez l'objet StatDemandeDto correspondant à la date
-                StatDemandeDto statDemandeDto = resultatGroupeParDate.get(date);
-
-                // Créez un objet StatutDto
-                StatutDto statutDto = new StatutDto();
-                statutDto.setKey(statut);
-                statutDto.setValue((long) nombreDemandes);
-
-                // Ajoutez le StatutDto à la liste "datas" de StatDemandeDto
-                statDemandeDto.getDatas().add(statutDto);
+                // Stockez la valeur du nombre de demandes pour le statut correspondant
+                statistiquesParDate.get(date).put(statut.toLowerCase(), nombreDemandes);
             }
 
-// Ajoutez les objets StatDemandeDto à la liste
-            statDemandeDtos.addAll(resultatGroupeParDate.values());
+            // Créez un StatDemandeDto pour chaque date
+            for (String date : statistiquesParDate.keySet()) {
+                StatDemandeDto statDemandeDto = new StatDemandeDto();
+                statDemandeDto.setDate(date);
 
-// Créez une instance de Response<StatDemandeDto> pour la réponse finale
+                List<StatutDto> statutDtos = new ArrayList<>();
+
+                for (String statut : statutsPossibles) {
+                    Long    valeur    = statistiquesParDate.get(date).getOrDefault(statut, 0L);
+                    StatutDto statutDto = new StatutDto();
+                    statutDto.setKey(statut);
+                    statutDto.setValue(Double.valueOf(valeur));
+                    statutDtos.add(statutDto);
+                }
+
+                statDemandeDto.setDatas(statutDtos);
+                statDemandeDtos.add(statDemandeDto);
+            }
+
             Comparator<StatDemandeDto> dateComparator = Comparator.comparing(StatDemandeDto::getDate);
-
-// Triez la liste d'objets StatDemandeDto par date
-            Collections.sort(statDemandeDtos, dateComparator);
-
+            statDemandeDtos.sort(dateComparator);
             response.setItems(statDemandeDtos);
 
-            return response;
         }
-
         return response;
     }
 
-    public Response<StatCaisseDto> getStatistiquesCaisseParPeriode(Request<CaisseDto> request) {
-        CaisseDto                dto         = request.getData();
-        String                   granularite = dto.getGranularite();
-        String                   dateDebut   = dto.getCreatedAtParam().getStart();
-        String                   dateFin     = dto.getCreatedAtParam().getEnd();
-        Response<StatDemandeDto> response    = new Response<>();
+    /**
+     *
+     */
+    public Response<StatCaisseDto> getStatistiquesCaisseParPeriode(Request<CaisseDto> request) throws ParseException {
+        CaisseDto               dto         = request.getData();
+        String                  granularite = dto.getGranularite();
+        String                  dateDebut   = Utilities.formatDate(dto.getCreatedAtParam().getStart(), formatDate);
+        String                  dateFin     = Utilities.formatDate(dto.getCreatedAtParam().getEnd(), formatDate);
+        Response<StatCaisseDto> response    = new Response<>();
 
         String                    sql  = "";
-        List<Map<String, Object>> rows = new ArrayList<>();
+        List<Map<String, Object>> rows;
 
         if ("jour".equalsIgnoreCase(granularite)) {
             sql = "SELECT date_range.date AS date,\n" +
@@ -430,14 +418,13 @@ public class StatistiqueBusiness {
                     "GROUP BY date_range.date;";
 
             rows = mysqlTemplate.queryForList(sql, dateDebut, dateDebut, dateDebut, dateFin);
-            List<StatCaisseDto> caisseDtos = new ArrayList<>();
 
             Map<String, StatCaisseDto> resultatGroupeParDate = new HashMap<>();
 
             for (Map<String, Object> row : rows) {
                 String date         = (String) row.get("date");
-                Long   totalEntrees = (Long) row.get("total_entrees");
-                Long   totalSortie  = (Long) row.get("total_entrees");
+                Double totalEntrees = (Double) row.get("total_entrees");
+                Double totalSortie  = (Double) row.get("total_sorties");
 
                 // Si la date n'existe pas encore dans la structure de données, créez-la
                 if (!resultatGroupeParDate.containsKey(date)) {
@@ -448,19 +435,22 @@ public class StatistiqueBusiness {
                 }
 
                 StatCaisseDto statCaisseDto = resultatGroupeParDate.get(date);
-                StatutDto      statutDto      = new StatutDto();
-                statutDto.setKey(statut);
-                statutDto.setValue(nombreDemandes);
-
-                statDemandeDto.getDatas().add(statutDto);
+                StatutDto     debit         = new StatutDto();
+                debit.setKey("montantTotalEntre");
+                debit.setValue(totalEntrees);
+                statCaisseDto.getDatas().add(debit);
+                StatutDto credit = new StatutDto();
+                credit.setKey("montantTotalSortie");
+                credit.setValue(totalSortie);
+                statCaisseDto.getDatas().add(credit);
             }
 
-            statDemandeDtos.addAll(resultatGroupeParDate.values());
+            List<StatCaisseDto>       caisseDtos     = new ArrayList<>(resultatGroupeParDate.values());
+            Comparator<StatCaisseDto> dateComparator = Comparator.comparing(StatCaisseDto::getDate);
+            caisseDtos.sort(dateComparator);
+            response.setItems(caisseDtos);
 
-            Comparator<StatDemandeDto> dateComparator = Comparator.comparing(StatDemandeDto::getDate);
-            Collections.sort(statDemandeDtos, dateComparator);
-            response.setItems(statDemandeDtos);
-            return response;
+
 
         } else if ("mois".equalsIgnoreCase(granularite)) {
             sql = "SELECT DATE_FORMAT(date_range.date, '%Y-%m') AS date,\n" +
@@ -489,6 +479,38 @@ public class StatistiqueBusiness {
                     "                    date_range.date;";
 
             rows = mysqlTemplate.queryForList(sql, dateDebut, dateDebut, dateDebut, dateFin);
+
+            Map<String, StatCaisseDto> resultatGroupeParDate = new HashMap<>();
+
+            for (Map<String, Object> row : rows) {
+                String date         = (String) row.get("date");
+                Double totalEntrees = (Double) row.get("total_entrees");
+                Double totalSortie  = (Double) row.get("total_sorties");
+
+                // Si la date n'existe pas encore dans la structure de données, créez-la
+                if (!resultatGroupeParDate.containsKey(date)) {
+                    StatCaisseDto statCaisseDto = new StatCaisseDto();
+                    statCaisseDto.setDate(date);
+                    statCaisseDto.setDatas(new ArrayList<>());
+                    resultatGroupeParDate.put(date, statCaisseDto);
+                }
+
+                StatCaisseDto statCaisseDto = resultatGroupeParDate.get(date);
+                StatutDto     debit         = new StatutDto();
+                debit.setKey("montantTotalEntre");
+                debit.setValue(totalEntrees);
+                statCaisseDto.getDatas().add(debit);
+                StatutDto credit = new StatutDto();
+                credit.setKey("montantTotalSortie");
+                credit.setValue(totalSortie);
+                statCaisseDto.getDatas().add(credit);
+            }
+
+            List<StatCaisseDto>       caisseDtos     = new ArrayList<>(resultatGroupeParDate.values());
+            Comparator<StatCaisseDto> dateComparator = Comparator.comparing(StatCaisseDto::getDate);
+            caisseDtos.sort(dateComparator);
+            response.setItems(caisseDtos);
+
         } else if ("annee".equalsIgnoreCase(granularite)) {
             sql  = "SELECT DATE_FORMAT(date_range.date, '%Y') AS date,\n" +
                     "                    COALESCE(SUM(CASE WHEN c.type = 'ENTREE' THEN c.montant_entre ELSE 0 END), 0) AS total_entrees,\n" +
@@ -512,7 +534,39 @@ public class StatistiqueBusiness {
                     "                GROUP BY\n" +
                     "                    date_range.date;";
             rows = mysqlTemplate.queryForList(sql, dateDebut, dateDebut, dateDebut, dateFin);
+
+            Map<String, StatCaisseDto> resultatGroupeParDate = new HashMap<>();
+
+            for (Map<String, Object> row : rows) {
+                String date         = (String) row.get("date");
+                Double totalEntrees = (Double) row.get("total_entrees");
+                Double totalSortie  = (Double) row.get("total_sorties");
+
+                // Si la date n'existe pas encore dans la structure de données, créez-la
+                if (!resultatGroupeParDate.containsKey(date)) {
+                    StatCaisseDto statCaisseDto = new StatCaisseDto();
+                    statCaisseDto.setDate(date);
+                    statCaisseDto.setDatas(new ArrayList<>());
+                    resultatGroupeParDate.put(date, statCaisseDto);
+                }
+
+                StatCaisseDto statCaisseDto = resultatGroupeParDate.get(date);
+                StatutDto     debit         = new StatutDto();
+                debit.setKey("montantTotalEntre");
+                debit.setValue(totalEntrees);
+                statCaisseDto.getDatas().add(debit);
+                StatutDto credit = new StatutDto();
+                credit.setKey("montantTotalSortie");
+                credit.setValue(totalSortie);
+                statCaisseDto.getDatas().add(credit);
+            }
+
+            List<StatCaisseDto>       caisseDtos     = new ArrayList<>(resultatGroupeParDate.values());
+            Comparator<StatCaisseDto> dateComparator = Comparator.comparing(StatCaisseDto::getDate);
+            caisseDtos.sort(dateComparator);
+            response.setItems(caisseDtos);
+
         }
-        return null;
+        return response;
     }
 }

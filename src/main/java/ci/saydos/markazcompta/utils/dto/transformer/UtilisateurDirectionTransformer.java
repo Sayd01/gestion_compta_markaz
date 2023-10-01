@@ -42,7 +42,6 @@ public interface UtilisateurDirectionTransformer {
 		@Mapping(source="entity.utilisateur.id", target="idUtilisateur"),
 		@Mapping(source="entity.utilisateur.firstName", target="utilisateurFirstName"),
 		@Mapping(source="entity.utilisateur.lastName", target="utilisateurLastName"),
-		@Mapping(source="entity.utilisateur.login", target="utilisateurLogin"),
 		@Mapping(source="entity.direction.id", target="idDirection"),
 		@Mapping(source="entity.direction.code", target="directionCode"),
 		@Mapping(source="entity.direction.intitule", target="directionIntitule"),

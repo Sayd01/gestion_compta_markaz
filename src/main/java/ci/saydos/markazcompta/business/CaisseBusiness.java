@@ -8,34 +8,33 @@
 
 package ci.saydos.markazcompta.business;
 
+import ci.saydos.markazcompta.dao.entity.Caisse;
+import ci.saydos.markazcompta.dao.entity.Utilisateur;
+import ci.saydos.markazcompta.dao.repository.CaisseRepository;
+import ci.saydos.markazcompta.dao.repository.DepenseRepository;
+import ci.saydos.markazcompta.dao.repository.UtilisateurRepository;
+import ci.saydos.markazcompta.utils.*;
+import ci.saydos.markazcompta.utils.contract.IBasicBusiness;
+import ci.saydos.markazcompta.utils.contract.Request;
+import ci.saydos.markazcompta.utils.contract.Response;
+import ci.saydos.markazcompta.utils.dto.CaisseDto;
+import ci.saydos.markazcompta.utils.dto.transformer.CaisseTransformer;
 import ci.saydos.markazcompta.utils.enums.TypeCaisseEnum;
+import ci.saydos.markazcompta.utils.exception.EntityNotFoundException;
+import ci.saydos.markazcompta.utils.exception.InternalErrorException;
+import ci.saydos.markazcompta.utils.exception.InvalidEntityException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.http.HttpStatus;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import ci.saydos.markazcompta.utils.*;
-import ci.saydos.markazcompta.utils.dto.*;
-import ci.saydos.markazcompta.utils.exception.*;
-import ci.saydos.markazcompta.utils.contract.IBasicBusiness;
-import ci.saydos.markazcompta.utils.contract.Request;
-import ci.saydos.markazcompta.utils.contract.Response;
-import ci.saydos.markazcompta.utils.dto.transformer.*;
-import ci.saydos.markazcompta.dao.entity.Caisse;
-import ci.saydos.markazcompta.dao.entity.Utilisateur;
-import ci.saydos.markazcompta.dao.entity.Depense;
-import ci.saydos.markazcompta.dao.entity.*;
-import ci.saydos.markazcompta.dao.repository.*;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * BUSINESS for table "caisse"
@@ -101,7 +100,7 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
             }
             ;
             Caisse entityToSave = null;
-            entityToSave = CaisseTransformer.INSTANCE.toEntity(dto, existingUtilisateur,null);
+            entityToSave = CaisseTransformer.INSTANCE.toEntity(dto, existingUtilisateur, null);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
             entityToSave.setCreatedBy(request.getUser());
             entityToSave.setIsDeleted(false);
@@ -312,7 +311,9 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
         List<Caisse>        items    = caisseRepository.getByCriteria(request, em, locale);
 
         if (items != null && !items.isEmpty()) {
-            List<CaisseDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? CaisseTransformer.INSTANCE.toLiteDtos(items) : CaisseTransformer.INSTANCE.toDtos(items);
+            List<CaisseDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                    ? CaisseTransformer.INSTANCE.toLiteDtos(items)
+                    : CaisseTransformer.INSTANCE.toDtos(items);
 
             final int    size        = items.size();
             List<String> listOfError = Collections.synchronizedList(new ArrayList<String>());
@@ -414,13 +415,13 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 
 
             Caisse entityToSave = null;
-            entityToSave = CaisseTransformer.INSTANCE.toEntity(dto, existingUtilisateur,null);
+            entityToSave = CaisseTransformer.INSTANCE.toEntity(dto, existingUtilisateur, null);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
             entityToSave.setCreatedBy(request.getUser());
             entityToSave.setType(TypeCaisseEnum.ENTREE);
             entityToSave.setMontantEntre(dto.getMontantEntre());
             entityToSave.setMontantSortie(0.0);
-            entityToSave.setSolde(Utilities.addMontant(getMontantDisponible(),dto.getMontantEntre()));
+            entityToSave.setSolde(Utilities.addMontant(getMontantDisponible(), dto.getMontantEntre()));
             entityToSave.setIsDeleted(false);
             items.add(entityToSave);
         }
@@ -464,10 +465,10 @@ public class CaisseBusiness implements IBasicBusiness<Request<CaisseDto>, Respon
 
     public Double getMontantDisponible() {
         Double montantEntre = caisseRepository.montantTotalEntre(false);
-        if (montantEntre == null ) montantEntre = 0.0;
+        if (montantEntre == null) montantEntre = 0.0;
         Double montantSortie = caisseRepository.montantTotalSortie(false);
-        if (montantSortie == null ) montantSortie = 0.0;
-        return Utilities.subtractMontant(montantEntre,montantSortie);
+        if (montantSortie == null) montantSortie = 0.0;
+        return Utilities.subtractMontant(montantEntre, montantSortie);
     }
 
 }

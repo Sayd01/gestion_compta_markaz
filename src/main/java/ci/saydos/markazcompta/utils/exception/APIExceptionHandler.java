@@ -46,6 +46,16 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .build();
         return new ResponseEntity<>(apiErrorResponse, badRequest);
+    }    @ExceptionHandler(FunctionalException.class)
+    public ResponseEntity<ApiErrorResponse> handleException(FunctionalException exception, WebRequest webRequest) {
+        final HttpStatus badRequest= HttpStatus.BAD_REQUEST;
+        final ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
+                .status(exception.getStatus())
+                .hasError(true)
+                .httpCode(badRequest.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(apiErrorResponse, badRequest);
     }
 
     @ExceptionHandler(InternalErrorException.class)
@@ -59,4 +69,6 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
         return new ResponseEntity<>(apiErrorResponse, internalServerError);
     }
+
+
 }

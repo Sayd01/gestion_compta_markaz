@@ -42,7 +42,6 @@ public interface UtilisateurRoleTransformer {
 		@Mapping(source="entity.role.id", target="roleId"),
 		@Mapping(source="entity.role.name", target="roleName"),
 		@Mapping(source="entity.utilisateur.id", target="utilisateurId"),
-		@Mapping(source="entity.utilisateur.login", target="utilisateurLogin"),
 		@Mapping(source="entity.utilisateur.firstName", target="utilisateurFirstName"),
 		@Mapping(source="entity.utilisateur.lastName", target="utilisateurLastName"),
 	})

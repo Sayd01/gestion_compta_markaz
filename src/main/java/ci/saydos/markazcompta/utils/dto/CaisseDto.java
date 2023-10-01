@@ -52,7 +52,6 @@ public class CaisseDto extends _CaisseDto implements Cloneable {
     //----------------------------------------------------------------------
     private String utilisateurFirstName;
     private String utilisateurLastName;
-    private String utilisateurLogin;
     private String depenseCode;
 
     // Search param
@@ -70,7 +69,6 @@ public class CaisseDto extends _CaisseDto implements Cloneable {
     private SearchParam<Double>         montantSortieParam;
     private SearchParam<String>         utilisateurFirstNameParam;
     private SearchParam<String>         utilisateurLastNameParam;
-    private SearchParam<String>         utilisateurLoginParam;
     private SearchParam<String>         depenseCodeParam;
 
     /**

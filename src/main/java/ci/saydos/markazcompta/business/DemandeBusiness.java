@@ -111,16 +111,6 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
             entityToSave.setStatut(StatutDemandeEnum.INITIE);
             items.add(entityToSave);
 
-            Demande demandeStatut = demandeRepository.findByStatutAndDirectionAndMontant(
-                    entityToSave.getUtilisateur().getId(),
-                    entityToSave.getLabel(), entityToSave.getStatut(),
-                    entityToSave.getDirection().getId(),
-                    entityToSave.getMontant(), false);
-
-            if (demandeStatut != null) {
-                throw new InternalErrorException(functionalError.DATA_EXIST_DEMANDE(locale));
-            }
-
             DemandeHistorique demandeHistorique = new DemandeHistorique();
             demandeHistorique.setDemande(entityToSave);
             demandeHistorique.setUtilisateur(existingUtilisateur);

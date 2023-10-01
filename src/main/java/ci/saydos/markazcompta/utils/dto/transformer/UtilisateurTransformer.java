@@ -51,7 +51,6 @@ public interface UtilisateurTransformer {
 		}
 		UtilisateurDto dto = new UtilisateurDto();
 		dto.setId( entity.getId() );
-		dto.setLogin( entity.getLogin() );
 		dto.setFirstName( entity.getFirstName() );
 		dto.setLastName( entity.getLastName() );
 		return dto;
@@ -70,7 +69,6 @@ public interface UtilisateurTransformer {
 
 	@Mappings({
 		@Mapping(source="dto.id", target="id"),
-		@Mapping(source="dto.login", target="login"),
 		@Mapping(source="dto.firstName", target="firstName"),
 		@Mapping(source="dto.lastName", target="lastName"),
 		@Mapping(source="dto.email", target="email"),

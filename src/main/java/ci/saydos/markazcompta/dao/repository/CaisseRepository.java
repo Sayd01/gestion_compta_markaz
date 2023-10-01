@@ -158,7 +158,7 @@ public interface CaisseRepository extends JpaRepository<Caisse, Integer>, _Caiss
      * @return A List of Caisse
      * @throws DataAccessException,ParseException
      */
-    default List<Caisse> getByCriteria(Request<CaisseDto> request, EntityManager em, Locale locale) throws DataAccessException, Exception {
+    default List<Caisse> getByCriteria(Request<CaisseDto> request, EntityManager em, Locale locale) throws Exception {
         String                            req   = "select e from Caisse e where e IS NOT NULL";
         HashMap<String, java.lang.Object> param = new HashMap<String, java.lang.Object>();
         req += getWhereExpression(request, param, locale);
@@ -285,9 +285,7 @@ public interface CaisseRepository extends JpaRepository<Caisse, Integer>, _Caiss
             if (Utilities.notBlank(dto.getUtilisateurLastName())) {
                 listOfQuery.add(CriteriaUtils.generateCriteria("utilisateurLastName", dto.getUtilisateurLastName(), "e.utilisateur.lastName", "String", dto.getUtilisateurLastNameParam(), param, index, locale));
             }
-            if (Utilities.notBlank(dto.getUtilisateurLogin())) {
-                listOfQuery.add(CriteriaUtils.generateCriteria("utilisateurLogin", dto.getUtilisateurLogin(), "e.utilisateur.login", "String", dto.getUtilisateurLoginParam(), param, index, locale));
-            }
+
             if (Utilities.notBlank(dto.getDepenseCode())) {
                 listOfQuery.add(CriteriaUtils.generateCriteria("depenseCode", dto.getDepenseCode(), "e.depense.code", "String", dto.getDepenseCodeParam(), param, index, locale));
             }

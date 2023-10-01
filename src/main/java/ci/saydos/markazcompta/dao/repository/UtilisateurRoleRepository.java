@@ -224,9 +224,7 @@ public interface UtilisateurRoleRepository extends JpaRepository<UtilisateurRole
 			if (Utilities.notBlank(dto.getRoleName())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("roleName", dto.getRoleName(), "e.role.name", "String", dto.getRoleNameParam(), param, index, locale));
 			}
-			if (Utilities.notBlank(dto.getUtilisateurLogin())) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("utilisateurLogin", dto.getUtilisateurLogin(), "e.utilisateur.login", "String", dto.getUtilisateurLoginParam(), param, index, locale));
-			}
+
 			if (Utilities.notBlank(dto.getUtilisateurFirstName())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("utilisateurFirstName", dto.getUtilisateurFirstName(), "e.utilisateur.firstName", "String", dto.getUtilisateurFirstNameParam(), param, index, locale));
 			}

@@ -318,9 +318,7 @@ public interface DemandeRepository extends JpaRepository<Demande, Integer>, _Dem
 			if (dto.getIdDirection()!= null && dto.getIdDirection() > 0) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("idDirection", dto.getIdDirection(), "e.direction.id", "Integer", dto.getIdDirectionParam(), param, index, locale));
 			}
-			if (Utilities.notBlank(dto.getUtilisateurLogin())) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("utilisateurLogin", dto.getUtilisateurLogin(), "e.utilisateur.login", "String", dto.getUtilisateurLoginParam(), param, index, locale));
-			}
+
 			if (Utilities.notBlank(dto.getUtilisateurFirstName())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("utilisateurFirstName", dto.getUtilisateurFirstName(), "e.utilisateur.firstName", "String", dto.getUtilisateurFirstNameParam(), param, index, locale));
 			}

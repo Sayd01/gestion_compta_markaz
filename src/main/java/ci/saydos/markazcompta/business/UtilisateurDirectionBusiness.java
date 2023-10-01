@@ -93,7 +93,7 @@ public class UtilisateurDirectionBusiness implements IBasicBusiness<Request<Util
             Direction existingDirection = null;
             existingDirection = directionRepository.findByCode(dto.getDirectionCode(), false);
             if (existingDirection == null) {
-                throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("direction codeDirection -> " + dto.getIdDirection(), locale));
+                throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("direction codeDirection -> " + dto.getDirectionCode(), locale));
             }
 
             // Verify if utilisateur exist
@@ -110,6 +110,9 @@ public class UtilisateurDirectionBusiness implements IBasicBusiness<Request<Util
 
             UtilisateurDirection entityToSave = null;
             entityToSave = UtilisateurDirectionTransformer.INSTANCE.toEntity(dto, existingUtilisateur, existingDirection);
+            entityToSave.setCreatedAt(Utilities.getCurrentDate());
+            entityToSave.setCreatedBy(request.getUser());
+            entityToSave.setIsDeleted(false);
             items.add(entityToSave);
         }
 

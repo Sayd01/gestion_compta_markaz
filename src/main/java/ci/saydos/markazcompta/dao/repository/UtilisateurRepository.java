@@ -48,8 +48,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
 	 * @return An Object Utilisateur whose login is equals to the given login. If
 	 *         no Utilisateur is found, this method returns null.
 	 */
-	@Query("select e from Utilisateur e where e.login = :login and e.isDeleted = :isDeleted")
-	Utilisateur findByLogin(@Param("login")String login, @Param("isDeleted")Boolean isDeleted);
+
 	/**
 	 * Finds Utilisateur by using firstName as a search criteria.
 	 * 
@@ -236,9 +235,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
 			if (dto.getId()!= null && dto.getId() > 0) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("id", dto.getId(), "e.id", "Integer", dto.getIdParam(), param, index, locale));
 			}
-			if (Utilities.notBlank(dto.getLogin())) {
-				listOfQuery.add(CriteriaUtils.generateCriteria("login", dto.getLogin(), "e.login", "String", dto.getLoginParam(), param, index, locale));
-			}
+
 			if (Utilities.notBlank(dto.getFirstName())) {
 				listOfQuery.add(CriteriaUtils.generateCriteria("firstName", dto.getFirstName(), "e.firstName", "String", dto.getFirstNameParam(), param, index, locale));
 			}

@@ -41,9 +41,7 @@ public class Utilisateur implements Serializable, Cloneable {
 
     //----------------------------------------------------------------------
     // ENTITY DATA FIELDS 
-    //----------------------------------------------------------------------    
-    @Column(name="login", length=255)
-    private String     login        ;
+    //----------------------------------------------------------------------
 
     @Column(name="first_name", length=255)
     private String     firstName    ;

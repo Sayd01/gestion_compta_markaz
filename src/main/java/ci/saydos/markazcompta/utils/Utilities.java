@@ -7,14 +7,16 @@
 
 package ci.saydos.markazcompta.utils;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.LocaleUtils;
+import org.apache.commons.lang.RandomStringUtils;
+import org.joda.time.format.DateTimeFormat;
+import org.json.JSONObject;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.sql.Timestamp;
@@ -33,27 +35,12 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.imageio.ImageIO;
-
-import ci.saydos.markazcompta.dao.repository.CaisseRepository;
-import ci.saydos.markazcompta.utils.enums.TypeCaisseEnum;
-import jakarta.servlet.http.HttpServletRequest;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.LocaleUtils;
-import org.apache.commons.lang.RandomStringUtils;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-
 /**
  * Utilities
  *
  * @author Geo
  */
 public class Utilities {
-
-
 
 
     public static Date getCurrentDate() {
@@ -117,9 +104,8 @@ public class Utilities {
         }
         Date             initDate   = new SimpleDateFormat(initDateFormat).parse(date);
         SimpleDateFormat formatter  = new SimpleDateFormat(endDateFormat);
-        String           parsedDate = formatter.format(initDate);
 
-        return parsedDate;
+        return formatter.format(initDate);
     }
 
     public static Date asDate(LocalDate localDate) {
@@ -641,42 +627,92 @@ public class Utilities {
         }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date parsedDate = dateFormat.parse(dateString);
+        Date             parsedDate = dateFormat.parse(dateString);
         return new Timestamp(parsedDate.getTime());
     }
 
-    public static int custDateCompare(String date_1, String date_2, String format)
-    {
+    public static int custDateCompare(String date_1, String date_2, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
 
         int compareResult = 0;
-        try
-        {
+        try {
             Date d1 = sdf.parse(date_1);
             Date d2 = sdf.parse(date_2);
 
             compareResult = d1.compareTo(d2);
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             compareResult = date_1.equals(date_2) ? 0 : date_2 == null ? -1 : date_1.compareTo(date_2);
         }
         return compareResult;
     }
 
-    public static void sortMapList(List<Map<String, Object>> mapList, String key, boolean isDateKey, String format)
-    {
+    public static void sortMapList(List<Map<String, Object>> mapList, String key, boolean isDateKey, String format) {
         mapList.sort((o1, o2) ->
         {
             String v1 = o1.get(key).toString();
             String v2 = o2.get(key).toString();
-            if (isDateKey)
-            {
+            if (isDateKey) {
                 return custDateCompare(v1, v2, format);
-            } else
-            {
+            } else {
                 return v1.equals(v2) ? 0 : v2 == null ? -1 : v1.compareTo(v2);
             }
         });
+    }
+
+    public static boolean blank(String str) {
+        return !notBlank(str);
+    }
+
+    public static String findDateFormatByParsing(String date) {
+        if (blank(date)) {
+            return null;
+        }
+
+        List<String> datasPatterns = new ArrayList<String>();
+
+        datasPatterns.addAll(Arrays.asList("dd/MM/yyyy", "dd-MM-yyyy", "dd.MM.yyyy", "ddMMyyyy"));
+        datasPatterns.add("yyyyMMdd");
+        datasPatterns.add("yyyy-MM-ddTHH:mm:ss.SSSXXX");
+        datasPatterns.addAll(Arrays.asList("dd/MM/yyyy HH", "dd-MM-yyyy HH", "dd.MM.yyyy HH", "ddMMyyyy HH"));
+        datasPatterns.addAll(Arrays.asList("dd/MM/yyyy HH:mm", "dd-MM-yyyy HH:mm", "dd.MM.yyyy HH:mm", "ddMMyyyy " + "HH:mm"));
+        datasPatterns.addAll(Arrays.asList("dd/MM/yyyy HH:mm:ss", "dd-MM-yyyy HH:mm:ss", "dd.MM.yyyy HH:mm:ss", "ddMMyyyy HH:mm:ss"));
+        datasPatterns.addAll(Arrays.asList("dd/MM/yyyy HH:mm:ss.SSS", "dd-MM-yyyy HH:mm:ss.SSS", "dd.MM.yyyy HH:mm:ss" + ".SSS", "ddMMyyyy HH:mm:ss.SSS"));
+
+        datasPatterns.addAll(Arrays.asList("yyyy/MM/dd", "yyyy-MM-dd", "yyyy.MM.dd", "yyyyMMdd"));
+        datasPatterns.addAll(Arrays.asList("yyyy/MM/dd HH", "yyyy-MM-dd HH", "yyyy.MM.dd HH", "yyyyMMdd HH"));
+        datasPatterns.addAll(Arrays.asList("yyyy/MM/dd HH:mm", "yyyy-MM-dd HH:mm", "yyyy.MM.dd HH:mm", "yyyyMMdd " + "HH:mm"));
+        datasPatterns.addAll(Arrays.asList("yyyy/MM/dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm:ss", "yyyyMMdd HH:mm:ss"));
+        datasPatterns.addAll(Arrays.asList("yyyy/MM/dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SSS", "yyyy.MM.dd HH:mm:ss" + ".SSS", "yyyyMMdd HH:mm:ss.SSS"));
+
+        datasPatterns.addAll(Arrays.asList("dd/MM", "dd-MM", "dd.MM", "ddMM"));
+        datasPatterns.addAll(Arrays.asList("MM/yyyy", "MM-yyyy", "MM.yyyy", "MMyyyy"));
+
+        datasPatterns.addAll(Arrays.asList("MM/dd", "MM-dd", "MM.dd", "MMdd"));
+        datasPatterns.addAll(Arrays.asList("yyyy/MM", "yyyy-MM", "yyyy.MM", "yyyyMM"));
+
+        datasPatterns.addAll(Collections.singletonList("yyyy"));
+
+        datasPatterns.addAll(Arrays.asList("HH", "HH:mm", "HH:mm:ss", "HH:mm:ss.SSS"));
+
+        for (String pattern : datasPatterns) {
+            try {
+                org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern(pattern);
+                formatter.parseDateTime(date);
+                return pattern;
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+        }
+
+        return null;
+    }
+
+    public static String formatDate(String date, String format) throws ParseException {
+        if (!notBlank(date)) {
+            return "";
+        }
+        String initDateFormat = findDateFormatByParsing(date);
+        return formatDate(date, initDateFormat, format);
     }
 
 

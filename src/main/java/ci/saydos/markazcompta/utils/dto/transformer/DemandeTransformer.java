@@ -41,7 +41,6 @@ public interface DemandeTransformer {
             @Mapping(source = "entity.createdAt", dateFormat = "dd/MM/yyyy HH:mm:ss", target = "createdAt"),
             @Mapping(source = "entity.updatedAt", dateFormat = "dd/MM/yyyy", target = "updatedAt"),
             @Mapping(source = "entity.utilisateur.id", target = "idUtilisateur"),
-            @Mapping(source = "entity.utilisateur.login", target = "utilisateurLogin"),
             @Mapping(source = "entity.utilisateur.firstName", target = "utilisateurFirstName"),
             @Mapping(source = "entity.utilisateur.lastName", target = "utilisateurLastName"),
             @Mapping(source = "entity.direction.id", target = "idDirection"),

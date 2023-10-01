@@ -11,5 +11,5 @@ import lombok.ToString;
 @JsonPropertyOrder(alphabetic = true)
 public class StatutDto {
     private String key;
-    private Long value;
+    private Double value;
 }
