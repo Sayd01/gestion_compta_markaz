@@ -20,10 +20,7 @@ import java.io.*;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.Normalizer;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -713,6 +710,25 @@ public class Utilities {
         }
         String initDateFormat = findDateFormatByParsing(date);
         return formatDate(date, initDateFormat, format);
+    }
+
+    public static int getMonthFromDate(Date date) {
+        LocalDate localDate = date.toInstant().atZone(getZoneId()).toLocalDate();
+        return localDate.getMonthValue();
+    }
+
+    private static ZoneId getZoneId() {
+        return ZoneId.systemDefault();
+    }
+    public static String getMonthName(int numeroMois) {
+        if (numeroMois < 1 || numeroMois > 12) {
+            throw new IllegalArgumentException("Numéro de mois invalide. Le numéro de mois doit être compris entre 1 et 12.");
+        }
+
+        DateFormatSymbols dfs      = new DateFormatSymbols(Locale.FRENCH);
+        String[]          nomsMois = dfs.getMonths();
+
+        return nomsMois[numeroMois - 1]; // Les indices commencent à 0, donc on soustrait 1
     }
 
 

@@ -6,6 +6,7 @@ import ci.saydos.markazcompta.utils.CriteriaUtils;
 import ci.saydos.markazcompta.utils.Utilities;
 import ci.saydos.markazcompta.utils.contract.Request;
 import ci.saydos.markazcompta.utils.dto.DepenseDto;
+import ci.saydos.markazcompta.utils.enums.TypeDepenseEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.dao.DataAccessException;
@@ -72,6 +73,9 @@ public interface DepenseRepository extends JpaRepository<Depense, Integer>, _Dep
     @Query("select e from Depense e where e.isDeleted = :isDeleted")
     List<Depense> findByIsDeleted(@Param("isDeleted") Boolean isDeleted);
 
+    @Query("select e from Depense e where e.isCompleted= :isCompleted")
+    List<Depense> findByIsCompleted(@Param("isCompleted") Boolean isCompleted);
+
     /**
      * Finds Depense by using montant as a search criteria.
      *
@@ -110,7 +114,7 @@ public interface DepenseRepository extends JpaRepository<Depense, Integer>, _Dep
      * no Depense is found, this method returns null.
      */
     @Query("select e from Depense e where e.typeDepense = :typeDepense and e.isDeleted = :isDeleted")
-    List<Depense> findByTypedepense(@Param("typeDepense") String typeDepense, @Param("isDeleted") Boolean isDeleted);
+    List<Depense> findByTypeDepense(@Param("typeDepense") TypeDepenseEnum typeDepense, @Param("isDeleted") Boolean isDeleted);
 
     /**
      * Finds Depense by using idDemande as a search criteria.

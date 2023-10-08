@@ -6,28 +6,24 @@
 
 package ci.saydos.markazcompta.dao.entity;
 
-import java.io.Serializable;
-
 import ci.saydos.markazcompta.utils.enums.TypeDepenseEnum;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.ToString;
 
-import lombok.*;
-
-
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 
 /**
  * Persistent class for entity stored in table "depense"
  *
  * @author Telosys Tools Generator
- *
  */
 @Data
 @ToString
 @Entity
-@Table(name="depense" )
+@Table(name = "depense")
 public class Depense implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
@@ -36,65 +32,69 @@ public class Depense implements Serializable, Cloneable {
     // ENTITY PRIMARY KEY ( BASED ON A SINGLE FIELD )
     //----------------------------------------------------------------------
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)    @Column(name="id", nullable=false)
-    private Integer    id           ;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
 
     //----------------------------------------------------------------------
     // ENTITY DATA FIELDS 
     //----------------------------------------------------------------------    
-    @Column(name="code", length=2555)
-    private String     code         ;
+    @Column(name = "code", length = 2555)
+    private String code;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="created_at")
-    private Date       createdAt    ;
+    @Column(name = "created_at")
+    private Date createdAt;
 
-    @Column(name="created_by")
-    private Integer    createdBy    ;
+    @Column(name = "created_by")
+    private Integer createdBy;
 
-    @Column(name="is_deleted")
-    private Boolean    isDeleted    ;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 
-    @Column(name="montant")
-    private Double     montant      ;
+    @Column(name = "montant")
+    private Double montant;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="updated_at")
-    private Date       updatedAt    ;
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
-    @Column(name="updated_by")
-    private Integer    updatedBy    ;
+    @Column(name = "updated_by")
+    private Integer updatedBy;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="type_depense")
-    private TypeDepenseEnum typeDepense  ;
+    @Column(name = "type_depense")
+    private TypeDepenseEnum typeDepense;
 
-	// "idDemande" (column "id_demande") is not defined by itself because used as FK in a link 
-	// "idChargeFixe" (column "id_charge_fixe") is not defined by itself because used as FK in a link 
+    @Column(name = "is_completed")
+    private Boolean isCompleted;
+
+    // "idDemande" (column "id_demande") is not defined by itself because used as FK in a link
+    // "idChargeFixe" (column "id_charge_fixe") is not defined by itself because used as FK in a link
 
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="id_demande", referencedColumnName="id")
-    private Demande demande     ;
+    @JoinColumn(name = "id_demande", referencedColumnName = "id")
+    private Demande    demande;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="id_charge_fixe", referencedColumnName="id")
-    private ChargeFixe chargeFixe  ;
+    @JoinColumn(name = "id_charge_fixe", referencedColumnName = "id")
+    private ChargeFixe chargeFixe;
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR(S)
     //----------------------------------------------------------------------
     public Depense() {
-		super();
+        super();
     }
-    
-	//----------------------------------------------------------------------
+
+    //----------------------------------------------------------------------
     // clone METHOD
     //----------------------------------------------------------------------
-	@Override
-	public java.lang.Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    @Override
+    public java.lang.Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

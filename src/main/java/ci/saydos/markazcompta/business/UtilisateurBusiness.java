@@ -14,8 +14,11 @@ import ci.saydos.markazcompta.utils.*;
 import ci.saydos.markazcompta.utils.contract.IBasicBusiness;
 import ci.saydos.markazcompta.utils.contract.Request;
 import ci.saydos.markazcompta.utils.contract.Response;
+import ci.saydos.markazcompta.utils.dto.DirectionDto;
+import ci.saydos.markazcompta.utils.dto.RoleDto;
 import ci.saydos.markazcompta.utils.dto.UtilisateurDto;
 import ci.saydos.markazcompta.utils.dto.transformer.DirectionTransformer;
+import ci.saydos.markazcompta.utils.dto.transformer.RoleTransformer;
 import ci.saydos.markazcompta.utils.dto.transformer.UtilisateurTransformer;
 import ci.saydos.markazcompta.utils.exception.EntityNotFoundException;
 import ci.saydos.markazcompta.utils.exception.InternalErrorException;
@@ -40,6 +43,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
 BUSINESS for table "utilisateur"
@@ -405,15 +409,37 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 	 * @return
 	 */
 	private UtilisateurDto getFullInfos(UtilisateurDto dto, Integer size, Boolean isSimpleLoading, Locale locale) {
-		Utilisateur utilisateur = utilisateurRepository.findOne(dto.getId(), false);
-		List<UtilisateurDirection> utilisateurDirections = utilisateurDirectionRepository.findByIdUtilisateur(dto.getId(),false);
-		List<Direction> directions = new ArrayList<>();
-		for (UtilisateurDirection userDirection : utilisateurDirections){
-			directions.add(userDirection.getDirection());
-		}
-		dto.setDirections(DirectionTransformer.INSTANCE.toLiteDtos(directions));
-		dto.setPassword(null);
 
+		List<UtilisateurDirection> utilisateurDirections = utilisateurDirectionRepository.findByIdUtilisateur(dto.getId(),false);
+		if (utilisateurDirections != null) {
+			List<Direction> directions = new ArrayList<>();
+			utilisateurDirections.stream().map(userDir -> directions.add(userDir.getDirection())).collect(Collectors.toList());
+			List<DirectionDto> directionDtos = directions.stream().map(direction -> {
+				try {
+					return DirectionTransformer.INSTANCE.toDto(direction);
+				} catch (ParseException e) {
+					throw new RuntimeException(e);
+				}
+			}).collect(Collectors.toList());
+			dto.setDirections(directionDtos);
+		}
+
+		List<UtilisateurRole> utilisateurRoles = utilisateurRoleRepository.findByUtilisateurId(dto.getId(),false);
+		if (utilisateurRoles != null) {
+			List<Role> roles = new ArrayList<>();
+			utilisateurRoles.stream().map(roleUser -> roles.add(roleUser.getRole())).collect(Collectors.toList());
+			List<RoleDto> rolesDtos = roles.stream().map(role -> {
+				try {
+					return RoleTransformer.INSTANCE.toDto(role);
+				} catch (ParseException e) {
+					throw new RuntimeException(e);
+				}
+			}).collect(Collectors.toList());
+
+			dto.setRoles(rolesDtos);
+		}
+
+		dto.setPassword(null);
 		if (Utilities.isTrue(isSimpleLoading)) {
 			return dto;
 		}

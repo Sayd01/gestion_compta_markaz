@@ -50,4 +50,19 @@ public interface _DepenseRepository {
 											@Param("montant") Double montant, @Param("isDeleted") Boolean isDeleted);
 	@Query("select e from Depense e where  e.demande.id = :idDemande and e.typeDepense = :typeDepense and e.isDeleted = :isDeleted")
 	Depense findByIdDemandeAndType(@Param("idDemande")Integer idDemande, @Param("typeDepense") TypeDepenseEnum typeDepense, @Param("isDeleted") Boolean isDeleted );
+
+	@Query("select e from Depense e where  e.demande.id = :idDemande and e.isDeleted = :isDeleted and e.isCompleted = :isCompleted")
+	Depense findByIdDemandeAndType(@Param("idDemande")Integer idDemande, @Param("isDeleted") Boolean isDeleted, @Param("isCompleted") Boolean isCompleted );
+	@Query("select e from Depense e where e.chargeFixe.id = :idChargeFixe and e.isDeleted = :isDeleted and e.isCompleted = :isCompleted")
+	List<Depense> findByIdChargeFixeAndIsCompleted(@Param("idChargeFixe")Integer idChargeFixe, @Param("isDeleted") Boolean isDeleted, @Param("isCompleted") Boolean isCompleted);
+
+	@Query("SELECT e FROM Depense e WHERE e.chargeFixe.id = :idChargeFixe " +
+			"AND e.isDeleted = :isDeleted AND e.isCompleted = :isCompleted " +
+			"AND MONTH(e.createdAt) = :currentMonth")
+	Depense findByIdChargeFixeAndIsCompletedAndCurrentMonth(
+			@Param("idChargeFixe") Integer idChargeFixe,
+			@Param("isDeleted") Boolean isDeleted,
+			@Param("isCompleted") Boolean isCompleted,
+			@Param("currentMonth") Integer currentMonth);
+
 }
