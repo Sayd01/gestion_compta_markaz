@@ -111,6 +111,16 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
             entityToSave.setStatut(StatutDemandeEnum.INITIE);
             items.add(entityToSave);
 
+            Demande demandeStatut = demandeRepository.findByStatutAndDirectionAndMontant(
+                    entityToSave.getUtilisateur().getId(),
+                    entityToSave.getLabel(), entityToSave.getStatut(),
+                    entityToSave.getDirection().getId(),
+                    entityToSave.getMontant(), false);
+
+            if (demandeStatut != null) {
+                throw new InternalErrorException(functionalError.DATA_EXIST_DEMANDE(locale));
+            }
+
             DemandeHistorique demandeHistorique = new DemandeHistorique();
             demandeHistorique.setDemande(entityToSave);
             demandeHistorique.setUtilisateur(existingUtilisateur);
@@ -425,7 +435,6 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
         log.info("----begin create Demande-----");
 
         Response<DemandeDto>           response           = new Response<DemandeDto>();
-        Response<DemandeHistoriqueDto> responseHistorique = new Response<>();
         List<Demande>                  items              = new ArrayList<>();
         List<DemandeHistorique>        itemsHistorique    = new ArrayList<>();
 
@@ -453,32 +462,43 @@ public class DemandeBusiness implements IBasicBusiness<Request<DemandeDto>, Resp
                 }
             }
 
-            DemandeHistorique demandeHistorique = demandeHistoriqueRepository.findByUserAndDemandeAndStatut(
-                    entityToSave.getUtilisateur().getId(),
-                    entityToSave.getId(),
-                    dto.getStatut(),
-                    false);
-
-            if (demandeHistorique != null) {
-                throw new InternalErrorException(functionalError.DATA_EXIST("demande id -> " + dto.getId(),locale));
-            }
-
-            if (dto.getStatut().equals(StatutDemandeEnum.INVALIDE)) {
+            if (entityToSave.getStatut().equals(StatutDemandeEnum.INITIE)){
+                if (dto.getStatut().equals(StatutDemandeEnum.INVALIDE)) {
+                    entityToSave.setStatut(dto.getStatut());
+                    entityToSave.setUtilisateur(existingUtilisateur);
+                    entityToSave.setUpdatedAt(Utilities.getCurrentDate());
+                    entityToSave.setUpdatedBy(request.getUser());
+                    items.add(entityToSave);
+                } else if (dto.getStatut().equals(StatutDemandeEnum.VALIDE)) {
+                    entityToSave.setStatut(dto.getStatut());
+                    entityToSave.setUtilisateur(existingUtilisateur);
+                    entityToSave.setUpdatedAt(Utilities.getCurrentDate());
+                    entityToSave.setUpdatedBy(request.getUser());
+                    items.add(entityToSave);
+                } else {
+                    throw new FunctionalException(functionalError.DISALLOWED_OPERATION("",locale));
+                }
+            }else if(entityToSave.getStatut().equals(StatutDemandeEnum.VALIDE) && dto.getStatut().equals(StatutDemandeEnum.INVALIDE)){
                 entityToSave.setStatut(dto.getStatut());
                 entityToSave.setUtilisateur(existingUtilisateur);
                 entityToSave.setUpdatedAt(Utilities.getCurrentDate());
                 entityToSave.setUpdatedBy(request.getUser());
-                entityToSave.setDateFin(Utilities.getCurrentDate());
                 items.add(entityToSave);
-            } else if (dto.getStatut().equals(StatutDemandeEnum.VALIDE)) {
+
+            }else if(entityToSave.getStatut().equals(StatutDemandeEnum.INVALIDE) && dto.getStatut().equals(StatutDemandeEnum.VALIDE)){
                 entityToSave.setStatut(dto.getStatut());
                 entityToSave.setUtilisateur(existingUtilisateur);
                 entityToSave.setUpdatedAt(Utilities.getCurrentDate());
                 entityToSave.setUpdatedBy(request.getUser());
                 items.add(entityToSave);
-            } else {
-                throw new InternalErrorException(functionalError.DISALLOWED_OPERATION("Cette demande est en cours de traitement ou terminée",locale));
+
+            }  else if (entityToSave.getStatut().equals(StatutDemandeEnum.TERMINE)) {
+                throw new FunctionalException(functionalError.DISALLOWED_OPERATION("Demande clôturée",locale));
+            }else {
+                throw new FunctionalException(functionalError.DISALLOWED_OPERATION("",locale));
             }
+
+
 
             DemandeHistoriqueDto demandeHistoriqueDto = new DemandeHistoriqueDto();
             demandeHistoriqueDto.setIdDemande(entityToSave.getId());

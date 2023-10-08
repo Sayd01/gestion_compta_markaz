@@ -2,52 +2,52 @@
 	"user": 1,
 	"datas": [
 		{
-			"code": "ARTICLE",
-			"name": "ARTICLE"
+			"code": "PERMISSION",
+			"name": "PERMISSION"
 		},
 		{
-			"code": "VIEW_ARTICLE",
-			"parentCode": "ARTICLE",
-			"name": "VIEW ARTICLE"
+			"code": "VIEW_PERMISSION",
+			"parentCode": "PERMISSION",
+			"name": "VIEW PERMISSION"
 		},
 		{
-			"code": "CREATE_ARTICLE",
-			"parentCode": "ARTICLE",
-			"name": "CREATE ARTICLE"
+			"code": "CREATE_PERMISSION",
+			"parentCode": "PERMISSION",
+			"name": "CREATE PERMISSION"
 		},
 		{
-			"code": "UPDATE_ARTICLE",
-			"parentCode": "ARTICLE",
-			"name": "UPDATE ARTICLE"
+			"code": "UPDATE_PERMISSION",
+			"parentCode": "PERMISSION",
+			"name": "UPDATE PERMISSION"
 		},
 		{
-			"code": "DELETE_ARTICLE",
-			"parentCode": "ARTICLE",
-			"name": "DELETE ARTICLE"
+			"code": "DELETE_PERMISSION",
+			"parentCode": "PERMISSION",
+			"name": "DELETE PERMISSION"
 		},
 		{
-			"code": "STOCK",
-			"name": "STOCK"
+			"code": "ROLE_PERMISSION",
+			"name": "ROLE_PERMISSION"
 		},
 		{
-			"code": "VIEW_STOCK",
-			"parentCode": "STOCK",
-			"name": "VIEW STOCK"
+			"code": "VIEW_ROLE_PERMISSION",
+			"parentCode": "ROLE_PERMISSION",
+			"name": "VIEW ROLE_PERMISSION"
 		},
 		{
-			"code": "CREATE_STOCK",
-			"parentCode": "STOCK",
-			"name": "CREATE STOCK"
+			"code": "CREATE_ROLE_PERMISSION",
+			"parentCode": "ROLE_PERMISSION",
+			"name": "CREATE ROLE_PERMISSION"
 		},
 		{
-			"code": "UPDATE_STOCK",
-			"parentCode": "STOCK",
-			"name": "UPDATE STOCK"
+			"code": "UPDATE_ROLE_PERMISSION",
+			"parentCode": "ROLE_PERMISSION",
+			"name": "UPDATE ROLE_PERMISSION"
 		},
 		{
-			"code": "DELETE_STOCK",
-			"parentCode": "STOCK",
-			"name": "DELETE STOCK"
+			"code": "DELETE_ROLE_PERMISSION",
+			"parentCode": "ROLE_PERMISSION",
+			"name": "DELETE ROLE_PERMISSION"
 		}
 
 	]

@@ -1,8 +1,8 @@
 
 
 /*
- * Java transformer for entity table depense 
- * Created on 2023-08-10 ( Time 14:07:29 )
+ * Java transformer for entity table role_permission 
+ * Created on 2023-10-07 ( Time 23:33:42 )
  * Generator tool : Telosys Tools Generator ( version 3.3.0 )
  * Copyright 2018 Geo. All Rights Reserved.
  */
@@ -25,45 +25,45 @@ import ci.saydos.markazcompta.dao.entity.*;
 
 
 /**
- * TRANSFORMER for table "depense"
+ * TRANSFORMER for table "role_permission"
  * 
  * @author Geo
  *
  */
 @Mapper
-public interface DepenseTransformer {
+public interface RolePermissionTransformer {
 
-	DepenseTransformer INSTANCE = Mappers.getMapper(DepenseTransformer.class);
+	RolePermissionTransformer INSTANCE = Mappers.getMapper(RolePermissionTransformer.class);
 
 	@FullTransformerQualifier
 	@Mappings({
 		@Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
 		@Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
-		@Mapping(source="entity.demande.id", target="idDemande"),
-		@Mapping(source="entity.demande.code", target="demandeCode"),
-		@Mapping(source="entity.chargeFixe.id", target="idChargeFixe"),
-		@Mapping(source="entity.chargeFixe.code", target="chargeFixeCode"),
+		@Mapping(source="entity.permission.id", target="permissionId"),
+		@Mapping(source="entity.permission.name", target="permissionName"),
+		@Mapping(source="entity.role.id", target="roleId"),
+		@Mapping(source="entity.role.name", target="roleName"),
 	})
-	DepenseDto toDto(Depense entity) throws ParseException;
+	RolePermissionDto toDto(RolePermission entity) throws ParseException;
 
 	@IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<DepenseDto> toDtos(List<Depense> entities) throws ParseException;
+    List<RolePermissionDto> toDtos(List<RolePermission> entities) throws ParseException;
 
-    default DepenseDto toLiteDto(Depense entity) {
+    default RolePermissionDto toLiteDto(RolePermission entity) {
 		if (entity == null) {
 			return null;
 		}
-		DepenseDto dto = new DepenseDto();
+		RolePermissionDto dto = new RolePermissionDto();
 		dto.setId( entity.getId() );
 		return dto;
     }
 
-	default List<DepenseDto> toLiteDtos(List<Depense> entities) {
+	default List<RolePermissionDto> toLiteDtos(List<RolePermission> entities) {
 		if (entities == null || entities.stream().allMatch(o -> o == null)) {
 			return null;
 		}
-		List<DepenseDto> dtos = new ArrayList<DepenseDto>();
-		for (Depense entity : entities) {
+		List<RolePermissionDto> dtos = new ArrayList<RolePermissionDto>();
+		for (RolePermission entity : entities) {
 			dtos.add(toLiteDto(entity));
 		}
 		return dtos;
@@ -71,20 +71,16 @@ public interface DepenseTransformer {
 
 	@Mappings({
 		@Mapping(source="dto.id", target="id"),
-		@Mapping(source="dto.code", target="code"),
 		@Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
 		@Mapping(source="dto.createdBy", target="createdBy"),
 		@Mapping(source="dto.isDeleted", target="isDeleted"),
-		@Mapping(source="dto.isCompleted", target="isCompleted"),
-		@Mapping(source="dto.montant", target="montant"),
 		@Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
 		@Mapping(source="dto.updatedBy", target="updatedBy"),
-		@Mapping(source="dto.typeDepense", target="typeDepense"),
-		@Mapping(source="demande", target="demande"),
-		@Mapping(source="chargeFixe", target="chargeFixe"),
+		@Mapping(source="permission", target="permission"),
+		@Mapping(source="role", target="role"),
 	})
-    Depense toEntity(DepenseDto dto, Demande demande, ChargeFixe chargeFixe) throws ParseException;
+    RolePermission toEntity(RolePermissionDto dto, Permission permission, Role role) throws ParseException;
 
-    //List<Depense> toEntities(List<DepenseDto> dtos) throws ParseException;
+    //List<RolePermission> toEntities(List<RolePermissionDto> dtos) throws ParseException;
 
 }

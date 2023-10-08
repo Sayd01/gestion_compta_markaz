@@ -127,7 +127,7 @@ public class DepenseController {
 	  return response;
 	 }
 
-	@RequestMapping(value = "/fixe", method = RequestMethod.POST, consumes = {
+	@RequestMapping(value = "/createdDepenseFixe", method = RequestMethod.POST, consumes = {
 			"application/json"}, produces = {"application/json"})
 	public Response<DepenseDto> fixe(@RequestBody Request<DepenseDto> request) throws Exception {
 		log.info("start method /Depense/fixe");
@@ -137,7 +137,7 @@ public class DepenseController {
 		try {
 			response = Validate.validateList(request, response, functionalError, locale);
 			if (!response.isHasError()) {
-				response = depenseBusiness.fixe(request, locale);
+				response = depenseBusiness.createdDepenseFixe(request, locale);
 			} else {
 				slf4jLogger.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
 				return response;
@@ -166,7 +166,7 @@ public class DepenseController {
 		try {
 			response = Validate.validateList(request, response, functionalError, locale);
 			if (!response.isHasError()) {
-				response = depenseBusiness.varible(request, locale);
+				response = depenseBusiness.paidDepenseVarible(request, locale);
 			} else {
 				slf4jLogger.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
 				return response;
@@ -182,6 +182,35 @@ public class DepenseController {
 			exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response, locale, e);
 		}
 		log.info("end method /Depense/variable");
+		return response;
+	}
+
+	@RequestMapping(value = "/paidDepenseFixe", method = RequestMethod.POST, consumes = {
+			"application/json"}, produces = {"application/json"})
+	public Response<DepenseDto> paidDepenseFixe(@RequestBody Request<DepenseDto> request) throws Exception {
+		log.info("start method /Depense/paidDepenseFixe");
+		Response<DepenseDto> response   = new Response<>();
+		String               languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+		Locale               locale     = new Locale(languageID, "");
+		try {
+			response = Validate.validateList(request, response, functionalError, locale);
+			if (!response.isHasError()) {
+				response = depenseBusiness.paidDepenseFixe(request, locale);
+			} else {
+				slf4jLogger.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+				return response;
+			}
+			if (!response.isHasError()) {
+				slf4jLogger.info(String.format("code: {} -  message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+			} else {
+				slf4jLogger.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+			}
+		} catch (CannotCreateTransactionException e) {
+			exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response, locale, e);
+		} catch (TransactionSystemException e) {
+			exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response, locale, e);
+		}
+		log.info("end method /Depense/paidDepenseFixe");
 		return response;
 	}
 }

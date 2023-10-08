@@ -9,33 +9,33 @@
 	"public": false,
 	"folders": [
 		{
-			"id": "article.id",
-			"name": "article",
+			"id": "permission.id",
+			"name": "permission",
 			"description": "",
 			"order": [
-				"article.getByCriteria",
-				"article.create",
-				"article.update",
-				"article.delete"
+				"permission.getByCriteria",
+				"permission.create",
+				"permission.update",
+				"permission.delete"
 			],
 			"owner": "1151918"
 		},
 		{
-			"id": "stock.id",
-			"name": "stock",
+			"id": "rolePermission.id",
+			"name": "rolePermission",
 			"description": "",
 			"order": [
-				"stock.getByCriteria",
-				"stock.create",
-				"stock.update",
-				"stock.delete"
+				"rolePermission.getByCriteria",
+				"rolePermission.create",
+				"rolePermission.update",
+				"rolePermission.delete"
 			],
 			"owner": "1151918"
 		}
 	],
 	"requests": [
 		{
-			"id": "article.create",
+			"id": "permission.create",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -45,7 +45,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/article/create",
+			"url": "{{main_url}}/permission/create",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -58,14 +58,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "article-create",
+			"name": "permission-create",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"libelle\": \"\"\n\t\t} \n\t]  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"name\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "article.update",
+			"id": "permission.update",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -75,7 +75,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/article/update",
+			"url": "{{main_url}}/permission/update",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -88,14 +88,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "article-update",
+			"name": "permission-update",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"libelle\": \"\"\n\t\t} \n\t]  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"name\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "article.delete",
+			"id": "permission.delete",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -105,7 +105,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/article/delete",
+			"url": "{{main_url}}/permission/delete",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -118,14 +118,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "article-delete",
+			"name": "permission-delete",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
 			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "article.getByCriteria",
+			"id": "permission.getByCriteria",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -135,7 +135,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/article/getByCriteria",
+			"url": "{{main_url}}/permission/getByCriteria",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -148,14 +148,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439015040,
-			"name": "article-getByCriteria",
+			"name": "permission-getByCriteria",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"libelle\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"name\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\"\n\t}  \n}"
 		},
 		{
-			"id": "stock.create",
+			"id": "rolePermission.create",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -165,7 +165,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/stock/create",
+			"url": "{{main_url}}/rolePermission/create",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -178,14 +178,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "stock-create",
+			"name": "rolePermission-create",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"dateEntree\": \"\",\n\t\t\t\"dateSortie\": \"\",\n\t\t\t\"etat\": \"\",\n\t\t\t\"intitule\": \"\",\n\t\t\t\"quantite\": \"\",\n\t\t\t\"idArticle\": \"\"\n\t\t} \n\t]  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"roleId\": \"\",\n\t\t\t\"permissionId\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "stock.update",
+			"id": "rolePermission.update",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -195,7 +195,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/stock/update",
+			"url": "{{main_url}}/rolePermission/update",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -208,14 +208,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "stock-update",
+			"name": "rolePermission-update",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"dateEntree\": \"\",\n\t\t\t\"dateSortie\": \"\",\n\t\t\t\"etat\": \"\",\n\t\t\t\"intitule\": \"\",\n\t\t\t\"quantite\": \"\",\n\t\t\t\"idArticle\": \"\"\n\t\t} \n\t]  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\",\n\t\t\t\"roleId\": \"\",\n\t\t\t\"permissionId\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "stock.delete",
+			"id": "rolePermission.delete",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -225,7 +225,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/stock/delete",
+			"url": "{{main_url}}/rolePermission/delete",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -238,14 +238,14 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439012859,
-			"name": "stock-delete",
+			"name": "rolePermission-delete",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
 			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"datas\":[\n\t\t{\n  \t\t\t\"id\": \"\"\n\t\t} \n\t]  \n}"
 		},
 		{
-			"id": "stock.getByCriteria",
+			"id": "rolePermission.getByCriteria",
 			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
@@ -255,7 +255,7 @@
 					"enabled": true
 				}
 			],
-			"url": "{{main_url}}/stock/getByCriteria",
+			"url": "{{main_url}}/rolePermission/getByCriteria",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -268,11 +268,11 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1497439015040,
-			"name": "stock-getByCriteria",
+			"name": "rolePermission-getByCriteria",
 			"description": "",
 			"collectionId": "project.id",
 			"responses": [],
-			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"dateEntree\": \"\",\n\t\t\"dateSortie\": \"\",\n\t\t\"etat\": \"\",\n\t\t\"intitule\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"quantite\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\",\n\t\t\"idArticle\": \"\"\n\t}  \n}"
+			"rawModeData": "{\n\t\"user\":\"1\",\n\t\"isSimpleLoading\":false,\n\t\"data\":{\n  \t\t\"id\": \"\",\n\t\t\"createdAt\": \"\",\n\t\t\"createdBy\": \"\",\n\t\t\"isDeleted\": \"\",\n\t\t\"updatedAt\": \"\",\n\t\t\"updatedBy\": \"\",\n\t\t\"roleId\": \"\",\n\t\t\"permissionId\": \"\"\n\t}  \n}"
 		}
 	]
 }

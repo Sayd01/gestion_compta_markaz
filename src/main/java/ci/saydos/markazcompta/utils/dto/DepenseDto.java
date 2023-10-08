@@ -39,6 +39,7 @@ public class DepenseDto extends _DepenseDto implements Cloneable {
     private String          createdAt;
     private Integer         createdBy;
     private Boolean         isDeleted;
+    private Boolean         isCompleted;
     private Double          montant;
     private String          updatedAt;
     private Integer         updatedBy;
@@ -58,6 +59,7 @@ public class DepenseDto extends _DepenseDto implements Cloneable {
     private SearchParam<String>          createdAtParam;
     private SearchParam<Integer>         createdByParam;
     private SearchParam<Boolean>         isDeletedParam;
+    private SearchParam<Boolean>         isCompletedParam;
     private SearchParam<Double>          montantParam;
     private SearchParam<String>          updatedAtParam;
     private SearchParam<Integer>         updatedByParam;

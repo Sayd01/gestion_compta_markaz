@@ -49,7 +49,7 @@ public class FunctionalError {
 
 	public Status DATA_NOT_EXIST(String message, Locale locale) {
 		status.setCode(StatusCode.FUNC_DATA_NOT_EXIST);
-		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_NOT_EXIST", new Object[] {}, locale) + ": " + message);
+		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_NOT_EXIST", new Object[] {}, locale) + message);
 		return status;
 	}
 
@@ -182,6 +182,12 @@ public class FunctionalError {
 	public Status DATA_EXIST_DEMANDE(Locale locale) {
 		status.setCode(StatusCode.FUNC_DATA_EXIST);
 		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_EXIST_DEMANDE", new Object[] {}, locale));
+		return status;
+	}
+
+	public Status OPERATION(String message, Locale locale) {
+		status.setCode(StatusCode.FUNC_DISALLOWED_OPERATION);
+		status.setMessage(messageSource.getMessage("StatusMessage.FUNC_OPERATION", new Object[] {}, locale) + message);
 		return status;
 	}
 }

@@ -8,48 +8,46 @@
 
 package ci.saydos.markazcompta.business;
 
+import ci.saydos.markazcompta.dao.entity.*;
+import ci.saydos.markazcompta.dao.repository.*;
+import ci.saydos.markazcompta.utils.*;
+import ci.saydos.markazcompta.utils.contract.IBasicBusiness;
+import ci.saydos.markazcompta.utils.contract.Request;
+import ci.saydos.markazcompta.utils.contract.Response;
+import ci.saydos.markazcompta.utils.dto.DemandeHistoriqueDto;
+import ci.saydos.markazcompta.utils.dto.DepenseDto;
+import ci.saydos.markazcompta.utils.dto.transformer.DepenseTransformer;
 import ci.saydos.markazcompta.utils.enums.StatutDemandeEnum;
 import ci.saydos.markazcompta.utils.enums.TypeCaisseEnum;
 import ci.saydos.markazcompta.utils.enums.TypeDepenseEnum;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.http.HttpStatus;
-
+import ci.saydos.markazcompta.utils.exception.EntityNotFoundException;
+import ci.saydos.markazcompta.utils.exception.FunctionalException;
+import ci.saydos.markazcompta.utils.exception.InternalErrorException;
+import ci.saydos.markazcompta.utils.exception.InvalidEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import ci.saydos.markazcompta.utils.*;
-import ci.saydos.markazcompta.utils.dto.*;
-import ci.saydos.markazcompta.utils.exception.*;
-import ci.saydos.markazcompta.utils.contract.IBasicBusiness;
-import ci.saydos.markazcompta.utils.contract.Request;
-import ci.saydos.markazcompta.utils.contract.Response;
-import ci.saydos.markazcompta.utils.dto.transformer.*;
-import ci.saydos.markazcompta.dao.entity.Depense;
-import ci.saydos.markazcompta.dao.entity.Demande;
-import ci.saydos.markazcompta.dao.entity.ChargeFixe;
-import ci.saydos.markazcompta.dao.entity.*;
-import ci.saydos.markazcompta.dao.repository.*;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * BUSINESS for table "depense"
  *
  * @author Geo
  */
-@Log
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @Transactional
 public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Response<DepenseDto>> {
-    private final UtilisateurRepository utilisateurRepository;
+    private final UtilisateurRepository     utilisateurRepository;
     private final DepenseRepository         depenseRepository;
     private final DemandeRepository         demandeRepository;
     private final ChargeFixeRepository      chargeFixeRepository;
@@ -57,8 +55,6 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
     private final FunctionalError           functionalError;
     private final DemandeHistoriqueBusiness demandeHistoriqueBusiness;
     private final CaisseBusiness            caisseBusiness;
-
-
 
 
     @PersistenceContext
@@ -399,12 +395,11 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
         return response;
     }
 
-    public Response<DepenseDto> fixe(Request<DepenseDto> request, Locale locale) throws ParseException {
+    public Response<DepenseDto> createdDepenseFixe(Request<DepenseDto> request, Locale locale) throws ParseException {
         log.info("----begin fixe Depense-----");
 
-        Response<DepenseDto> response    = new Response<>();
-        List<Depense>        items       = new ArrayList<>();
-        List<Caisse>         itemsCaisse = new ArrayList<>();
+        Response<DepenseDto> response = new Response<>();
+        List<Depense>        items    = new ArrayList<>();
 
         for (DepenseDto dto : request.getDatas()) {
             // Definir les parametres obligatoires
@@ -420,18 +415,35 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
             if (dto.getIdChargeFixe() != null && dto.getIdChargeFixe() > 0) {
                 existingChargeFixe = chargeFixeRepository.findOne(dto.getIdChargeFixe(), false);
                 if (existingChargeFixe == null) {
-                    throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("chargeFixe idChargeFixe -> " + dto.getIdChargeFixe(), locale));
+                    log.warn("idChargeFixe : {} ==> null", dto.getIdChargeFixe());
+                    throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("", locale));
                 }
             }
 
             Utilisateur utilisateur = utilisateurRepository.findOne(request.getUser(), false);
             if (utilisateur == null) {
-                throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("Utilisateur est null -> ", locale));
+                log.warn("Utilisateur : {}==> null", request.getUser());
+                throw new EntityNotFoundException(functionalError.OPERATION("Utilisateur n'existe pas", locale));
             }
 
-            Double montantActuel = caisseBusiness.getMontantDisponible();
-            if (montantActuel <= dto.getMontant()) {
-                throw new FunctionalException(functionalError.DISALLOWED_OPERATION("Solde insuffisant pour effectuer la transaction.", locale));
+            int currentMonth = Utilities.getMonthFromDate(Utilities.getCurrentDate());
+            Depense depenseFalse = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, false,currentMonth);
+
+            if (Objects.nonNull(depenseFalse)) {
+                log.info("depense => {}",depenseFalse.getCode());
+                throw new FunctionalException(functionalError.DATA_EXIST("depense code -> " +depenseFalse.getCode(),locale));
+            }
+
+            Depense depenseTrue = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, true,currentMonth);
+            if (Objects.nonNull((depenseTrue)) ){
+                int createdMonth = Utilities.getMonthFromDate(depenseTrue.getCreatedAt());
+                if (currentMonth == createdMonth) {
+                    String mois = Utilities.getMonthName(createdMonth);
+                    String preposition = mois.startsWith("a") || mois.startsWith("e") || mois.startsWith("i") || mois.startsWith("o") || mois.startsWith("u")
+                            ? "d'"
+                            : "de";
+                    throw new FunctionalException(functionalError.OPERATION("Le paiement pour le mois " + preposition + mois + " a déjà été effectué", locale));
+                }
             }
 
 
@@ -442,31 +454,10 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
             entityToSave.setCreatedBy(request.getUser());
             entityToSave.setTypeDepense(TypeDepenseEnum.FIXE);
             entityToSave.setIsDeleted(false);
+            entityToSave.setIsCompleted(false);
             items.add(entityToSave);
 
-            Caisse caisse = new Caisse();
-            caisse.setIsDeleted(false);
-            caisse.setType(TypeCaisseEnum.SORTIE);
-            caisse.setCreatedAt(Utilities.getCurrentDate());
-            caisse.setCreatedBy(utilisateur.getId());
-            caisse.setUtilisateur(utilisateur);
-            caisse.setSolde(Utilities.subtractMontant(montantActuel,dto.getMontant()));
-            caisse.setMontantSortie(dto.getMontant());
-            caisse.setLibelle(existingChargeFixe.getLabel());
-            caisse.setDepense(entityToSave);
-            itemsCaisse.add(caisse);
 
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(entityToSave.getCreatedAt());
-            int mois  = calendar.get(Calendar.MONTH) + 1;
-            int annee = calendar.get(Calendar.YEAR);
-
-            Depense existingDepense = depenseRepository.findByDateAndIdChargeAndMontant(
-                    mois, annee, dto.getIdChargeFixe(), dto.getMontant(), false);
-            if (existingDepense != null) {
-                throw new InternalErrorException(functionalError.DATA_EXIST("Depense id -> " + existingDepense.getId(), locale));
-            }
         }
 
         if (!items.isEmpty()) {
@@ -478,11 +469,7 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
             }
             List<DepenseDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? DepenseTransformer.INSTANCE.toLiteDtos(itemsSaved) : DepenseTransformer.INSTANCE.toDtos(itemsSaved);
 
-            List<Caisse> itemsCaisseSaved = null;
-            itemsCaisseSaved = caisseRepository.saveAll(itemsCaisse);
-            if (itemsCaisseSaved == null) {
-                throw new InternalErrorException(functionalError.SAVE_FAIL("caisse", locale));
-            }
+
             final int    size        = itemsSaved.size();
             List<String> listOfError = Collections.synchronizedList(new ArrayList<String>());
             itemsDto.parallelStream().forEach(dto -> {
@@ -511,7 +498,7 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
         return response;
     }
 
-    public Response<DepenseDto> varible(Request<DepenseDto> request, Locale locale) throws ParseException {
+    public Response<DepenseDto> paidDepenseVarible(Request<DepenseDto> request, Locale locale) throws ParseException {
         log.info("----begin fixe Depense-----");
 
         Response<DepenseDto> response     = new Response<>();
@@ -531,10 +518,18 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
             // Verify if chargeFixe exist
             Demande existingDemande = null;
             if (dto.getIdDemande() != null && dto.getIdDemande() > 0) {
-                existingDemande = demandeRepository.findByIdAndStatut(dto.getIdDemande(), StatutDemandeEnum.VALIDE, false);
+                existingDemande = demandeRepository.findOne(dto.getIdDemande(), false);
                 if (existingDemande == null) {
                     throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("demande idDemande -> " + dto.getIdDemande(), locale));
                 }
+            }
+
+            if (existingDemande.getStatut() == StatutDemandeEnum.INITIE) {
+                throw new FunctionalException(functionalError.OPERATION("La demande n'a pas encore été validée, veuillez patienter. Merci.", locale));
+            }
+
+            if (existingDemande.getStatut() == StatutDemandeEnum.TERMINE) {
+                throw new FunctionalException(functionalError.OPERATION("La demande a déjà été traitée. Merci !", locale));
             }
 
             Utilisateur utilisateur = utilisateurRepository.findOne(request.getUser(), false);
@@ -552,9 +547,8 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
             Double montantActuel = caisseBusiness.getMontantDisponible();
             System.out.println(montantActuel);
             if (montantActuel <= existingDemande.getMontant()) {
-                throw new InternalErrorException(functionalError.DISALLOWED_OPERATION("le montant disponible dans la caisse est inssufisant", locale));
+                throw new FunctionalException(functionalError.OPERATION("L'opération ne peut pas être effectuée en raison d'un montant insuffisant dans la caisse. Veuillez réviser votre demande ou effectuer un approvisionnement adéquat dans la caisse pour continuer.", locale));
             }
-
 
             Depense entityToSave = null;
             entityToSave = DepenseTransformer.INSTANCE.toEntity(dto, existingDemande, null);
@@ -562,7 +556,9 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
             entityToSave.setCreatedBy(request.getUser());
             entityToSave.setTypeDepense(TypeDepenseEnum.DEMANDE);
+            entityToSave.setIsCompleted(true);
             entityToSave.setIsDeleted(false);
+            entityToSave.setIsCompleted(true);
             entityToSave.setMontant(existingDemande.getMontant());
             items.add(entityToSave);
 
@@ -572,7 +568,7 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
             caisse.setCreatedAt(Utilities.getCurrentDate());
             caisse.setCreatedBy(utilisateur.getId());
             caisse.setUtilisateur(utilisateur);
-            caisse.setSolde(Utilities.subtractMontant(montantActuel,existingDemande.getMontant()));
+            caisse.setSolde(Utilities.subtractMontant(montantActuel, existingDemande.getMontant()));
             caisse.setLibelle(existingDemande.getLabel());
             caisse.setMontantSortie(existingDemande.getMontant());
             caisse.setDepense(entityToSave);
@@ -594,7 +590,7 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
 
             Depense existingDepense = depenseRepository.findByIdDemandeAndType(dto.getIdDemande(), TypeDepenseEnum.DEMANDE, false);
             if (existingDepense != null) {
-                throw new InternalErrorException(functionalError.DATA_EXIST("Depense id -> " + existingDepense.getId(), locale));
+                throw new FunctionalException(functionalError.DATA_EXIST("Depense id -> " + existingDepense.getId(), locale));
             }
         }
 
@@ -644,6 +640,135 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
         }
 
         log.info("----end fixe Depense-----");
+        return response;
+    }
+
+    public Response<DepenseDto> paidDepenseFixe(Request<DepenseDto> request, Locale locale) throws ParseException {
+        log.info("----begin paidDepenseFixe-----");
+
+        Response<DepenseDto> response     = new Response<>();
+        List<Depense>        items        = new ArrayList<>();
+        List<Caisse>         itemsCaisse  = new ArrayList<>();
+        List<Demande>        itemsDemande = new ArrayList<>();
+
+
+        for (DepenseDto dto : request.getDatas()) {
+            // Definir les parametres obligatoires
+            Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
+            fieldsToVerify.put("idChargeFixe", dto.getIdChargeFixe());
+            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+                throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            }
+
+            // Verify if chargeFixe exist
+            ChargeFixe existingChargeFixe = null;
+            if (dto.getIdChargeFixe() != null && dto.getIdChargeFixe() > 0) {
+                existingChargeFixe = chargeFixeRepository.findOne(dto.getIdChargeFixe(), false);
+                if (existingChargeFixe == null) {
+                    log.warn("idChargeFixe : {} ==> null", dto.getIdChargeFixe());
+                    throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("", locale));
+                }
+            }
+
+            Utilisateur utilisateur = utilisateurRepository.findOne(request.getUser(), false);
+            if (utilisateur == null) {
+                log.warn("Utilisateur : {}==> null", request.getUser());
+                throw new EntityNotFoundException(functionalError.OPERATION("Utilisateur n'existe pas", locale));
+            }
+            int currentMonth = Utilities.getMonthFromDate(Utilities.getCurrentDate());
+
+            Depense entityToSave = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, false,currentMonth);
+            if (Objects.isNull(entityToSave)) {
+                log.info("depense => null");
+                throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST(" depense",locale));
+            }
+            Depense depenseTrue = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, true,currentMonth);
+            System.out.println(depenseTrue);
+            if (Objects.nonNull((depenseTrue)) ){
+                int createdMonth = Utilities.getMonthFromDate(depenseTrue.getCreatedAt());
+                if (currentMonth == createdMonth) {
+                    String mois = Utilities.getMonthName(createdMonth);
+                    String preposition = mois.startsWith("a") || mois.startsWith("e") || mois.startsWith("i") || mois.startsWith("o") || mois.startsWith("u")
+                            ? "d'"
+                            : "de";
+                    throw new FunctionalException(functionalError.OPERATION("Le paiement pour le mois " + preposition + mois + " a déjà été effectué", locale));
+                }
+            }
+
+            entityToSave.setIsCompleted(true);
+            entityToSave.setUpdatedAt(Utilities.getCurrentDate());
+            items.add(entityToSave);
+
+
+
+
+
+            Double montantActuel = caisseBusiness.getMontantDisponible();
+            System.out.println(montantActuel);
+            if (montantActuel <= entityToSave.getMontant()) {
+                throw new FunctionalException(functionalError.OPERATION("L'opération ne peut pas être effectuée en raison d'un montant insuffisant dans la caisse. Veuillez réviser votre demande ou effectuer un approvisionnement adéquat dans la caisse pour continuer.", locale));
+            }
+
+            Caisse caisse = Caisse.builder()
+                    .isDeleted(false)
+                    .type(TypeCaisseEnum.SORTIE)
+                    .createdAt(Utilities.getCurrentDate())
+                    .createdBy(utilisateur.getId())
+                    .utilisateur(utilisateur)
+                    .solde(Utilities.subtractMontant(montantActuel, entityToSave.getMontant()))
+                    .libelle(existingChargeFixe.getLabel())
+                    .montantSortie(entityToSave.getMontant())
+                    .depense(entityToSave)
+                    .build();
+            itemsCaisse.add(caisse);
+        }
+
+        if (!items.isEmpty()) {
+            List<Caisse> itemsCaisseSaved = null;
+            itemsCaisseSaved = caisseRepository.saveAll(itemsCaisse);
+            if (itemsCaisseSaved == null) {
+                throw new InternalErrorException(functionalError.SAVE_FAIL("caisse", locale));
+            }
+
+            List<Depense> itemsSaved = null;
+            // inserer les donnees en base de donnees
+            itemsSaved = depenseRepository.saveAll((Iterable<Depense>) items);
+            if (itemsSaved == null) {
+                throw new InternalErrorException(functionalError.SAVE_FAIL("depense", locale));
+            }
+            List<DepenseDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? DepenseTransformer.INSTANCE.toLiteDtos(itemsSaved) : DepenseTransformer.INSTANCE.toDtos(itemsSaved);
+
+
+            List<Demande> itemsDemandeSaved = null;
+            itemsDemandeSaved = demandeRepository.saveAll(itemsDemande);
+            if (itemsDemandeSaved == null) {
+                throw new InternalErrorException(functionalError.SAVE_FAIL("Demande", locale));
+            }
+            final int    size        = itemsSaved.size();
+            List<String> listOfError = Collections.synchronizedList(new ArrayList<String>());
+            itemsDto.parallelStream().forEach(dto -> {
+                try {
+                    dto = getFullInfos(dto, size, request.getIsSimpleLoading(), locale);
+                } catch (Exception e) {
+                    listOfError.add(e.getMessage());
+                    e.printStackTrace();
+                }
+            });
+            if (Utilities.isNotEmpty(listOfError)) {
+                Object[] objArray = listOfError.stream().distinct().toArray();
+                throw new RuntimeException(StringUtils.join(objArray, ", "));
+            }
+            Status status = new Status();
+            status.setCode(StatusCode.SUCCESS);
+            status.setMessage(StatusMessage.SUCCESS);
+
+            response.setHttpCode(HttpStatus.CREATED.value());
+            response.setStatus(status);
+            response.setItems(itemsDto);
+            response.setHasError(false);
+        }
+
+        log.info("----end paidDepenseFixe-----");
         return response;
     }
 
