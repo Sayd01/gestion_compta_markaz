@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -123,7 +124,7 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 			entityToSave = UtilisateurTransformer.INSTANCE.toEntity(dto);
 			entityToSave.setCreatedAt(Utilities.getCurrentDate());
 			entityToSave.setCreatedBy(request.getUser());
-//			entityToSave.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
+			entityToSave.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
 			entityToSave.setIsDeleted(false);
 			items.add(entityToSave);
 		}
