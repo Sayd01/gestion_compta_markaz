@@ -2,7 +2,6 @@ package ci.saydos.markazcompta.security;
 
 import ci.saydos.markazcompta.dao.entity.Role;
 import ci.saydos.markazcompta.dao.entity.Utilisateur;
-import ci.saydos.markazcompta.dao.repository.RoleRepository;
 import ci.saydos.markazcompta.dao.repository.UtilisateurRepository;
 import ci.saydos.markazcompta.dao.repository.UtilisateurRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
     private final UtilisateurRepository     userRepository;
-    private final RoleRepository            roleRepository;
     private final UtilisateurRoleRepository userRoleRepository;
 
     @Override

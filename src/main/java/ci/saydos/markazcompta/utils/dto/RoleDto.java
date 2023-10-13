@@ -34,6 +34,7 @@ public class RoleDto extends _RoleDto implements Cloneable{
     private Integer    id                   ; // Primary Key
 
     private String     name                 ;
+    private String     description                 ;
 	private String     createdAt            ;
     private Integer    createdBy            ;
     private Boolean    isDeleted            ;

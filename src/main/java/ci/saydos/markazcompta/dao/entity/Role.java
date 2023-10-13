@@ -45,6 +45,9 @@ public class Role implements Serializable, Cloneable {
     @Column(name="name", length=255)
     private String     name         ;
 
+    @Column(name="description", length=255)
+    private String     description;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="created_at")
     private Date       createdAt    ;

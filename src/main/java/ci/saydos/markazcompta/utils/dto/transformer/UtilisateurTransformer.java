@@ -76,6 +76,7 @@ public interface UtilisateurTransformer {
 		@Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
 		@Mapping(source="dto.createdBy", target="createdBy"),
 		@Mapping(source="dto.isDeleted", target="isDeleted"),
+		@Mapping(source="dto.isFirstConnexion", target="isFirstConnexion"),
 		@Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
 		@Mapping(source="dto.updatedBy", target="updatedBy"),
 		@Mapping(source="dto.password", target="password"),

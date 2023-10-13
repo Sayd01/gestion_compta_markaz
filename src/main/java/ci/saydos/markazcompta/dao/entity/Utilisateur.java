@@ -75,6 +75,10 @@ public class Utilisateur implements Serializable, Cloneable {
     @Column(name="password", length=255)
     private String     password     ;
 
+
+    @Column(name="is_fist_connexion")
+    private Boolean            isFirstConnexion = true;
+
 	// "idMarkaz" (column "id_markaz") is not defined by itself because used as FK in a link 
 
 

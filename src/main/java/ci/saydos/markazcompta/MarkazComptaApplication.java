@@ -18,17 +18,6 @@ public class MarkazComptaApplication  {
 	public static void main(String[] args) {
 		SpringApplication.run(MarkazComptaApplication.class, args);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-
-
-		calendar.add(Calendar.DAY_OF_MONTH, 1);
-
-
-		Date nouvelleDate = calendar.getTime();
-
-		System.out.println(nouvelleDate);
-
 	}
 
 }

@@ -26,4 +26,5 @@ import java.util.List;
 public class _UtilisateurDto {
     private List<DirectionDto> directions;
     private List<RoleDto>      roles;
+    private Boolean            isFirstConnexion;
 }

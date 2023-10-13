@@ -11,6 +11,7 @@ package ci.saydos.markazcompta.rest.api;
 
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +58,8 @@ public class UtilisateurController {
 	 @Autowired
 	 private ExceptionUtils exceptionUtils;
 
+
+
 	 private Logger slf4jLogger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
@@ -74,6 +77,37 @@ public class UtilisateurController {
 				.toUri();
 		log.info("end method /utilisateur/create");
         return ResponseEntity.created(uri).body(response);
+    }
+
+	@RequestMapping(value="/create-admin",method=RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    public Response<UtilisateurDto> createAdmin(@RequestBody Request<UtilisateurDto> request) throws Exception {
+		log.info(this.getClass().getName()+ ".createAdmin Start !");
+		Response<UtilisateurDto> response = new Response<UtilisateurDto>();
+		String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+		Locale locale = new Locale(languageID, "");
+		try {
+			response = Validate.validateList(request, response, functionalError, locale);
+			if (!response.isHasError()) {
+				response = utilisateurBusiness.createAdmin(request, locale);
+			} else {
+				slf4jLogger.info("Erreur| code: {} -  message: {}", response.getStatus().getCode(),
+						response.getStatus().getMessage());
+				return response;
+			}
+			if (!response.isHasError()) {
+				slf4jLogger.info("end method custom");
+				slf4jLogger.info("code: {} -  message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS);
+			} else {
+				slf4jLogger.info("Erreur| code: {} -  message: {}", response.getStatus().getCode(),
+						response.getStatus().getMessage());
+			}
+		} catch (CannotCreateTransactionException e) {
+			exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response, locale, e);
+		} catch (TransactionSystemException e) {
+			exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response, locale, e);
+		}
+		log.info(this.getClass().getName()+ ".createAdmin End !");
+		return response;
     }
 
 	@RequestMapping(value="/update",method=RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})

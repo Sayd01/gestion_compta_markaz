@@ -69,6 +69,7 @@ public interface RoleTransformer {
 	@Mappings({
 		@Mapping(source="dto.id", target="id"),
 		@Mapping(source="dto.name", target="name"),
+		@Mapping(source="dto.description", target="description"),
 		@Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
 		@Mapping(source="dto.createdBy", target="createdBy"),
 		@Mapping(source="dto.isDeleted", target="isDeleted"),

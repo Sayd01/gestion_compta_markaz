@@ -25,6 +25,8 @@ import java.util.Date;
 @ToString
 @Entity
 @Table(name="utilisateur_role" )
+@Builder
+@AllArgsConstructor
 public class UtilisateurRole implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
@@ -82,7 +84,7 @@ public class UtilisateurRole implements Serializable, Cloneable {
     // clone METHOD
     //----------------------------------------------------------------------
 	@Override
-	public java.lang.Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
 }

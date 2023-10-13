@@ -81,6 +81,7 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDto>, Response<R
 			// Definir les parametres obligatoires
 			Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
 			fieldsToVerify.put("name", dto.getName());
+			fieldsToVerify.put("description", dto.getDescription());
 			if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
 				throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
 			}
@@ -101,7 +102,7 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDto>, Response<R
 				throw new InternalErrorException(functionalError.DATA_DUPLICATE(" name ", locale));
 			}
 
-				Role entityToSave = null;
+			Role entityToSave = null;
 			entityToSave = RoleTransformer.INSTANCE.toEntity(dto);
 			entityToSave.setCreatedAt(Utilities.getCurrentDate());
 			entityToSave.setCreatedBy(request.getUser());
