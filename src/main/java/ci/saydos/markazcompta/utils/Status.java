@@ -7,8 +7,6 @@
 
 package ci.saydos.markazcompta.utils;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.*;
@@ -20,11 +18,11 @@ import lombok.*;
  *
  */
 @Data
-@ToString
+@Builder
 @NoArgsConstructor
-@XmlRootElement
-@JsonInclude(Include.NON_NULL)
+@AllArgsConstructor
 public class Status {
 	private String	code;
 	private String	message;
+
 }

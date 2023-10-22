@@ -89,6 +89,7 @@ public class UtilisateurDirectionBusiness implements IBasicBusiness<Request<Util
                 throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
             }
 
+
             // Verify if direction exist
             Direction existingDirection = null;
             existingDirection = directionRepository.findByCode(dto.getDirectionCode(), false);
@@ -139,9 +140,10 @@ public class UtilisateurDirectionBusiness implements IBasicBusiness<Request<Util
                 Object[] objArray = listOfError.stream().distinct().toArray();
                 throw new RuntimeException(StringUtils.join(objArray, ", "));
             }
-            Status status = new Status();
-            status.setCode(StatusCode.SUCCESS);
-            status.setMessage(StatusMessage.SUCCESS);
+            Status status = Status.builder()
+                    .code(StatusCode.SUCCESS)
+                    .message(StatusMessage.SUCCESS)
+                    .build();
 
             response.setHttpCode(HttpStatus.CREATED.value());
             response.setStatus(status);

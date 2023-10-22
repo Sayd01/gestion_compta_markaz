@@ -48,4 +48,16 @@ public class JwtUtil {
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
     }
+
+    public long calculateExpiresIn() {
+        long expirationMillis = System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION;
+        long currentTimeMillis = System.currentTimeMillis();
+        return (expirationMillis - currentTimeMillis) / 1000;
+    }
+
+
+
+
+
+
 }

@@ -36,10 +36,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
 
-        log.info("Auth------------");
+        log.info("Start " +this.getClass().getName());
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            log.info("Authorized--------------------------");
+            log.info("Authentication part");
             try {
                 String      token       = authorizationHeader.substring(7);
                 Algorithm   algorithm   = Algorithm.HMAC256(SECRET);
@@ -57,16 +57,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(username, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 filterChain.doFilter(request, response);
-
+                log.info("End " +this.getClass().getName());
             } catch (Exception e) {
-                log.info("e.getMessage()");
-                log.info(e.getMessage());
+                log.warning("e.getMessage()");
+                log.warning(e.getMessage());
                 response.addHeader("error-message", e.getMessage());
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
 
         } else {
-            log.info("Unauthorized--------------------------");
+            log.info("No authentication method");
             filterChain.doFilter(request, response);
         }
     }

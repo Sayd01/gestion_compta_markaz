@@ -101,9 +101,11 @@ public class StatistiqueBusiness {
         Map<String, Object>       countMap = new HashMap<>();
 
         if (Utilities.notBlank(dateDebut) && Utilities.notBlank(dateFin)) {
-            Double montantTotal       = getMontantDisponibleByDateRange(dateDebut, dateFin) != null ? getMontantDisponibleByDateRange(dateDebut, dateFin) : 0.0;
+//            Double montantTotal       = getMontantDisponibleByDateRange(dateDebut, dateFin) != null ? getMontantDisponibleByDateRange(dateDebut, dateFin) : 0.0;
             Double montantTotalSortie = getTotalMontantsSortieByDateRange(dateDebut, dateFin) != null ? getTotalMontantsSortieByDateRange(dateDebut, dateFin) : 0.0;
             Double montantTotalEntre  = getTotalMontantsEntresByDateRange(dateDebut, dateFin) != null ? getTotalMontantsEntresByDateRange(dateDebut, dateFin) : 0.0;
+
+            Double montantTotal = montantTotalEntre - montantTotalSortie;
 
             System.out.println(montantTotalEntre);
             countMap.put("montantTotal", montantTotal);

@@ -243,6 +243,9 @@ public interface DepenseRepository extends JpaRepository<Depense, Integer>, _Dep
             if (dto.getIsDeleted() != null) {
                 listOfQuery.add(CriteriaUtils.generateCriteria("isDeleted", dto.getIsDeleted(), "e.isDeleted", "Boolean", dto.getIsDeletedParam(), param, index, locale));
             }
+            if (dto.getIsCompleted() != null) {
+                listOfQuery.add(CriteriaUtils.generateCriteria("isCompleted", dto.getIsCompleted(), "e.isCompleted", "Boolean", dto.getIsCompletedParam(), param, index, locale));
+            }
             if (dto.getMontant() != null && dto.getMontant() > 0) {
                 listOfQuery.add(CriteriaUtils.generateCriteria("montant", dto.getMontant(), "e.montant", "Double", dto.getMontantParam(), param, index, locale));
             }

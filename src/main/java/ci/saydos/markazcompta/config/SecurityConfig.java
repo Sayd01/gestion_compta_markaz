@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,21 +21,40 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
-@EnableWebSecurity
+
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 @Configuration
+
 public class SecurityConfig {
 
-    private final MyUserDetailsService   userDetailsService;
-    private final JwtAuthorizationFilter jwtFilter;
+    private static final String[]  WHITE_LIST_URL = {
+            "**/auth/authenticate",
+            "**/auth/forgot-password",
+            "**/auth/refresh-token",
+            "**/buckets/**",
+            "**/upload/**",
+            "**/download/**",
+            "**/utilisateur/create-admin",
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**"};
+    private final        MyUserDetailsService   userDetailsService;
+    private final        JwtAuthorizationFilter jwtFilter;
 
 
-    static HashMap<String, String> pages = new HashMap<String, String>() {{
+    static HashMap<String, String> pages = new HashMap<>() {{
         // ARTICLE
-        put("VIEW_ARTICLE",  "/article/getByCriteria");
+        put("VIEW_ARTICLE", "/article/getByCriteria");
         put("CREATE_ARTICLE", "/article/create");
         put("UPDATE_ARTICLE", "/article/update");
         put("DELETE_ARTICLE", "/article/delete");
@@ -94,7 +114,7 @@ public class SecurityConfig {
         put("UPDATE_STOCK_HISTORIQUE", "/stockHistorique/update");
         put("DELETE_STOCK_HISTORIQUE", "/stockHistorique/delete");
         // UTILISATEUR
-        put("VIEW_UTILISATEUR", "/utilisateur/getByCriteria");
+        put("VIEW_UTILISATEUR",   "/utilisateur/getByCriteria");
         put("CREATE_UTILISATEUR", "/utilisateur/create");
         put("UPDATE_UTILISATEUR", "/utilisateur/update");
         put("DELETE_UTILISATEUR", "/utilisateur/delete");
@@ -115,11 +135,9 @@ public class SecurityConfig {
         put("VIEW_DASHBOARD_CAISSE_BY_PERIOD", "/statistique/caisse-par-periode");
         // AUTHENTICATION
         put("CHANGE_PASSWORD", "/auth/change-password");
-        put("REFRESH_TOKEN", "/auth/refresh-token");
-        put("AUTHENTICATION", "/auth/authenticate");
     }};
 
-    static HashMap<String[], String[]> routes = new HashMap<String[], String[]>() {{
+    static HashMap<String[], String[]> routes = new HashMap<>() {{
 
         put(new String[]{"/dossiers/add", "/dossiers/update", "/dossiers/delete"},
                 new String[]{"UPDATE_DOSSIERS"});
@@ -163,24 +181,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers(
-                                        "/auth/**",
-                                        "**/buckets/**",
-                                        "**/upload/**",
-                                        "**/download/**",
-                                        "**/utilisateur/**",
-                                        "/v2/api-docs",
-                                        "/swagger-resources",
-                                        "/swagger-resources/**",
-                                        "/configuration/ui",
-                                        "/configuration/security",
-                                        "/swagger-ui.html",
-                                        "/webjars/**",
-                                        "/v3/api-docs/**",
-                                        "/swagger-ui/**").permitAll()
-                                .anyRequest().authenticated())
+                        request.requestMatchers(WHITE_LIST_URL)
+                                .permitAll()
+                                .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -204,13 +210,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+    public CorsConfigurationSource corsConfigurationSource() {
+        final UrlBasedCorsConfigurationSource source        = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration               configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type", "Access-Control-Allow-Origin"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:3002"));
+        configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Access-Control-Allow-Headers", "X-Requested-With", "Content-Type", "Authorization", "Origin", "Accept", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Access-Control-Allow-Origin", "Cache-Control"));
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

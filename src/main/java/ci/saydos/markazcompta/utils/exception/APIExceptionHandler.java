@@ -6,8 +6,10 @@
 
 package ci.saydos.markazcompta.utils.exception;
 
+import ci.saydos.markazcompta.utils.Status;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -23,6 +25,7 @@ import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class APIExceptionHandler extends ResponseEntityExceptionHandler {
+
     
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleException(EntityNotFoundException exception, WebRequest webRequest) {
@@ -70,6 +73,24 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .build();
         return new ResponseEntity<>(apiErrorResponse, internalServerError);
+    }
+
+
+    Status status = Status.builder()
+            .code("901")
+            .message("Les informations de connexion fournies (mot de passe et/ou adresse e-mail) sont incorrectes")
+            .build();
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiErrorResponse> handleException() {
+        final HttpStatus badRequest= HttpStatus.BAD_REQUEST;
+        final ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
+                .status(status)
+                .hasError(true)
+                .httpCode(badRequest.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(apiErrorResponse, badRequest);
     }
 
 

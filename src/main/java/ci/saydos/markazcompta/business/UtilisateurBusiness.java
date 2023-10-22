@@ -14,10 +14,7 @@ import ci.saydos.markazcompta.utils.*;
 import ci.saydos.markazcompta.utils.contract.IBasicBusiness;
 import ci.saydos.markazcompta.utils.contract.Request;
 import ci.saydos.markazcompta.utils.contract.Response;
-import ci.saydos.markazcompta.utils.dto.ChangePasswordRequest;
-import ci.saydos.markazcompta.utils.dto.DirectionDto;
-import ci.saydos.markazcompta.utils.dto.RoleDto;
-import ci.saydos.markazcompta.utils.dto.UtilisateurDto;
+import ci.saydos.markazcompta.utils.dto.*;
 import ci.saydos.markazcompta.utils.dto.transformer.DirectionTransformer;
 import ci.saydos.markazcompta.utils.dto.transformer.RoleTransformer;
 import ci.saydos.markazcompta.utils.dto.transformer.UtilisateurTransformer;
@@ -41,7 +38,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -82,8 +78,10 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 
     private final UtilisateurDirectionRepository utilisateurDirectionRepository;
 
-    private final FunctionalError functionalError;
-
+    private final FunctionalError              functionalError;
+    private final DirectionRepository          directionRepository;
+    private final UtilisateurRoleBusiness      utilisateurRoleBusiness;
+    private final UtilisateurDirectionBusiness utilisateurDirectionBusiness;
 
 
     @PersistenceContext
@@ -100,33 +98,38 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
     public Response<UtilisateurDto> create(Request<UtilisateurDto> request, Locale locale) throws ParseException {
         log.info("----begin create Utilisateur-----");
 
-        Response<UtilisateurDto> response = new Response<UtilisateurDto>();
-        List<Utilisateur>        items    = new ArrayList<Utilisateur>();
+        Response<UtilisateurDto>   response        = new Response<UtilisateurDto>();
+        List<Utilisateur>          items           = new ArrayList<Utilisateur>();
+        List<UtilisateurDirection> itemsDirections = new ArrayList<>();
+        List<UtilisateurRole>      itemsRoles      = new ArrayList<>();
 
         for (UtilisateurDto dto : request.getDatas()) {
             // Definir les parametres obligatoires
             Map<String, java.lang.Object> fieldsToVerify = new HashMap<String, java.lang.Object>();
             fieldsToVerify.put("email", dto.getEmail());
+            fieldsToVerify.put("roles", dto.getRoles());
+            fieldsToVerify.put("directions", dto.getDirections());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 throw new InvalidEntityException(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
             }
 
             //Verifier que l'utilisateur connecté est l'admin
-            List<UtilisateurRole> userRoles = utilisateurRoleRepository.findByUtilisateurId(request.getUser(),false);
+            List<UtilisateurRole> userRoles = utilisateurRoleRepository.findByUtilisateurId(request.getUser(), false);
             if (Utilities.isNotEmpty(userRoles)) {
-                for (UtilisateurRole userRole : userRoles){
+                for (UtilisateurRole userRole : userRoles) {
                     if (!Objects.equals(userRole.getRole().getName(), "ADMIN")) {
-                        throw new FunctionalException(functionalError.OPERATION("The USER does not have an ADMIN role",locale));
+                        throw new FunctionalException(functionalError.OPERATION("The USER does not have an ADMIN role", locale));
                     }
                 }
+            }
+
+            if (!Utilities.isValidEmail(dto.getEmail())) {
+                throw new FunctionalException(functionalError.OPERATION("Email invalide", locale));
             }
 
 
             // Verify if utilisateur to insert do not exist
             Utilisateur existingEntity = null;
-            if (existingEntity != null) {
-                throw new InternalErrorException(functionalError.DATA_EXIST("utilisateur id -> " + dto.getId(), locale));
-            }
 
             // verif unique email in db
             existingEntity = utilisateurRepository.findByEmail(dto.getEmail(), false);
@@ -147,6 +150,42 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
             entityToSave.setIsDeleted(false);
             entityToSave.setIsFirstConnexion(true);
             items.add(entityToSave);
+
+            Response<UtilisateurRoleDto>      responUserRole       = new Response<>();
+            Request<UtilisateurRoleDto>       requestUserRole      = new Request<>();
+            Response<UtilisateurDirectionDto> responUserDirecrion  = new Response<>();
+            Request<UtilisateurDirectionDto>  requestUserDirecrion = new Request<>();
+
+
+            for (DirectionDto directionDto : dto.getDirections()) {
+                Direction direction = directionRepository.findByCode(directionDto.getCode(), false);
+                if (Objects.isNull(direction)) {
+                    throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("direction codeDirection -> " + directionDto.getCode(), locale));
+                }
+                UtilisateurDirection userDirection = new UtilisateurDirection();
+                userDirection.setUtilisateur(entityToSave);
+                userDirection.setCreatedBy(request.getUser());
+                userDirection.setCreatedAt(Utilities.getCurrentDate());
+                userDirection.setIsDeleted(false);
+                userDirection.setDirection(direction);
+                itemsDirections.add(userDirection);
+            }
+
+            for (RoleDto roleDto : dto.getRoles()) {
+                Role role = roleRepository.findByName(roleDto.getName(), false);
+                if (Objects.isNull(role)) {
+                    throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("direction codeDirection -> " + role.getName(), locale));
+                }
+                UtilisateurRole userRole = new UtilisateurRole();
+                userRole.setUtilisateur(entityToSave);
+                userRole.setCreatedBy(request.getUser());
+                userRole.setCreatedAt(Utilities.getCurrentDate());
+                userRole.setIsDeleted(false);
+                userRole.setRole(role);
+                itemsRoles.add(userRole);
+            }
+
+
         }
 
         if (!items.isEmpty()) {
@@ -157,6 +196,11 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
                 throw new InternalErrorException(functionalError.SAVE_FAIL("utilisateur", locale));
             }
             List<UtilisateurDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? UtilisateurTransformer.INSTANCE.toLiteDtos(itemsSaved) : UtilisateurTransformer.INSTANCE.toDtos(itemsSaved);
+
+
+            utilisateurDirectionRepository.saveAll( itemsDirections);
+            utilisateurRoleRepository.saveAll(itemsRoles);
+
 
             final int    size        = itemsSaved.size();
             List<String> listOfError = Collections.synchronizedList(new ArrayList<String>());
@@ -233,8 +277,8 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
                 entityToSave.setUpdatedBy(dto.getUpdatedBy());
             }
             if (Utilities.notBlank(dto.getPassword())) {
-				entityToSave.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
-                entityToSave.setPassword(dto.getPassword());
+                entityToSave.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
+//                entityToSave.setPassword(dto.getPassword());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
             entityToSave.setUpdatedBy(request.getUser());
@@ -423,7 +467,7 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
      * @return
      */
     private UtilisateurDto getFullInfos(UtilisateurDto dto, Integer size, Boolean isSimpleLoading, Locale locale) {
-        log.info(this.getClass().getName()+"getFullInfos Start !");
+        log.info(this.getClass().getName() + "getFullInfos Start !");
 
         List<UtilisateurDirection> utilisateurDirections = utilisateurDirectionRepository.findByIdUtilisateur(dto.getId(), false);
         if (utilisateurDirections != null) {
@@ -437,7 +481,7 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
                 }
             }).collect(Collectors.toList());
             dto.setDirections(directionDtos);
-            log.info("roles {}",dto.getDirections());
+            log.info("roles {}", dto.getDirections());
         }
 
         List<UtilisateurRole> utilisateurRoles = utilisateurRoleRepository.findByUtilisateurId(dto.getId(), false);
@@ -453,7 +497,7 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
             }).collect(Collectors.toList());
 
             dto.setRoles(rolesDtos);
-            log.info("roles {}",dto.getRoles());
+            log.info("roles {}", dto.getRoles());
         }
 
         dto.setPassword(null);
@@ -463,7 +507,7 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
         if (size > 1) {
             return dto;
         }
-        log.info(this.getClass().getName()+"getFullInfos End !");
+        log.info(this.getClass().getName() + "getFullInfos End !");
         return dto;
     }
 
@@ -528,8 +572,8 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
         validate(dto);
         Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(dto.getId());
         if (utilisateurOptional.isEmpty()) {
-            log.warn("Aucun utilisateur n'a ete trouvé avec l'ID"+dto.getId());
-            throw new FunctionalException(functionalError.OPERATION("Aucun utilisateur n'a ete trouve",Locale.FRANCE));
+            log.warn("Aucun utilisateur n'a ete trouvé avec l'ID" + dto.getId());
+            throw new FunctionalException(functionalError.OPERATION("Aucun utilisateur n'a ete trouve", Locale.FRANCE));
         }
 
         Utilisateur utilisateur = utilisateurOptional.get();
@@ -546,36 +590,56 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
         response.setHttpCode(HttpStatus.OK.value());
         response.setStatus(status);
         response.setHasError(false);
-        log.info("End service " +this.getClass().getName() + ".changeMotDePasse");
+        log.info("End service " + this.getClass().getName() + ".changeMotDePasse");
         return response;
     }
 
-    private void validate(ChangePasswordRequest dto){
-        if(dto ==null){
+    public void forgotPassword(String email) {
+        log.info("Start service" + this.getClass().getName() + ".forgotPassword");
+        if (!Utilities.isValidEmail(email)) {
+            throw new FunctionalException(functionalError.OPERATION("Email invalide", Locale.FRANCE));
+        }
+
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email, false);
+        if (Objects.isNull(utilisateur)) {
+            log.warn("Aucun utilisateur n'a ete trouvé avec l'EMAIL " + email);
+            throw new FunctionalException(functionalError.OPERATION("Aucun utilisateur n'a ete trouve avec l'email " + email, Locale.FRANCE));
+        }
+
+        utilisateur.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
+        utilisateur.setUpdatedAt(Utilities.getCurrentDate());
+
+        utilisateurRepository.save(utilisateur);
+
+        log.info("End service " + this.getClass().getName() + ".forgotPassword");
+    }
+
+    private void validate(ChangePasswordRequest dto) {
+        if (dto == null) {
             log.warn("Impossible de modifier le mot de passe avec un objet NULL");
-            throw new FunctionalException(functionalError.OPERATION("Aucune information n'a ete fourni pour pouvoir changer le mot de passe",Locale.FRANCE));
+            throw new FunctionalException(functionalError.OPERATION("Aucune information n'a ete fourni pour pouvoir changer le mot de passe", Locale.FRANCE));
 
         }
-        if(dto.getId() ==null){
+        if (dto.getId() == null) {
             log.warn("Impossible de modifier le mot de passe avec un IDN NULL");
-            throw new FunctionalException(functionalError.OPERATION("ID utilisateur null::Impossible de modifier le mot de passe",Locale.FRANCE));
+            throw new FunctionalException(functionalError.OPERATION("ID utilisateur null::Impossible de modifier le mot de passe", Locale.FRANCE));
 
         }
-        if(Objects.isNull(dto.getConfirmationPassword()) || Objects.isNull(dto.getNewPassword())){
+        if (Objects.isNull(dto.getConfirmationPassword()) || Objects.isNull(dto.getNewPassword())) {
             log.warn("Impossible de modifier le mot de passe avec un mot de passse NULL");
-            throw new FunctionalException(functionalError.OPERATION("Mot de passe utilisateur null::Impossible de modifier le mot de passe",Locale.FRANCE));
+            throw new FunctionalException(functionalError.OPERATION("Mot de passe utilisateur null::Impossible de modifier le mot de passe", Locale.FRANCE));
 
         }
-        if(!dto.getConfirmationPassword().equals(dto.getNewPassword())){
+        if (!dto.getConfirmationPassword().equals(dto.getNewPassword())) {
             log.warn("Impossible de modifier le mot de passe avec deux mots de passe different NULL");
-            throw new FunctionalException(functionalError.OPERATION("Mot de passe utilisateur non conformes::Impossible de modifier le mot de passe ",Locale.FRANCE));
+            throw new FunctionalException(functionalError.OPERATION("Mot de passe utilisateur non conformes::Impossible de modifier le mot de passe ", Locale.FRANCE));
 
         }
 
     }
 
     public Response<UtilisateurDto> createAdmin(Request<UtilisateurDto> request, Locale locale) throws ParseException {
-        log.info(this.getClass().getName()+".createAdmin");
+        log.info(this.getClass().getName() + ".createAdmin");
 
         Response<UtilisateurDto> response = new Response<UtilisateurDto>();
         List<Utilisateur>        items    = new ArrayList<Utilisateur>();
@@ -590,10 +654,10 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
 
             // Verify if utilisateur to insert do not exist
             Utilisateur existingEntity = null;
-            if (existingEntity != null) {
-                throw new InternalErrorException(functionalError.DATA_EXIST("utilisateur id -> " + dto.getId(), locale));
-            }
 
+            if (!Utilities.isValidEmail(dto.getEmail())) {
+                throw new FunctionalException(functionalError.OPERATION("Email invalide", locale));
+            }
             // verif unique email in db
             existingEntity = utilisateurRepository.findByEmail(dto.getEmail(), false);
             if (existingEntity != null) {
@@ -611,9 +675,10 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
             entityToSave.setCreatedBy(request.getUser());
             entityToSave.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
             entityToSave.setIsDeleted(false);
+            entityToSave.setIsFirstConnexion(true);
             items.add(entityToSave);
 
-            Role role = roleRepository.findByName("ADMIN",false);
+            Role role = roleRepository.findByName("ADMIN", false);
             UtilisateurRole utilisateurRole = UtilisateurRole.builder()
                     .role(role)
                     .utilisateur(entityToSave)
@@ -657,10 +722,9 @@ public class UtilisateurBusiness implements IBasicBusiness<Request<UtilisateurDt
             response.setHasError(false);
         }
 
-        log.info(this.getClass().getName() +".createAdmin End !");
+        log.info(this.getClass().getName() + ".createAdmin End !");
         return response;
     }
-
 
 
 }

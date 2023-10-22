@@ -7,6 +7,8 @@
 
 package ci.saydos.markazcompta.utils;
 
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.LocaleUtils;
@@ -204,11 +206,14 @@ public class Utilities {
     }
 
     public static boolean isValidEmail(String email) {
-        String  regex   = "^(.+)@(.+)$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(email);
-
-        return matcher.matches();
+            boolean isValid = true;
+            try {
+                InternetAddress internetAddress = new InternetAddress(email);
+                internetAddress.validate();
+            } catch (AddressException e) {
+                isValid = false;
+            }
+            return isValid;
     }
 
     public static String encrypt(String str) throws Exception {

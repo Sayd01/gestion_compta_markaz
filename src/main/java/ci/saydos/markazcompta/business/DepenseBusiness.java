@@ -16,7 +16,11 @@ import ci.saydos.markazcompta.utils.contract.Request;
 import ci.saydos.markazcompta.utils.contract.Response;
 import ci.saydos.markazcompta.utils.dto.DemandeHistoriqueDto;
 import ci.saydos.markazcompta.utils.dto.DepenseDto;
+import ci.saydos.markazcompta.utils.dto.DirectionDto;
+import ci.saydos.markazcompta.utils.dto.UtilisateurDto;
 import ci.saydos.markazcompta.utils.dto.transformer.DepenseTransformer;
+import ci.saydos.markazcompta.utils.dto.transformer.DirectionTransformer;
+import ci.saydos.markazcompta.utils.dto.transformer.UtilisateurTransformer;
 import ci.saydos.markazcompta.utils.enums.StatutDemandeEnum;
 import ci.saydos.markazcompta.utils.enums.TypeCaisseEnum;
 import ci.saydos.markazcompta.utils.enums.TypeDepenseEnum;
@@ -36,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * BUSINESS for table "depense"
@@ -47,14 +52,15 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional
 public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Response<DepenseDto>> {
-    private final UtilisateurRepository     utilisateurRepository;
-    private final DepenseRepository         depenseRepository;
-    private final DemandeRepository         demandeRepository;
-    private final ChargeFixeRepository      chargeFixeRepository;
-    private final CaisseRepository          caisseRepository;
-    private final FunctionalError           functionalError;
-    private final DemandeHistoriqueBusiness demandeHistoriqueBusiness;
-    private final CaisseBusiness            caisseBusiness;
+    private final UtilisateurRepository          utilisateurRepository;
+    private final DepenseRepository              depenseRepository;
+    private final DemandeRepository              demandeRepository;
+    private final ChargeFixeRepository           chargeFixeRepository;
+    private final CaisseRepository               caisseRepository;
+    private final FunctionalError                functionalError;
+    private final DemandeHistoriqueBusiness      demandeHistoriqueBusiness;
+    private final CaisseBusiness                 caisseBusiness;
+    private final UtilisateurDirectionRepository utilisateurDirectionRepository;
 
 
     @PersistenceContext
@@ -290,6 +296,11 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
                 throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST("depense -> " + dto.getId(), locale));
             }
 
+            Boolean isCompleted = existingEntity.getIsCompleted();
+            if (isCompleted) {
+                throw new FunctionalException(functionalError.OPERATION("Impossible de supprimer une depense déja reglée",locale));
+            }
+
             existingEntity.setIsDeleted(true);
             items.add(existingEntity);
         }
@@ -372,7 +383,54 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
      * @throws Exception
      */
     private DepenseDto getFullInfos(DepenseDto dto, Integer size, Boolean isSimpleLoading, Locale locale) throws Exception {
-        // put code here
+
+
+        Utilisateur userCreator = utilisateurRepository.findOne(dto.getCreatedBy(),false);
+        if (Objects.nonNull(userCreator)) {
+            UtilisateurDto userCreatorDto  = UtilisateurTransformer.INSTANCE.toDto(userCreator);
+            List<UtilisateurDirection> utilisateurDirectionsCreator = utilisateurDirectionRepository.findByIdUtilisateur(userCreator.getId(), false);
+            List<DirectionDto> directionDtos = new ArrayList<>();
+            if (utilisateurDirectionsCreator != null) {
+                List<Direction> directions = new ArrayList<>();
+                utilisateurDirectionsCreator.stream().map(userDir -> directions.add(userDir.getDirection())).collect(Collectors.toList());
+                directionDtos = directions.stream().map(direction -> {
+                    try {
+                        return DirectionTransformer.INSTANCE.toDto(direction);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
+
+            }
+            userCreatorDto.setDirections(directionDtos);
+            userCreatorDto.setPassword(null);
+            dto.setUserInfoCreator(userCreatorDto);
+
+        }
+
+        Utilisateur userPayer = utilisateurRepository.findOne(dto.getUpdatedBy(),false);
+        if (Objects.nonNull(userPayer)) {
+            UtilisateurDto userPayerDto  = UtilisateurTransformer.INSTANCE.toDto(userCreator);
+            List<UtilisateurDirection> utilisateurDirectionsPayer = utilisateurDirectionRepository.findByIdUtilisateur(userPayer.getId(), false);
+            List<DirectionDto> directionDtos = new ArrayList<>();
+            if (utilisateurDirectionsPayer != null) {
+                List<Direction> directions = new ArrayList<>();
+                utilisateurDirectionsPayer.stream().map(userDir -> directions.add(userDir.getDirection())).collect(Collectors.toList());
+                directionDtos = directions.stream().map(direction -> {
+                    try {
+                        return DirectionTransformer.INSTANCE.toDto(direction);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
+
+            }
+            userPayerDto.setDirections(directionDtos);
+            userPayerDto.setPassword(null);
+            dto.setUserInfoPaying(userPayerDto);
+
+        }
+
 
         if (Utilities.isTrue(isSimpleLoading)) {
             return dto;
@@ -426,16 +484,16 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
                 throw new EntityNotFoundException(functionalError.OPERATION("Utilisateur n'existe pas", locale));
             }
 
-            int currentMonth = Utilities.getMonthFromDate(Utilities.getCurrentDate());
-            Depense depenseFalse = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, false,currentMonth);
+            int     currentMonth = Utilities.getMonthFromDate(Utilities.getCurrentDate());
+            Depense depenseFalse = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, false, currentMonth);
 
             if (Objects.nonNull(depenseFalse)) {
-                log.info("depense => {}",depenseFalse.getCode());
-                throw new FunctionalException(functionalError.DATA_EXIST("depense code -> " +depenseFalse.getCode(),locale));
+                log.info("depense => {}", depenseFalse.getCode());
+                throw new FunctionalException(functionalError.DATA_EXIST("depense code -> " + depenseFalse.getCode(), locale));
             }
 
-            Depense depenseTrue = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, true,currentMonth);
-            if (Objects.nonNull((depenseTrue)) ){
+            Depense depenseTrue = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, true, currentMonth);
+            if (Objects.nonNull((depenseTrue))) {
                 int createdMonth = Utilities.getMonthFromDate(depenseTrue.getCreatedAt());
                 if (currentMonth == createdMonth) {
                     String mois = Utilities.getMonthName(createdMonth);
@@ -677,14 +735,14 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
             }
             int currentMonth = Utilities.getMonthFromDate(Utilities.getCurrentDate());
 
-            Depense entityToSave = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, false,currentMonth);
+            Depense entityToSave = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, false, currentMonth);
             if (Objects.isNull(entityToSave)) {
                 log.info("depense => null");
-                throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST(" depense",locale));
+                throw new EntityNotFoundException(functionalError.DATA_NOT_EXIST(" depense", locale));
             }
-            Depense depenseTrue = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, true,currentMonth);
+            Depense depenseTrue = depenseRepository.findByIdChargeFixeAndIsCompletedAndCurrentMonth(dto.getIdChargeFixe(), false, true, currentMonth);
             System.out.println(depenseTrue);
-            if (Objects.nonNull((depenseTrue)) ){
+            if (Objects.nonNull((depenseTrue))) {
                 int createdMonth = Utilities.getMonthFromDate(depenseTrue.getCreatedAt());
                 if (currentMonth == createdMonth) {
                     String mois = Utilities.getMonthName(createdMonth);
@@ -698,9 +756,6 @@ public class DepenseBusiness implements IBasicBusiness<Request<DepenseDto>, Resp
             entityToSave.setIsCompleted(true);
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
             items.add(entityToSave);
-
-
-
 
 
             Double montantActuel = caisseBusiness.getMontantDisponible();

@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthentificationController {
@@ -40,7 +41,7 @@ public class AuthentificationController {
     private final MyUserDetailsService userDetailsService;
 
     private final AuthenticationManager authenticationManager;
-    private final UtilisateurBusiness   userBusiness;
+    private final UtilisateurBusiness   userBusiness ;
 
     private final JwtUtil                        jwt;
     private final UtilisateurRepository          userRepository;
@@ -57,8 +58,11 @@ public class AuthentificationController {
 
         UserDetails  user            = userDetailsService.loadUserByUsername(request.getEmail());
 
+
+
         final String jwtAccessToken  = jwt.generateAccessToken(user);
         final String jwtRefreshToken = jwt.generateRefreshToken(user);
+        final long expiresIn = jwt.calculateExpiresIn();
 
         Utilisateur utilisateur = userRepository.findByEmail(request.getEmail(),false);
         UtilisateurDto userDto = UtilisateurTransformer.INSTANCE.toDto(utilisateur);
@@ -100,13 +104,14 @@ public class AuthentificationController {
                 AuthenticationResponse.builder()
                         .accessToken(jwtAccessToken)
                         .refreshToken(jwtRefreshToken)
+                        .expiresIn(expiresIn)
                         .utilisateur(userDto)
                         .build()
         );
 
     }
 
-    @PostMapping("/refresh-token")
+    @PostMapping("refresh-token")
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
@@ -116,21 +121,25 @@ public class AuthentificationController {
         log.info(this.getClass().getName() + ".refreshToken end !");
     }
 
-//    @GetMapping("/profile")
-//    public UtilisateurDto profile(Authentication authentication) throws ParseException {
-//        return UtilisateurTransformer.INSTANCE.toDto(userRepository.findByEmail((String) authentication.getPrincipal(), false));
-//    }
-
     @PostMapping("/change-password")
     public Response<UtilisateurDto> changePassword(
             @RequestBody ChangePasswordRequest request
 
     ) throws ParseException {
-        log.info(this.getClass().getName() + ".changePassword start !");
+        log.info("Start controller "+this.getClass().getName() + ".changePassword");
         Response<UtilisateurDto> response = new Response<>();
         response = userBusiness.changeMotDePasse(request);
-        log.info(this.getClass().getName() + ".changePassword end !");
+        log.info("End controller"+this.getClass().getName() + ".changePassword");
         return response;
+    }
+
+    @PostMapping("forgot-password")
+    public ResponseEntity<String> forgotPassword(
+            @RequestBody ResetPassword request)throws ParseException {
+        log.info("Start controller "+this.getClass().getName() + ".forgotPassword");
+        userBusiness.forgotPassword(request.getEmail());
+        log.info("End controller "+this.getClass().getName() + ".forgotPassword");
+        return ResponseEntity.ok("Mot de passe réinitialisé avec succès");
     }
 
 

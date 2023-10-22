@@ -39,10 +39,8 @@ public interface DepenseTransformer {
 	@Mappings({
 		@Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
 		@Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
-		@Mapping(source="entity.demande.id", target="idDemande"),
-		@Mapping(source="entity.demande.code", target="demandeCode"),
-		@Mapping(source="entity.chargeFixe.id", target="idChargeFixe"),
-		@Mapping(source="entity.chargeFixe.code", target="chargeFixeCode"),
+		@Mapping(source="entity.demande", target="demande"),
+		@Mapping(source="entity.chargeFixe", target="chargeFixe"),
 	})
 	DepenseDto toDto(Depense entity) throws ParseException;
 
